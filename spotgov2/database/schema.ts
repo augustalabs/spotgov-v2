@@ -1,12 +1,12 @@
-import { createId } from "@paralleldrive/cuid2";
+
 import { sql } from "drizzle-orm";
-import { pgTable, text } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid } from "drizzle-orm/pg-core";
 
 export const usersTable = pgTable("users", {
-  id: text()
+  id: uuid("id")
     .primaryKey()
-    .unique()
-    .$defaultFn(() => createId()),
+    .unique(),
+    
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   createdAt: text("created_at")
