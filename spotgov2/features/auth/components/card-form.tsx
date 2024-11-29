@@ -27,7 +27,7 @@ const CardForm = ({
   footerLinkHref,
 }: CardFormProps) => {
   return (
-    <Card>
+    <Card className="max-h-full overflow-auto">
       <CardHeader className="space-y-6">
         <CardTitle className="mx-auto">
           <Image alt="SpotGov Logo" src={logo} width={145} />
