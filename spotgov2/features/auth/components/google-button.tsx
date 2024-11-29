@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
@@ -8,7 +10,12 @@ const GoogleButton = ({ label }: { label: string }) => {
   const handleGoogleSignIn = async () => {
     const supabase = await createClient();
 
-    await supabase.auth.signInWithOAuth({ provider: "google" });
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${origin}/auth/callback`,
+      },
+    });
   };
 
   return (
