@@ -1,7 +1,7 @@
 "use client";
 
 import * as z from "zod";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
@@ -20,9 +20,13 @@ import {
 import { loginSchema } from "../schemas";
 import { signInWithPassword } from "../actions";
 import CardForm from "./card-form";
+import { Eye, EyeOff } from "lucide-react";
+import GoogleButton from "./google-button";
+import AuthSeparator from "./separator";
 
 const LoginForm = () => {
   const { toast } = useToast();
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -54,6 +58,8 @@ const LoginForm = () => {
       footerLinkLabel="Crie uma conta"
       footerLinkHref="/auth/sign-up"
     >
+      <GoogleButton label="Iniciar sessão com Google" />
+      <AuthSeparator />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -76,7 +82,19 @@ const LoginForm = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input {...field} type="password" placeholder="******" />
+                  <div className="relative">
+                    <Input
+                      {...field}
+                      type={showPassword ? "text" : "password"}
+                      placeholder="******"
+                    />
+                    <div
+                      onClick={() => setShowPassword((v) => !v)}
+                      className="absolute cursor-pointer text-muted-foreground top-1/2 -translate-y-1/2 right-4"
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </div>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

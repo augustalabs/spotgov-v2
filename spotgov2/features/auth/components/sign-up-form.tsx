@@ -1,7 +1,7 @@
 "use client";
 
 import * as z from "zod";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { useToast } from "@/hooks/use-toast";
@@ -20,9 +20,15 @@ import { signUpSchema } from "../schemas";
 import CardForm from "./card-form";
 import { signUpWithPassword } from "../actions";
 import { Button } from "@/components/ui/button";
+import { Eye, EyeOff } from "lucide-react";
+import GoogleButton from "./google-button";
+import AuthSeparator from "./separator";
 
 const SignUpForm = () => {
   const { toast } = useToast();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] =
+    useState<boolean>(false);
 
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
@@ -56,6 +62,8 @@ const SignUpForm = () => {
       footerLinkLabel="Faça login"
       footerLinkHref="/auth/login"
     >
+      <GoogleButton label="Criar conta com Google" />
+      <AuthSeparator />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -91,7 +99,19 @@ const SignUpForm = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input {...field} type="password" placeholder="******" />
+                  <div className="relative">
+                    <Input
+                      {...field}
+                      type={showPassword ? "text" : "password"}
+                      placeholder="******"
+                    />
+                    <div
+                      onClick={() => setShowPassword((v) => !v)}
+                      className="absolute cursor-pointer text-muted-foreground top-1/2 -translate-y-1/2 right-4"
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </div>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -104,7 +124,23 @@ const SignUpForm = () => {
               <FormItem>
                 <FormLabel>Confirmação de Password</FormLabel>
                 <FormControl>
-                  <Input {...field} type="password" placeholder="******" />
+                  <div className="relative">
+                    <Input
+                      {...field}
+                      type={showPasswordConfirmation ? "text" : "password"}
+                      placeholder="******"
+                    />
+                    <div
+                      onClick={() => setShowPasswordConfirmation((v) => !v)}
+                      className="absolute cursor-pointer text-muted-foreground top-1/2 -translate-y-1/2 right-4"
+                    >
+                      {showPasswordConfirmation ? (
+                        <EyeOff size={16} />
+                      ) : (
+                        <Eye size={16} />
+                      )}
+                    </div>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

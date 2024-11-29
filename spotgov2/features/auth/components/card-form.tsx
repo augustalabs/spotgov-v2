@@ -34,7 +34,7 @@ const CardForm = ({
         </CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="w-full">
         {children}
         <CardFooter className="mt-4 p-0">
           <CardDescription>
