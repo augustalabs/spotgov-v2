@@ -20,7 +20,7 @@ import {
 import { loginSchema } from "../schemas";
 import { signInWithPassword } from "../actions";
 import CardForm from "./card-form";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader } from "lucide-react";
 import GoogleButton from "./google-button";
 import AuthSeparator from "./separator";
 
@@ -36,7 +36,7 @@ const LoginForm = () => {
     },
   });
 
-  const isLoading = form.formState.isLoading;
+  const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     try {
@@ -101,7 +101,7 @@ const LoginForm = () => {
             )}
           />
           <Button disabled={isLoading} type="submit" className="w-full">
-            Login
+            {isLoading ? <Loader className="animate-spin" /> : "Login"}
           </Button>
         </form>
       </Form>
