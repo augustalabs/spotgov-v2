@@ -56,7 +56,7 @@ const LoginForm = () => {
       description="Faça login para continuar para o SpotGov."
       footerText="Ainda não está registado?"
       footerLinkLabel="Crie uma conta"
-      footerLinkHref="/auth/sign-up"
+      footerLinkHref="/auth/registar"
     >
       <GoogleButton label="Iniciar sessão com Google" />
       <AuthSeparator />

@@ -37,7 +37,7 @@ export async function signUpWithPassword(data: z.infer<typeof signUpSchema>) {
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/criar-organizacao");
 }
 
 export async function signOut() {
