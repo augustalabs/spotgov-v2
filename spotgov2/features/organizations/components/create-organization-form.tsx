@@ -23,8 +23,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
-import { db } from "@/database/db";
-import { organizationsTable } from "@/database/schema";
+import { useMutation } from "@tanstack/react-query";
+import { createOrganization } from "../actions";
 
 const CreateOrganizationForm = () => {
   const { toast } = useToast();
@@ -39,8 +39,14 @@ const CreateOrganizationForm = () => {
 
   const isLoading = form.formState.isSubmitting;
 
+  const mutation = useMutation({
+    mutationKey: ["createOrganization"],
+    mutationFn: createOrganization,
+  });
+
   const onSubmit = async (values: z.infer<typeof createOrganizationSchema>) => {
     try {
+      mutation.mutate(values);
     } catch (error: unknown) {
       const err = error as Error;
 

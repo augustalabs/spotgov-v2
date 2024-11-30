@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { InferSelectModel, sql } from "drizzle-orm";
 import { pgTable, text, uuid, integer } from "drizzle-orm/pg-core";
 
 export const organizationsTable = pgTable("organizations", {
@@ -15,3 +15,5 @@ export const organizationsTable = pgTable("organizations", {
     .notNull(),
   updatedAt: text("updated_at").$onUpdate(() => sql`(CURRENT_TIMESTAMP)`),
 });
+
+export type Organization = InferSelectModel<typeof organizationsTable>;
