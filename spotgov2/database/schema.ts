@@ -73,6 +73,9 @@ export const contracts = pgTable("contracts", {
 export type Contract = InferSelectModel<typeof contracts>;
 
 export const contract_lots = pgTable("contract_lots", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`uuid_generate_v4()`),
   contract_id: uuid("contract_id").references(() => contracts.id),
   lot_number: text("lot_number"),
   description: text("description"),
@@ -121,12 +124,18 @@ export type ContractsOrganization = InferSelectModel<
 >;
 
 // RELAÇÃO CONTRATO QUERY
-export const contracts_queries = pgTable("contracts_queries", {
-  contract_id: uuid("contract_id").references(() => contracts.id),
-  query_id: uuid("query_id").references(() => queries.id),
-  match_type_full: boolean("match_type_full"),
-  reason: json("reason"),
-});
+export const contracts_queries = pgTable(
+  "contracts_queries",
+  {
+    contract_id: uuid("contract_id").references(() => contracts.id),
+    query_id: uuid("query_id").references(() => queries.id),
+    match_type_full: boolean("match_type_full"),
+    reason: json("reason"),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.contract_id, table.query_id] }),
+  })
+);
 
 export type ContractsQuery = InferSelectModel<typeof contracts_queries>;
 
@@ -165,8 +174,8 @@ export type UsageCost = InferSelectModel<typeof usage_cost>;
 
 // CPVS
 export const cpvs_list = pgTable("cpvs_list", {
+  code: text("code").primaryKey(),
   full_name: text("full_name"),
-  code: text("code"),
   name: text("name"),
 });
 
@@ -243,6 +252,9 @@ export type FeedCustomField = InferSelectModel<typeof feed_custom_fields>;
 
 // FEED CUSTOM FIELDS VALUES
 export const feed_custom_fields_values = pgTable("feed_custom_fields_values", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`uuid_generate_v4()`),
   organization_id: uuid("organization_id").references(() => organizations.id),
   field_id: uuid("field_id").references(() => feed_custom_fields.id),
   contract_id: uuid("contract_id").references(() => contracts.id),
@@ -255,8 +267,8 @@ export type FeedCustomFieldValue = InferSelectModel<
 
 // ADJUDICANTES
 export const issuers_list = pgTable("issuers_list", {
+  nif: text("nif").primaryKey(),
   name: text("name"),
-  nif: text("nif"),
   total_value_closed: numeric("total_value_closed"),
 });
 
@@ -278,6 +290,9 @@ export type OrganizationFeature = InferSelectModel<
 
 // KEYWORDS DA ORGANIZAÇÃO
 export const organization_keywords = pgTable("organization_keywords", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`uuid_generate_v4()`),
   organization_id: uuid("organization_id").references(() => organizations.id),
   keyword: text("keyword"),
 });
@@ -290,6 +305,9 @@ export type OrganizationKeyword = InferSelectModel<
 export const organization_marketintel_favourites = pgTable(
   "organization_marketintel_favourites",
   {
+    id: uuid("id")
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
     organization_id: uuid("organization_id").references(() => organizations.id),
     nif: text("nif"),
   }
@@ -386,11 +404,17 @@ export const userOrganizationRoleEnum = pgEnum("user_organization_role", [
   "member",
   "viewer",
 ]);
-export const users_organizations = pgTable("users_organizations", {
-  user_id: uuid("user_id").references(() => users.id),
-  organization_id: uuid("organization_id").references(() => organizations.id),
-  role: userOrganizationRoleEnum("role").notNull(),
-  last_online: timestamp("last_online", { withTimezone: true }),
-});
+export const users_organizations = pgTable(
+  "users_organizations",
+  {
+    user_id: uuid("user_id").references(() => users.id),
+    organization_id: uuid("organization_id").references(() => organizations.id),
+    role: userOrganizationRoleEnum("role").notNull(),
+    last_online: timestamp("last_online", { withTimezone: true }),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.user_id, table.organization_id] }),
+  })
+);
 
 export type UsersOrganization = InferSelectModel<typeof users_organizations>;
