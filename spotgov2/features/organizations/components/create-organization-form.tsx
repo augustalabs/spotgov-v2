@@ -25,6 +25,8 @@ import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { createOrganization } from "../actions";
+import Image from "next/image";
+import logo from "@public/assets/logo.png";
 
 const CreateOrganizationForm = () => {
   const { toast } = useToast();
@@ -60,9 +62,11 @@ const CreateOrganizationForm = () => {
   return (
     <Card className="max-h-full overflow-auto">
       <CardHeader className="space-y-6 ">
-        <CardTitle className="mx-auto">Criar Organização</CardTitle>
+        <CardTitle className="mx-auto">
+          <Image alt="SpotGov Logo" src={logo} width={145} />
+        </CardTitle>
         <CardDescription className="mx-auto">
-          Preencha o formulário abaixo para criar uma nova organização.
+          Junte-se ao futuro da contratação pública.
         </CardDescription>
       </CardHeader>
       <CardContent className="w-full">
@@ -73,9 +77,15 @@ const CreateOrganizationForm = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nome</FormLabel>
+                  <FormLabel>
+                    Empresa <span className="text-red-500">*</span>
+                  </FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" placeholder="Nome" />
+                    <Input
+                      {...field}
+                      type="text"
+                      placeholder="Nome da empresa"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -86,16 +96,27 @@ const CreateOrganizationForm = () => {
               name="nif"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>NIF</FormLabel>
+                  <FormLabel>
+                    NIF <span className="text-red-500">*</span>
+                  </FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" placeholder="NIF" max={9} />
+                    <Input
+                      {...field}
+                      type="text"
+                      placeholder="NIF da empresa"
+                      max={9}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <Button disabled={isLoading} type="submit" className="w-full">
-              {isLoading ? <Loader className="animate-spin" /> : "Criar"}
+              {isLoading ? (
+                <Loader className="animate-spin" />
+              ) : (
+                "Adicionar informações"
+              )}
             </Button>
           </form>
         </Form>

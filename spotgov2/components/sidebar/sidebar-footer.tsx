@@ -30,8 +30,8 @@ const SidebarFooter = async () => {
             </p>
           </div>
           <form className="flex items-center">
-            <button formAction={signOut}>
-              <LogOut size={16} className="cursor-pointer" />
+            <button formAction={signOut} className="hover:text-primary">
+              <LogOut size={16} />
             </button>
           </form>
         </SidebarMenuItem>
