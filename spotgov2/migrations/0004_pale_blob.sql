@@ -1,0 +1,1 @@
+ALTER TABLE "contract_tables" ADD COLUMN "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL;
