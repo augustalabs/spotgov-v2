@@ -58,7 +58,7 @@ const SidebarItems = () => {
                 href={item.href}
                 className={cn(
                   "flex items-center gap-2 p-2 rounded-xl hover:text-primary",
-                  item.isActive && "bg-white"
+                  item.isActive && "bg-background border"
                 )}
               >
                 <span>
