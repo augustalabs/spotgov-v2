@@ -1,6 +1,6 @@
 {
-  "id": "2d81e43a-e658-4529-bca7-e63522cab404",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "8e1dec52-6b01-4d36-a3bb-2919c0034430",
+  "prevId": "2d81e43a-e658-4529-bca7-e63522cab404",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -240,12 +240,6 @@
         "documents": {
           "name": "documents",
           "type": "json",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "dr_title": {
-          "name": "dr_title",
-          "type": "text",
           "primaryKey": false,
           "notNull": false
         },

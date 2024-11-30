@@ -8,7 +8,8 @@ import {
   boolean,
   timestamp,
   json,
-  PgArray,
+  primaryKey,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 
 // TODO: Organizar esta merda
@@ -20,278 +21,376 @@ export const organizations = pgTable("organizations", {
     .default(sql`uuid_generate_v4()`),
   nif: text("nif").notNull().unique(),
   name: text("name").notNull(),
-  deepDiveCurrency: integer("deep_dive_currency").default(3),
-  matchmakingCurrency: integer("matchmaking_currency").default(3),
-  createdAt: text("created_at")
-    .default(sql`(CURRENT_TIMESTAMP)`)
-    .notNull(),
-  updatedAt: text("updated_at").$onUpdate(() => sql`(CURRENT_TIMESTAMP)`),
+  deep_dive_currency: integer("deep_dive_currency").default(3),
+  matchmaking_currency: integer("matchmaking_currency").default(3),
+  created_at: timestamp("created_at", { withTimezone: true }).default(
+    sql`now()`
+  ),
+  updated_at: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+    () => sql`now()`
+  ),
 });
 
 export type Organization = InferSelectModel<typeof organizations>;
 
-// TABELA DE FILES NO CONTRATO ACHO
-export const contractTablesTable = pgTable("contract_tables", {
-  contractId: uuid("contractId"),
-  name: text("name"),
-  column: text("column"),
-  row: integer("row"),
-  value: text("value"),
-});
-
-export type ContractTable = InferSelectModel<typeof contractTablesTable>;
-
 // CONTRATO
-export const contractsTable = pgTable("contracts", {
+export const contracts = pgTable("contracts", {
   id: uuid("id")
     .primaryKey()
     .default(sql`uuid_generate_v4()`),
   geoset: text("geoset"),
-  contractNumber: text("contractNumber"),
-  userUploaded: boolean("userUploaded"),
-  basePrice: numeric("basePrice"),
-  contractType: text("contractType"),
-  euFunds: boolean("euFunds"),
-  executionLocation: text("executionLocation"),
-  issuerName: text("issuerName"),
-  linkDelivery: text("linkDelivery"),
-  linkDr: text("linkDr"),
-  publishDate: timestamp("publishDate", { withTimezone: true }),
-  submissionDeadlineDate: timestamp("submissionDeadlineDate", {
+  contract_number: text("contract_number"),
+  user_uploaded: boolean("user_uploaded"),
+  base_price: numeric("base_price"),
+  contract_type: text("contract_type"),
+  eu_funds: boolean("eu_funds"),
+  execution_location: text("execution_location"),
+  issuer_name: text("issuer_name"),
+  link_delivery: text("link_delivery"),
+  link_dr: text("link_dr"),
+  publish_date: timestamp("publish_date", { withTimezone: true }),
+  submission_deadline_date: timestamp("submission_deadline_date", {
     withTimezone: true,
   }),
   summary: text("summary"),
-  deepDiveAvailable: boolean("deepDiveAvailable"),
+  deep_dive_available: boolean("deep_dive_available"),
+  deepdive_unavailable_reason: text("deepdive_unavailable_reason"),
   title: text("title"),
-  awardCriteria: json("awardCriteria"),
+  award_criteria: json("award_criteria"),
   cpvs: text("cpvs").array(),
   documents: json("documents"),
-  drTitle: text("drTitle"),
-  executionDeadlineDays: integer("executionDeadlineDays"),
-  issuerInfo: json("issuerInfo"),
-  drPdfUrl: text("drPdfUrl"),
+
+  execution_deadline_days: integer("execution_deadline_days"),
+  issuer_info: json("issuer_info"),
+  dr_pdf_url: text("dr_pdf_url"),
   renews: boolean("renews"),
-  reviewBodyInfo: json("reviewBodyInfo"),
+  review_body_info: json("review_body_info"),
+  max_lots: integer("max_lots"),
+  max_lots_per_contestant: integer("max_lots_per_contestant"),
+  extra_data: json("extra_data"),
 });
 
-export type Contract = InferSelectModel<typeof contractsTable>;
+export type Contract = InferSelectModel<typeof contracts>;
+
+export const contract_lots = pgTable("contract_lots", {
+  contract_id: uuid("contract_id").references(() => contracts.id),
+  lot_number: text("lot_number"),
+  description: text("description"),
+  base_price: numeric("base_price", { precision: 20, scale: 2 }),
+  cpvs: text("cpvs").array(),
+});
+
+export type ContractLot = InferSelectModel<typeof contract_lots>;
+
+// TABELA DE FILES NO CONTRATO ACHO
+export const contract_tables = pgTable("contract_tables", {
+  contract_id: uuid("contract_id").references(() => contracts.id),
+  name: text("name"),
+  column_name: text("column_name"),
+  row: integer("row"),
+  value: text("value"),
+});
+
+export type ContractTable = InferSelectModel<typeof contract_tables>;
 
 // RELAÇÃO CONTRATO ORGANIZAÇÃO
-export const contractsOrganizationsTable = pgTable("contracts_organizations", {
-  contractId: uuid("contractId"),
-  organizationId: uuid("organizationId"),
-  saved: boolean("saved"),
-  comments: text("comments"),
-  labels: text("labels").array(),
-});
+export const contracts_organizations = pgTable(
+  "contracts_organizations",
+  {
+    contract_id: uuid("contract_id")
+      .references(() => contracts.id)
+      .notNull(),
+    organization_id: uuid("organization_id")
+      .references(() => organizations.id)
+      .notNull(),
+    saved: boolean("saved"),
+    comments: text("comments"),
+    labels: text("labels").array(),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({
+        columns: [table.contract_id, table.organization_id],
+      }),
+    };
+  }
+);
 
 export type ContractsOrganization = InferSelectModel<
-  typeof contractsOrganizationsTable
+  typeof contracts_organizations
 >;
 
 // RELAÇÃO CONTRATO QUERY
-export const contractsQueriesTable = pgTable("contracts_queries", {
-  contractId: uuid("contractId"),
-  queryId: uuid("queryId"),
-  matchTypeFull: boolean("matchTypeFull"),
+export const contracts_queries = pgTable("contracts_queries", {
+  contract_id: uuid("contract_id").references(() => contracts.id),
+  query_id: uuid("query_id").references(() => queries.id),
+  match_type_full: boolean("match_type_full"),
   reason: json("reason"),
 });
 
-export type ContractsQuery = InferSelectModel<typeof contractsQueriesTable>;
+export type ContractsQuery = InferSelectModel<typeof contracts_queries>;
 
 // COSTS, ISTO É DO VASCO ACHO
-export const costsTable = pgTable("costs", {
+export const usage = pgTable("usage", {
   id: uuid("id")
     .primaryKey()
     .default(sql`uuid_generate_v4()`),
-  organizationId: text("organizationId"),
-  userId: uuid("userId"),
-  costType: text("costType"),
-  actionType: text("actionType"),
-  actionSubType: text("actionSubType"),
-  value: numeric("value"),
+  organization_id: uuid("organization_id")
+    .references(() => organizations.id)
+    .notNull(),
+  user_id: uuid("user_id")
+    .references(() => users.id)
+    .notNull(),
+  action_type: text("action_type").notNull(),
+  action_sub_type: text("action_sub_type").notNull(),
+  action_sub_sub_type: text("action_sub_sub_type").notNull(),
+  action_value: text("action_value").notNull(),
 });
 
-export type Cost = InferSelectModel<typeof costsTable>;
+export type Usage = InferSelectModel<typeof usage>;
+
+export const usage_cost = pgTable("usage_cost", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`uuid_generate_v4()`),
+  usage_id: uuid("usage_id")
+    .references(() => usage.id)
+    .notNull(),
+  cost_type: text("cost_type").notNull(),
+  cost_sub_type: text("cost_sub_type").notNull(),
+  cost_value: numeric("cost_value", { precision: 20, scale: 2 }).notNull(),
+});
+
+export type UsageCost = InferSelectModel<typeof usage_cost>;
 
 // CPVS
-export const cpvsListTable = pgTable("cpvsList", {
-  fullName: text("fullName"),
+export const cpvs_list = pgTable("cpvs_list", {
+  full_name: text("full_name"),
   code: text("code"),
   name: text("name"),
 });
 
-export type CpvsList = InferSelectModel<typeof cpvsListTable>;
+export type CpvsList = InferSelectModel<typeof cpvs_list>;
 
 // DEEP DIVE LATEST
-export const deepdiveLatestTable = pgTable("deepdive_latest_table", {
-  organizationId: uuid("organizationId"),
-  contractId: uuid("contractId"),
-  templateId: uuid("templateId"),
-  rowHeader: text("rowHeader"),
-  value: text("value"),
-});
-
-export type DeepdiveLatest = InferSelectModel<typeof deepdiveLatestTable>;
-
-// DEEP DIVE TEMPLATES
-export const deepdiveTemplatesTable = pgTable("deepdive_templates", {
-  templateId: uuid("templateId")
-    .primaryKey()
-    .default(sql`uuid_generate_v4()`),
-  organizationId: uuid("organizationId"),
-  name: text("name"),
-  createdAt: timestamp("createdAt", { withTimezone: true }),
-});
-
-export type DeepdiveTemplate = InferSelectModel<typeof deepdiveTemplatesTable>;
-
-// DEEP DIVE VERSIONS (ISTO É DO VASCO)
-export const deepdiveVersionsTable = pgTable("deepdive_versions", {
-  templateId: uuid("templateId"),
-  templateVersionOrder: integer("templateVersionOrder"),
-  contractId: uuid("contractId"),
-  templateArray: json("templateArray"),
-});
-
-export type DeepdiveVersion = InferSelectModel<typeof deepdiveVersionsTable>;
-
-// FEED CUSTOM FIELDS
-export const feedCustomFieldsTable = pgTable("feed_custom_fields", {
-  organizationId: uuid("organizationId"),
-  id: uuid("id")
-    .primaryKey()
-    .default(sql`uuid_generate_v4()`),
-  fieldName: text("fieldName"),
-  fieldType: text("fieldType"),
-  createdAt: timestamp("createdAt", { withTimezone: true }),
-});
-
-export type FeedCustomField = InferSelectModel<typeof feedCustomFieldsTable>;
-
-// FEED CUSTOM FIELDS VALUES
-export const feedCustomFieldsValuesTable = pgTable(
-  "feed_custom_fields_values",
+export const deepdive_latest_table = pgTable(
+  "deepdive_latest_table",
   {
-    organizationId: uuid("organizationId"),
-    fieldId: uuid("fieldId"),
-    contractId: uuid("contractId"),
+    organization_id: uuid("organization_id")
+      .references(() => organizations.id)
+      .notNull(),
+    contract_id: uuid("contract_id")
+      .references(() => contracts.id)
+      .notNull(),
+    template_id: uuid("template_id")
+      .references(() => deepdive_templates.template_id)
+      .notNull(),
+    row_header: text("row_header").notNull(),
     value: text("value"),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({
+        columns: [
+          table.organization_id,
+          table.contract_id,
+          table.template_id,
+          table.row_header,
+        ],
+      }),
+    };
   }
 );
 
+export type DeepdiveLatest = InferSelectModel<typeof deepdive_latest_table>;
+
+// DEEP DIVE TEMPLATES
+export const deepdive_templates = pgTable("deepdive_templates", {
+  template_id: uuid("template_id")
+    .primaryKey()
+    .default(sql`uuid_generate_v4()`),
+  organization_id: uuid("organization_id").references(() => organizations.id),
+  name: text("name"),
+  created_at: timestamp("created_at", { withTimezone: true }),
+});
+
+export type DeepdiveTemplate = InferSelectModel<typeof deepdive_templates>;
+
+// DEEP DIVE VERSIONS (ISTO É DO VASCO)
+export const deepdive_versions = pgTable("deepdive_versions", {
+  template_id: uuid("template_id").references(
+    () => deepdive_templates.template_id
+  ),
+  template_version_order: integer("template_version_order"),
+  contract_id: uuid("contract_id").references(() => contracts.id),
+  template_array: json("template_array"),
+});
+
+export type DeepdiveVersion = InferSelectModel<typeof deepdive_versions>;
+
+// FEED CUSTOM FIELDS
+export const feed_custom_fields = pgTable("feed_custom_fields", {
+  organization_id: uuid("organization_id").references(() => organizations.id),
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`uuid_generate_v4()`),
+  field_name: text("field_name"),
+  field_type: text("field_type"),
+  created_at: timestamp("created_at", { withTimezone: true }),
+});
+
+export type FeedCustomField = InferSelectModel<typeof feed_custom_fields>;
+
+// FEED CUSTOM FIELDS VALUES
+export const feed_custom_fields_values = pgTable("feed_custom_fields_values", {
+  organization_id: uuid("organization_id").references(() => organizations.id),
+  field_id: uuid("field_id").references(() => feed_custom_fields.id),
+  contract_id: uuid("contract_id").references(() => contracts.id),
+  value: text("value"),
+});
+
 export type FeedCustomFieldValue = InferSelectModel<
-  typeof feedCustomFieldsValuesTable
+  typeof feed_custom_fields_values
 >;
 
 // ADJUDICANTES
-export const issuersListTable = pgTable("issuersList", {
+export const issuers_list = pgTable("issuers_list", {
   name: text("name"),
   nif: text("nif"),
+  total_value_closed: numeric("total_value_closed"),
 });
 
-export type IssuersList = InferSelectModel<typeof issuersListTable>;
+export type IssuersList = InferSelectModel<typeof issuers_list>;
 
 // TABELA DE LIGAR/DESLIGAR FEATURES DE CADA ORGANIZAÇÃO
-export const organizationFeaturesTable = pgTable("organization_features", {
-  organizationId: uuid("organizationId").primaryKey(),
+export const organization_features = pgTable("organization_features", {
+  organization_id: uuid("organization_id")
+    .primaryKey()
+    .references(() => organizations.id),
   feature_deepdive: boolean("feature_deepdive"),
   feature_marketintel: boolean("feature_marketintel"),
+  //TODO ADD ALL FEATURES
 });
 
 export type OrganizationFeature = InferSelectModel<
-  typeof organizationFeaturesTable
+  typeof organization_features
 >;
 
 // KEYWORDS DA ORGANIZAÇÃO
-export const organizationKeywordsTable = pgTable("organization_keywords", {
-  organizationId: uuid("organizationId"),
+export const organization_keywords = pgTable("organization_keywords", {
+  organization_id: uuid("organization_id").references(() => organizations.id),
   keyword: text("keyword"),
 });
 
 export type OrganizationKeyword = InferSelectModel<
-  typeof organizationKeywordsTable
+  typeof organization_keywords
 >;
 
 // EMPRESAS FAVORITAS DO MARKETINTEL DA ORGANIZAÇÃO
-export const organizationMarketintelFavouritesTable = pgTable(
+export const organization_marketintel_favourites = pgTable(
   "organization_marketintel_favourites",
   {
-    organizationId: uuid("organizationId"),
+    organization_id: uuid("organization_id").references(() => organizations.id),
     nif: text("nif"),
   }
 );
 
 export type OrganizationMarketintelFavourite = InferSelectModel<
-  typeof organizationMarketintelFavouritesTable
+  typeof organization_marketintel_favourites
 >;
 
 // FASE DO PIPELINE
-export const pipelinePhaseContractTable = pgTable("pipeline_phase_contract", {
-  phaseId: uuid("phaseId"),
-  organizationId: uuid("organizationId"),
-  contractId: uuid("contractId"),
-  orderInPhase: integer("orderInPhase"),
-});
+export const pipeline_phase_contract = pgTable(
+  "pipeline_phase_contract",
+  {
+    phase_id: uuid("phase_id")
+      .references(() => pipeline_phases.id)
+      .notNull(),
+    organization_id: uuid("organization_id")
+      .references(() => organizations.id)
+      .notNull(),
+    contract_id: uuid("contract_id")
+      .references(() => contracts.id)
+      .notNull(),
+    order_in_phase: integer("order_in_phase"),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({
+        columns: [table.phase_id, table.organization_id, table.contract_id],
+      }),
+    };
+  }
+);
 
 export type PipelinePhaseContract = InferSelectModel<
-  typeof pipelinePhaseContractTable
+  typeof pipeline_phase_contract
 >;
 
 // AS VÁRIAS FASES DO PIPELINE
-export const pipelinePhasesTable = pgTable("pipeline_phases", {
+export const pipeline_phases = pgTable("pipeline_phases", {
   id: uuid("id")
     .primaryKey()
     .default(sql`uuid_generate_v4()`),
-  organizationId: uuid("organizationId"),
-  phaseName: text("phaseName"),
-  phaseOrder: integer("phaseOrder"),
-  createdAt: timestamp("createdAt", { withTimezone: true }),
+  organization_id: uuid("organization_id").references(() => organizations.id),
+  phase_name: text("phase_name"),
+  phase_order: integer("phase_order"),
+  created_at: timestamp("created_at", { withTimezone: true }),
 });
 
-export type PipelinePhase = InferSelectModel<typeof pipelinePhasesTable>;
+export type PipelinePhase = InferSelectModel<typeof pipeline_phases>;
 
 // QUERIES
-export const queriesTable = pgTable("queries", {
+export const queries = pgTable("queries", {
   id: uuid("id")
     .primaryKey()
     .default(sql`uuid_generate_v4()`),
   geoset: text("geoset"),
-  organizationId: uuid("organizationId"),
+  organization_id: uuid("organization_id").references(() => organizations.id),
   starred: boolean("starred"),
   title: text("title"),
-  inputData: json("inputData"),
-  createdAt: timestamp("createdAt", { withTimezone: true }),
+  input_data: json("input_data"),
+  created_at: timestamp("created_at", { withTimezone: true }),
   status: text("status"),
-  refresh_autoRefresh: boolean("refresh_autoRefresh"),
-  refresh_autoRefreshEmail: boolean("refresh_autoRefreshEmail"),
-  refresh_lastContractDate: timestamp("refresh_lastContractDate", {
+  refresh_autorefresh: boolean("refresh_autorefresh"),
+  refresh_autorefresh_email: boolean("refresh_autorefresh_email"),
+  refresh_last_contract_date: timestamp("refresh_last_contract_date", {
     withTimezone: true,
   }),
-  refresh_lastContractId: json("refresh_lastContractId"),
-  extraEmails: text("extraEmails").array(),
+  refresh_last_contract_id: json("refresh_last_contract_id"),
+  extra_emails: text("extra_emails").array(),
 });
 
-export type Query = InferSelectModel<typeof queriesTable>;
+export type Query = InferSelectModel<typeof queries>;
 
 // USERS
-export const usersTable = pgTable("users", {
+export const users = pgTable("users", {
   id: uuid("id")
     .primaryKey()
     .default(sql`uuid_generate_v4()`),
   name: text("name"),
-  email: text("email"),
+  email: text("email").unique(),
+  avatar_url: text("avatar_url"),
+  created_at: timestamp("created_at", { withTimezone: true }).default(
+    sql`now()`
+  ),
+  updated_at: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+    () => sql`now()`
+  ),
 });
 
-export type User = InferSelectModel<typeof usersTable>;
+export type User = InferSelectModel<typeof users>;
 
-export const usersOrganizationsTable = pgTable("users_organizations", {
-  userId: uuid("userId"),
-  organizationId: uuid("organizationId"),
-  role: text("role"),
-  lastOnline: timestamp("lastOnline", { withTimezone: true }),
+export const userOrganizationRoleEnum = pgEnum("user_organization_role", [
+  "admin",
+  "member",
+  "viewer",
+]);
+export const users_organizations = pgTable("users_organizations", {
+  user_id: uuid("user_id").references(() => users.id),
+  organization_id: uuid("organization_id").references(() => organizations.id),
+  role: userOrganizationRoleEnum("role").notNull(),
+  last_online: timestamp("last_online", { withTimezone: true }),
 });
 
-export type UsersOrganization = InferSelectModel<
-  typeof usersOrganizationsTable
->;
+export type UsersOrganization = InferSelectModel<typeof users_organizations>;
