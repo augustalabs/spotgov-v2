@@ -27,7 +27,7 @@ export async function signUpWithPassword(data: z.infer<typeof signUpSchema>) {
     password: data.password,
     options: {
       data: {
-        display_name: data.name,
+        full_name: data.name,
       },
     },
   });
