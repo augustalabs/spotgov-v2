@@ -19,7 +19,7 @@ const GoogleButton = ({ label }: { label: string }) => {
   };
 
   return (
-    <Button onClick={handleGoogleSignIn} variant="secondary" className="w-full">
+    <Button onClick={handleGoogleSignIn} variant="outline" className="w-full">
       <Image alt="Google Icon" src={googleIcon} width={18} />
       {label}
     </Button>
