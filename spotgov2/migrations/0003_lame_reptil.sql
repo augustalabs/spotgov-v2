@@ -1,0 +1,1 @@
+ALTER TABLE "deepdive_versions" ADD CONSTRAINT "deepdive_versions_template_id_contract_id_template_version_order_pk" PRIMARY KEY("template_id","contract_id","template_version_order");

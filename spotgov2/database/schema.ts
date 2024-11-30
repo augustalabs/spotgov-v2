@@ -226,14 +226,26 @@ export const deepdive_templates = pgTable("deepdive_templates", {
 export type DeepdiveTemplate = InferSelectModel<typeof deepdive_templates>;
 
 // DEEP DIVE VERSIONS (ISTO É DO VASCO)
-export const deepdive_versions = pgTable("deepdive_versions", {
-  template_id: uuid("template_id").references(
-    () => deepdive_templates.template_id
-  ),
-  template_version_order: integer("template_version_order"),
-  contract_id: uuid("contract_id").references(() => contracts.id),
-  template_array: json("template_array"),
-});
+export const deepdive_versions = pgTable(
+  "deepdive_versions",
+  {
+    template_id: uuid("template_id").references(
+      () => deepdive_templates.template_id
+    ),
+    template_version_order: integer("template_version_order"),
+    contract_id: uuid("contract_id").references(() => contracts.id),
+    template_array: json("template_array"),
+  },
+  (table) => ({
+    pk: primaryKey({
+      columns: [
+        table.template_id,
+        table.contract_id,
+        table.template_version_order,
+      ],
+    }),
+  })
+);
 
 export type DeepdiveVersion = InferSelectModel<typeof deepdive_versions>;
 
