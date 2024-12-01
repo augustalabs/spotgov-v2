@@ -5,7 +5,7 @@ import {
   SidebarMenuItem,
 } from "../ui/sidebar";
 import { createClient } from "@/lib/supabase/server";
-import { LogOut } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import { signOut } from "@/features/auth/actions";
 
 const SidebarFooter = async () => {
@@ -18,13 +18,19 @@ const SidebarFooter = async () => {
       <SidebarMenu>
         <SidebarMenuItem className="px-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Image
-              alt="profile icon"
-              className="rounded-full object-cover"
-              src={data?.user?.user_metadata?.avatar_url}
-              width={28}
-              height={28}
-            />
+            {data?.user?.user_metadata?.avatar_url ? (
+              <Image
+                alt="profile icon"
+                className="rounded-full object-cover"
+                src={data?.user?.user_metadata?.avatar_url}
+                width={28}
+                height={28}
+              />
+            ) : (
+              <div className="size-7 border bg-primary/10 text-primary rounded-full flex items-center justify-center">
+                <User size={16} />
+              </div>
+            )}
             <p className="text-sm max-w-32 truncate">
               {data?.user?.user_metadata?.full_name}
             </p>
