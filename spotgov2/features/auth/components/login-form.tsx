@@ -17,12 +17,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { loginSchema } from "../schemas";
 import { signInWithPassword } from "../actions";
 import CardForm from "./card-form";
 import { Eye, EyeOff, Loader } from "lucide-react";
 import GoogleButton from "./google-button";
 import AuthSeparator from "./separator";
+import { loginSchema } from "../schemas";
 
 const LoginForm = () => {
   const { toast } = useToast();

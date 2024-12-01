@@ -1,18 +1,7 @@
 import * as z from "zod";
 
 // TODO: improve messages
-
-export const loginSchema = z.object({
-  email: z.string().email({
-    message: "Email inválido",
-  }),
-  // TODO: Refine password validation
-  password: z.string().min(6, {
-    message: "Password...",
-  }),
-});
-
-export const signUpSchema = z
+const signUpSchema = z
   .object({
     name: z.string().min(3, {
       message: "Nome inválido",
@@ -32,3 +21,5 @@ export const signUpSchema = z
     message: "Passwords não coincidem",
     path: ["passwordConfirmation"],
   });
+
+export default signUpSchema;

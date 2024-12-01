@@ -2,9 +2,9 @@
 
 import { createClient } from "@/lib/supabase/server";
 import * as z from "zod";
-import { loginSchema, signUpSchema } from "./schemas";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { loginSchema, signUpSchema } from "./schemas";
 
 export async function signInWithPassword(data: z.infer<typeof loginSchema>) {
   const supabase = await createClient();
@@ -37,7 +37,7 @@ export async function signUpWithPassword(data: z.infer<typeof signUpSchema>) {
   }
 
   revalidatePath("/", "layout");
-  redirect("/criar-organizacao");
+  redirect("/");
 }
 
 export async function signOut() {
