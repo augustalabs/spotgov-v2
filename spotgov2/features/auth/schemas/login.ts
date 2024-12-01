@@ -1,14 +1,18 @@
 import * as z from "zod";
 
-// TODO: improve messages
 const loginSchema = z.object({
   email: z.string().email({
-    message: "Email inválido",
+    message: "O email é inválido",
   }),
-  // TODO: Refine password validation
-  password: z.string().min(6, {
-    message: "Password...",
-  }),
+  password: z
+    .string()
+    .min(6, {
+      message: "A password deve ter pelo menos 6 caracteres.",
+    })
+    .refine((v) => v.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/), {
+      message:
+        "A password deve conter pelo menos uma letra maiúscula, uma letra minúscula e um número.",
+    }),
 });
 
 export default loginSchema;

@@ -151,7 +151,7 @@ const SignUpForm = () => {
                     </div>
                   </div>
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-xs" />
               </FormItem>
             )}
           />

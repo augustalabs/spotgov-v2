@@ -1,24 +1,31 @@
 import * as z from "zod";
 
-// TODO: improve messages
 const signUpSchema = z
   .object({
     name: z.string().min(3, {
-      message: "Nome inválido",
+      message: "O nome é inválido.",
     }),
     email: z.string().email({
-      message: "Email inválido",
+      message: "O email é inválido.",
     }),
-    // TODO: Refine password validation
-    password: z.string().min(6, {
-      message: "Password...",
-    }),
+    password: z
+      .string()
+      .min(6, {
+        message: "A password deve ter pelo menos 6 caracteres.",
+      })
+      .refine(
+        (v) => v.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/),
+        {
+          message:
+            "A password deve conter pelo menos uma letra maiúscula, uma letra minúscula e um número.",
+        }
+      ),
     passwordConfirmation: z.string().min(6, {
-      message: "Password...",
+      message: "A password deve ter pelo menos 6 caracteres.",
     }),
   })
   .refine((data) => data.password === data.passwordConfirmation, {
-    message: "Passwords não coincidem",
+    message: "As passwords não coincidem.",
     path: ["passwordConfirmation"],
   });
 
