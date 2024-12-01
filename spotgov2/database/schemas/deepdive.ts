@@ -40,21 +40,17 @@ export const deepdiveVersions = pgTable(
 export const deepdiveLatestTable = pgTable(
   "deepdive_latest_table",
   {
-    organizationId: uuid("organization_id")
-      .references(() => organizations.id)
-      .notNull(),
+    organizationId: uuid("organization_id").references(() => organizations.id),
     contractId: uuid("contract_id")
       .references(() => contracts.id)
       .notNull(),
-    templateId: uuid("template_id")
-      .references(() => deepdiveTemplates.templateId)
-      .notNull(),
+    templateId: uuid("template_id").notNull(),
     rowHeader: text("row_header").notNull(),
     value: text("value"),
   },
   (t) => [
     primaryKey({
-      columns: [t.organizationId, t.contractId, t.templateId, t.rowHeader],
+      columns: [t.contractId, t.templateId, t.rowHeader],
     }),
   ]
 );
