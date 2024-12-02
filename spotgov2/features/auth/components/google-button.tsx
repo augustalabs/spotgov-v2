@@ -3,12 +3,12 @@
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/client";
 import googleIcon from "@public/assets/google.svg";
+import useSupabase from "@/hooks/use-supabase";
 
 const GoogleButton = ({ label }: { label: string }) => {
   const handleGoogleSignIn = async () => {
-    const supabase = await createClient();
+    const supabase = useSupabase();
 
     await supabase.auth.signInWithOAuth({
       provider: "google",

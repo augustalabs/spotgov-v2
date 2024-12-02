@@ -1,5 +1,5 @@
 import { User } from "@/database/schemas";
-import { createClient } from "@/lib/supabase/client";
+import useSupabase from "@/hooks/use-supabase";
 import { createContext, useEffect, useState } from "react";
 
 interface UserContextType {
@@ -13,6 +13,8 @@ export const UserContext = createContext<UserContextType | undefined>(
 );
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+  const supabase = useSupabase();
+
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
@@ -20,7 +22,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const supabase = createClient();
         const { data, error } = await supabase.auth.getUser();
 
         if (error) {
