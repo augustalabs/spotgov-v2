@@ -4,7 +4,6 @@ import * as z from "zod";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,9 +22,9 @@ import { Eye, EyeOff, Loader } from "lucide-react";
 import GoogleButton from "./google-button";
 import AuthSeparator from "./separator";
 import { loginSchema } from "../schemas";
+import { toast } from "sonner";
 
 const LoginForm = () => {
-  const { toast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -41,13 +40,13 @@ const LoginForm = () => {
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     try {
       await signInWithPassword(values);
+
+      toast.success("Login efetuado com sucesso!");
     } catch (error: unknown) {
       const err = error as Error;
 
-      toast({
-        title: err.name,
-        description: err.message,
-      });
+      // TODO: handle error correctly
+      toast.error(err.message);
     }
   };
 

@@ -4,7 +4,6 @@ import * as z from "zod";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { useToast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import {
@@ -23,9 +22,9 @@ import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Loader } from "lucide-react";
 import GoogleButton from "./google-button";
 import AuthSeparator from "./separator";
+import { toast } from "sonner";
 
 const SignUpForm = () => {
-  const { toast } = useToast();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState<boolean>(false);
@@ -45,13 +44,13 @@ const SignUpForm = () => {
   const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
     try {
       await signUpWithPassword(values);
+
+      toast.success("Conta criada com sucesso!");
     } catch (error: unknown) {
       const err = error as Error;
 
-      toast({
-        title: err.name,
-        description: err.message,
-      });
+      // TODO: handle error correctly
+      toast.error(err.message);
     }
   };
 
