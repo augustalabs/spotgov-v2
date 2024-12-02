@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  BarChart,
   KanbanSquare,
   LucideIcon,
   MessageCircleMore,
@@ -44,6 +45,12 @@ const SidebarItems = () => {
       label: "Pipeline",
       href: "/pipeline",
       isActive: pathname === "/pipeline",
+    },
+    {
+      icon: BarChart,
+      label: "Market Intelligence",
+      href: "/market-intelligence",
+      isActive: pathname === "/market-intelligence",
     },
   ];
 
