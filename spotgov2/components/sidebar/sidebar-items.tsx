@@ -56,8 +56,8 @@ const SidebarItems = () => {
               <Link
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-2 p-2 rounded-xl hover:text-primary",
-                  item.isActive && "bg-background border"
+                  "flex items-center gap-2 p-2 border border-sidebar rounded-xl hover:text-primary",
+                  item.isActive && "bg-background border border-border"
                 )}
               >
                 <span>
