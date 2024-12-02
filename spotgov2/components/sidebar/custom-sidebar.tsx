@@ -6,14 +6,17 @@ import SidebarHistory from "./sidebar-history";
 import SidebarItems from "./sidebar-items";
 import { getQueryClient } from "@/lib/react-query/client";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { createClient } from "@/lib/supabase/server";
 
 const CustomSidebar = async () => {
   const queryClient = getQueryClient();
 
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getUser();
+
   await queryClient.prefetchQuery({
     queryKey: ["get-user-organizations"],
-    queryFn: () =>
-      fetchUserOrganizations("aa2cbf21-f037-4d40-a8a5-538933a3d2d0"),
+    queryFn: () => fetchUserOrganizations(data.user?.id as string),
   });
 
   return (
