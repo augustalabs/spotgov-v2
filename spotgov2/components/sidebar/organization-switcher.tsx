@@ -9,14 +9,14 @@ import { fetchUserOrganizations } from "@/features/organizations/actions";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command";
-import useOrganizationQuery from "@/hooks/queries/use-organization-query";
+import useOrganizationQuery from "@/queries/use-organization-query";
 
 type OrganizationSwitcherProps = {
   userId: string;
 };
 
 const OrganizationSwitcher = ({ userId }: OrganizationSwitcherProps) => {
-  const { data, error, isPending } = useOrganizationQuery(userId);
+  const { data, error } = useOrganizationQuery(userId);
 
   if (error) {
     // TODO: handle errors

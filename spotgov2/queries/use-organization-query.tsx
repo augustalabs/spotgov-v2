@@ -1,5 +1,5 @@
 import { fetchUserOrganizations } from "@/features/organizations/actions";
-import useSupabase from "../use-supabase";
+import useSupabase from "../hooks/use-supabase";
 import { useQuery } from "@tanstack/react-query";
 
 function useOrganizationQuery(userId: string) {

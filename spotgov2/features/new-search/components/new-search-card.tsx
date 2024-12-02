@@ -13,13 +13,16 @@ import AIIcon from "@/public/assets/ai-icon.svg";
 import { ScrollText, WholeWord } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import MultiSelect from "@/components/ui/multi-select";
+import { useQuery } from "@tanstack/react-query";
+import cpvsQuery from "@/queries/cpvs-query";
 
 interface NewSearchCardProps {
   title: string;
-  cpvs: string[];
 }
 
-const NewSearchCard: React.FC<NewSearchCardProps> = ({ title, cpvs }) => {
+const NewSearchCard: React.FC<NewSearchCardProps> = ({ title }) => {
+  const { data: cpvs, error, isLoading } = useQuery(cpvsQuery());
+
   const handleCPVsChange = (
     selectedOptions: { value: string; label: string }[]
   ) => {
@@ -56,13 +59,18 @@ const NewSearchCard: React.FC<NewSearchCardProps> = ({ title, cpvs }) => {
           <div className="flex aspect-square h-12 w-12 items-center justify-center rounded-2xl border bg-[#F9F9FB] p-1">
             <ScrollText className="h-full w-full rounded-xl border bg-white p-2.5 text-gray-600" />
           </div>
+          {/*
           <MultiSelect
-            defaultOptions={cpvs.map((cpv) => ({ value: cpv, label: cpv }))}
+            defaultOptions={cpvs?.map((cpv) => ({
+              value: cpv,
+              label: cpv,
+            }))}
             placeholder="Pesquisar com CPVs..."
             variant="cpv"
             onChange={handleCPVsChange}
             creatable
           />
+          */}
         </div>
         <Button>Pesquisar</Button>
       </CardContent>
