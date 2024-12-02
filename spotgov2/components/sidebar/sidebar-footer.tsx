@@ -16,7 +16,6 @@ type SidebarFooterProps = {
 
 const SidebarFooter = async ({ userId }: SidebarFooterProps) => {
   const supabase = await createClient();
-
   const { data } = await supabase.auth.getUser();
 
   return (
