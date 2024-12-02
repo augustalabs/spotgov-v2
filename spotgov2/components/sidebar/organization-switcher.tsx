@@ -28,7 +28,7 @@ const OrganizationSwitcher = ({ userId }: OrganizationSwitcherProps) => {
 
   // TODO: Handle org state
   const [currentOrganization, setCurrentOrganization] = useState(
-    data?.[0].organization
+    data?.[0]?.organization
   );
 
   const handleSelection = (organization: Organization) => {

@@ -451,14 +451,14 @@ const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
           commandProps?.onKeyDown?.(e);
         }}
         className={cn(
-          "h-auto overflow-visible bg-transparent !placeholder-[#9CA3AF]",
+          "h-auto overflow-visible bg-transparent",
           commandProps?.className
         )}
         shouldFilter={false}
       >
         <div
           className={cn(
-            "border rounded-xl",
+            "border rounded-xl bg-white",
             {
               "px-3 py-2": selected.length !== 0,
               "cursor-text": !disabled && selected.length !== 0,
@@ -532,7 +532,7 @@ const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
                   : placeholder
               }
               className={cn(
-                "flex-1 bg-transparent !placeholder-[#9CA3AF] outline-none",
+                "flex-1 bg-transparent placeholder-secondary outline-none",
                 {
                   "w-full": hidePlaceholderWhenSelected,
                   "px-3 py-2": selected.length === 0,
@@ -597,7 +597,6 @@ const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
                         height: `${rowVirtualizer.getTotalSize()}px`,
                         position: "relative",
                         width: "100%",
-                        padding: "2px",
                       }}
                     >
                       {rowVirtualizer.getVirtualItems().map((virtualRow) => {

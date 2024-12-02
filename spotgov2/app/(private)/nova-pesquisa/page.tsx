@@ -17,11 +17,8 @@ export default async function NewSearchPage() {
   const cpvs = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
   return (
-    <div className="p-4">
-      <h1 className="font-medium text-xl">Nova Pesquisa</h1>
-      <div className="flex flex-col items-center justify-start">
-        <NewSearchCard title={title} cpvs={cpvs} />
-      </div>
+    <div className="p-4 w-full flex flex-col items-center">
+      <NewSearchCard title={title} cpvs={cpvs} />
     </div>
   );
 }

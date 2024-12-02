@@ -27,9 +27,9 @@ const NewSearchCard: React.FC<NewSearchCardProps> = ({ title, cpvs }) => {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
+    <Card className="rounded-2xl w-full max-w-3xl border-[#2388FF]/30 bg-gradient-to-t from-[#2388FF]/10 to-white shadow-sm backdrop-blur-lg backdrop-filter">
+      <CardHeader className="text-center">
+        <CardTitle className="font-semibold text-xl">{title}</CardTitle>
         <CardDescription>
           Pesquise por qualquer concurso público em Portugal.
         </CardDescription>
