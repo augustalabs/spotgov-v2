@@ -2,12 +2,15 @@
 
 import { Toaster } from "sonner";
 import ReactQueryProvider from "./react-query-provider";
+import { UserProvider } from "./user-provider";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ReactQueryProvider>
-      <Toaster />
-      {children}
-    </ReactQueryProvider>
+    <UserProvider>
+      <ReactQueryProvider>
+        <Toaster />
+        {children}
+      </ReactQueryProvider>
+    </UserProvider>
   );
 }
