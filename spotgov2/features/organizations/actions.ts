@@ -1,25 +1,18 @@
-import { db } from "@/database/db";
-import {
-  Organization,
-  UserOrganization,
-  usersOrganizations,
-} from "@/database/schemas";
-import { eq } from "drizzle-orm";
+"use server";
 
-type OrganizationWithUserInfo = UserOrganization & {
-  organization: Organization | null;
-};
+import { db } from "@/database/db";
+import { usersOrganizations } from "@/database/schemas";
+import { eq } from "drizzle-orm";
+import { OrganizationWithUserInfo } from "./types";
 
 // TODO: Handle errors
 export async function fetchUserOrganizations(
   userId: string
 ): Promise<OrganizationWithUserInfo[]> {
-  const response = await db.query.usersOrganizations.findMany({
+  return await db.query.usersOrganizations.findMany({
     where: eq(usersOrganizations.userId, userId),
     with: {
       organization: true,
     },
   });
-
-  return response;
 }

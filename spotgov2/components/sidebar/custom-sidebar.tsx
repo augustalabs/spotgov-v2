@@ -1,4 +1,4 @@
-import { fetchUserOrganizations } from "@/features/organizations/api";
+import { fetchUserOrganizations } from "@/features/organizations/actions";
 import { Sidebar, SidebarContent } from "../ui/sidebar";
 import SidebarFooter from "./sidebar-footer";
 import SidebarHeader from "./sidebar-header";
@@ -18,14 +18,14 @@ const CustomSidebar = async () => {
 
   return (
     <Sidebar>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <SidebarHeader />
-      </HydrationBoundary>
+      <SidebarHeader />
       <SidebarContent>
         <SidebarItems />
         <SidebarHistory />
       </SidebarContent>
-      <SidebarFooter />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <SidebarFooter />
+      </HydrationBoundary>
     </Sidebar>
   );
 };
