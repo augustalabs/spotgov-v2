@@ -1,7 +1,10 @@
 // Export database schemas
 export { default as users } from "./users";
 export { default as organizations } from "./organizations";
-export { default as usersOrganizations } from "./users-organizations";
+export {
+  default as usersOrganizations,
+  usersOrganizationsRelations,
+} from "./users-organizations";
 export { default as contracts } from "./contracts";
 export { default as lots } from "./lots";
 export { default as tables } from "./tables";
@@ -26,6 +29,7 @@ export {
 // Export database types
 export type { User } from "./users";
 export type { Organization } from "./organizations";
+export type { UserOrganization } from "./users-organizations";
 export type { Contract } from "./contracts";
 export type { Lot } from "./lots";
 export type { Table } from "./tables";

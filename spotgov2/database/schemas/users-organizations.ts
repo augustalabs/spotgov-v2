@@ -7,6 +7,7 @@ import {
 } from "drizzle-orm/pg-core";
 import users from "./users";
 import organizations from "./organizations";
+import { InferSelectModel, relations } from "drizzle-orm";
 
 const userOrganizationRoleEnum = pgEnum("user_organization_role", [
   "admin",
@@ -24,5 +25,17 @@ const usersOrganizations = pgTable(
   },
   (t) => [primaryKey({ columns: [t.userId, t.organizationId] })]
 );
+
+export const usersOrganizationsRelations = relations(
+  usersOrganizations,
+  ({ one }) => ({
+    organization: one(organizations, {
+      fields: [usersOrganizations.organizationId],
+      references: [organizations.id],
+    }),
+  })
+);
+
+export type UserOrganization = InferSelectModel<typeof usersOrganizations>;
 
 export default usersOrganizations;
