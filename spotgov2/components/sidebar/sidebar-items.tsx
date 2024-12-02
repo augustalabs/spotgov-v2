@@ -26,7 +26,6 @@ type SidebarItem = {
 const SidebarItems = () => {
   const pathname = usePathname();
 
-  // TODO: Update href & isActive
   const items: SidebarItem[] = [
     {
       icon: MessageCircleMore,

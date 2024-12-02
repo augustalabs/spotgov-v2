@@ -8,16 +8,20 @@ import { createClient } from "@/lib/supabase/server";
 import { LogOut, User } from "lucide-react";
 import { signOut } from "@/features/auth/actions";
 import { Separator } from "../ui/separator";
-import SidebarOrganizationSelection from "./sidebar-organization-selection";
+import OrganizationSwitcher from "./organization-switcher";
 
-const SidebarFooter = async () => {
+type SidebarFooterProps = {
+  userId: string;
+};
+
+const SidebarFooter = async ({ userId }: SidebarFooterProps) => {
   const supabase = await createClient();
 
   const { data } = await supabase.auth.getUser();
 
   return (
     <Footer>
-      <SidebarOrganizationSelection />
+      <OrganizationSwitcher userId={userId} />
       <Separator className="mb-4 mx-auto max-w-[calc(100%-1rem)]" />
       <SidebarMenu>
         <SidebarMenuItem className="px-2 flex items-center justify-between">
