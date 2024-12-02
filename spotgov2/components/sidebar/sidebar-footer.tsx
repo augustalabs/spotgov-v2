@@ -8,7 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { LogOut, User } from "lucide-react";
 import { signOut } from "@/features/auth/actions";
 import { Separator } from "../ui/separator";
-import SidebarOrganizationSelection from "./sidebar-organization-switcher";
+import SidebarOrganizationSelection from "./sidebar-organization-selection";
 
 const SidebarFooter = async () => {
   const supabase = await createClient();
