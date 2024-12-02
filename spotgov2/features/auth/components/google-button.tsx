@@ -7,9 +7,9 @@ import googleIcon from "@public/assets/google.svg";
 import useSupabase from "@/hooks/use-supabase";
 
 const GoogleButton = ({ label }: { label: string }) => {
-  const handleGoogleSignIn = async () => {
-    const supabase = useSupabase();
+  const supabase = useSupabase();
 
+  const handleGoogleSignIn = async () => {
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
