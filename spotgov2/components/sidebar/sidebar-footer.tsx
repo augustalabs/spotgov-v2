@@ -7,6 +7,7 @@ import {
 import { createClient } from "@/lib/supabase/server";
 import { LogOut, User } from "lucide-react";
 import { signOut } from "@/features/auth/actions";
+import { Separator } from "../ui/separator";
 
 const SidebarFooter = async () => {
   const supabase = await createClient();
@@ -15,6 +16,7 @@ const SidebarFooter = async () => {
 
   return (
     <Footer>
+      <Separator className="mb-4 mx-auto max-w-[calc(100%-1rem)]" />
       <SidebarMenu>
         <SidebarMenuItem className="px-2 flex items-center justify-between">
           <div className="flex items-center gap-2">

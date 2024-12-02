@@ -22,7 +22,7 @@ const SidebarHeader = () => {
               <p>Beta</p>
             </div>
           </div>
-          <Separator className="mt-8" />
+          <Separator className="mt-4" />
         </SidebarGroupContent>
       </SidebarGroup>
     </Header>
