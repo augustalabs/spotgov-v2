@@ -2,37 +2,20 @@
 
 import { useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { Organization } from "@/database/schemas";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command";
+import { Skeleton } from "../ui/skeleton";
 import organizationsQuery from "@/queries/organizations-query";
+import { useUser } from "@/hooks/use-user";
 
-type OrganizationSwitcherProps = {
-  userId: string;
-};
+const OrganizationSwitcher = () => {
+  const { user } = useUser();
 
-const OrganizationSwitcher = ({ userId }: OrganizationSwitcherProps) => {
-  const { data, error } = useQuery(organizationsQuery(userId));
-
-  if (error) {
-    // TODO: handle errors
-  }
+  const { data, isPending } = useQuery(organizationsQuery(user?.id as string));
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  // TODO: Handle org state
-  const [currentOrganization, setCurrentOrganization] = useState(
-    data?.[0]?.organization
-  );
-
-  const handleSelection = (organization: Organization) => {
-    // TODO: handle this correctly
-    setCurrentOrganization(organization);
-    setIsOpen(false);
-  };
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -43,7 +26,11 @@ const OrganizationSwitcher = ({ userId }: OrganizationSwitcherProps) => {
           role="combobox"
           className="flex items-center justify-between"
         >
-          <p>{currentOrganization?.name}</p>
+          {isPending ? (
+            <Skeleton className="w-2/3 h-2" />
+          ) : (
+            <p>{data?.[0].organization?.name}</p>
+          )}
           <ChevronsUpDown size={16} />
         </Button>
       </PopoverTrigger>
@@ -54,18 +41,11 @@ const OrganizationSwitcher = ({ userId }: OrganizationSwitcherProps) => {
               {data?.map((v) => (
                 <CommandItem
                   key={v.organizationId}
-                  onSelect={() => handleSelection(v.organization!)}
+                  onSelect={() => {}}
                   className="flex items-center justify-between cursor-pointer"
                 >
                   <p>{v.organization?.name}</p>
-                  <Check
-                    size={16}
-                    className={cn(
-                      "opacity-0",
-                      v.organizationId === currentOrganization?.id &&
-                        "opacity-100"
-                    )}
-                  />
+                  <Check size={16} />
                 </CommandItem>
               ))}
             </CommandGroup>

@@ -8,7 +8,7 @@ function organizationsQuery(userId: string) {
     return response;
   };
 
-  return { queryKey, queryFn };
+  return { queryKey, queryFn, enabled: !!userId };
 }
 
 export default organizationsQuery;

@@ -1,14 +1,14 @@
 "use client";
 
-import { UserContext } from "@/providers/user-provider";
-import { useContext } from "react";
+import useUserStore from "@/stores/use-user-store";
 
 export const useUser = () => {
-  const context = useContext(UserContext);
+  const userStore = useUserStore();
+  userStore.getUser();
 
-  if (context === undefined) {
-    throw new Error("useUser must be used within a UserProvider");
-  }
-
-  return context;
+  return {
+    user: userStore.user,
+    isLoading: userStore.isLoading,
+    error: userStore.error,
+  };
 };
