@@ -1,6 +1,6 @@
 import { fetchUserOrganizations } from "@/features/organizations/actions";
 
-function organizationsQuery(userId: string) {
+function organizationsQuery(userId: string, isLoading: boolean) {
   const queryKey = ["organizations", userId];
 
   const queryFn = async () => {
@@ -8,7 +8,9 @@ function organizationsQuery(userId: string) {
     return response;
   };
 
-  return { queryKey, queryFn, enabled: !!userId };
+  const enabled = isLoading;
+
+  return { queryKey, queryFn, enabled };
 }
 
 export default organizationsQuery;

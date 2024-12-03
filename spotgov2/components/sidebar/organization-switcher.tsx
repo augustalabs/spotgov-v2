@@ -9,11 +9,14 @@ import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command";
 import { Skeleton } from "../ui/skeleton";
 import organizationsQuery from "@/queries/organizations-query";
 import { useUser } from "@/hooks/use-user";
+import { redirect } from "next/navigation";
 
 const OrganizationSwitcher = () => {
-  const { user } = useUser();
+  const { user, isLoading, error } = useUser();
 
-  const { data, isPending } = useQuery(organizationsQuery(user?.id as string));
+  if (error || !user) redirect("/auth/login");
+
+  const { data, isPending } = useQuery(organizationsQuery(user.id, isLoading));
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
