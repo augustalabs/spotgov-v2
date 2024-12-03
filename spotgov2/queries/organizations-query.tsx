@@ -8,6 +8,7 @@ function organizationsQuery() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        // TODO: We should have authorization and accept
       },
     });
 
