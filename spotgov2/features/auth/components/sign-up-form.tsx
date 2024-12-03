@@ -48,10 +48,9 @@ const SignUpForm = () => {
 
       toast.success("Conta criada com sucesso!");
     } catch (error: unknown) {
-      const err = error as Error;
-
-      // TODO: handle error correctly
-      toast.error(err.message);
+      toast.error(
+        "Não foi possível efetuar o registo. Por favor tente mais tarde."
+      );
     }
   };
 

@@ -6,8 +6,8 @@ const features = pgTable("organization_features", {
   organizationId: uuid("organization_id")
     .primaryKey()
     .references(() => organizations.id),
-  feature_deepdive: boolean("feature_deepdive"),
-  feature_marketintel: boolean("feature_marketintel"),
+  featureDeepdive: boolean("feature_deepdive"),
+  featureMarketintel: boolean("feature_marketintel"),
   //TODO ADD ALL FEATURES
 });
 

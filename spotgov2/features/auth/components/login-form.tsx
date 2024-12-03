@@ -42,11 +42,10 @@ const LoginForm = () => {
       await signInWithPassword(values);
 
       toast.success("Login efetuado com sucesso!");
-    } catch (error: unknown) {
-      const err = error as Error;
-
-      // TODO: handle error correctly
-      toast.error(err.message);
+    } catch {
+      toast.error(
+        "Não foi possível efetuar o login. Por favor tente mais tarde."
+      );
     }
   };
 
