@@ -23,6 +23,7 @@ import { Eye, EyeOff, Loader } from "lucide-react";
 import GoogleButton from "./google-button";
 import AuthSeparator from "./separator";
 import { toast } from "sonner";
+import { LOGIN_ROUTE } from "@/routes";
 
 const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -59,7 +60,7 @@ const SignUpForm = () => {
       description="Junte-se ao futuro da contratação pública."
       footerText="Já tem uma conta?"
       footerLinkLabel="Faça login"
-      footerLinkHref="/auth/login"
+      footerLinkHref={LOGIN_ROUTE}
     >
       <GoogleButton label="Criar conta com Google" />
       <AuthSeparator />

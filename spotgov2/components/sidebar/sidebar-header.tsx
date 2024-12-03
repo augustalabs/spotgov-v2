@@ -8,6 +8,7 @@ import {
 import logo from "@/public/assets/logo.png";
 import Link from "next/link";
 import { Separator } from "../ui/separator";
+import { HOME_ROUTE } from "@/routes";
 
 const SidebarHeader = () => {
   return (
@@ -15,7 +16,7 @@ const SidebarHeader = () => {
       <SidebarGroup>
         <SidebarGroupContent>
           <div className="flex items-center gap-4">
-            <Link href="/">
+            <Link href={HOME_ROUTE}>
               <Image alt="SpotGov logo" src={logo} width={110} />
             </Link>
             <div className="px-1.5 py-1 border border-primary bg-primary/10 text-primary rounded-lg text-xs">

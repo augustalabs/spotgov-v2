@@ -16,6 +16,12 @@ import {
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import {
+  FAVORITE_SEARCH_ROUTE,
+  MARKET_INTELLIGENCE_ROUTE,
+  NEW_SEARCH_ROUTE,
+  PIPELINE_ROUTE,
+} from "@/routes";
 
 type SidebarItem = {
   icon: LucideIcon;
@@ -31,26 +37,26 @@ const SidebarItems = () => {
     {
       icon: MessageCircleMore,
       label: "Nova pesquisa",
-      href: "/nova-pesquisa",
-      isActive: pathname === "/nova-pesquisa",
+      href: NEW_SEARCH_ROUTE,
+      isActive: pathname === NEW_SEARCH_ROUTE,
     },
     {
       icon: Star,
       label: "Pesquisas favoritas",
-      href: "/pesquisas-favoritas",
-      isActive: pathname === "/pesquisas-favoritas",
+      href: FAVORITE_SEARCH_ROUTE,
+      isActive: pathname === FAVORITE_SEARCH_ROUTE,
     },
     {
       icon: KanbanSquare,
       label: "Pipeline",
-      href: "/pipeline",
-      isActive: pathname === "/pipeline",
+      href: PIPELINE_ROUTE,
+      isActive: pathname === PIPELINE_ROUTE,
     },
     {
       icon: BarChart,
       label: "Market Intelligence",
-      href: "/market-intelligence",
-      isActive: pathname === "/market-intelligence",
+      href: MARKET_INTELLIGENCE_ROUTE,
+      isActive: pathname === MARKET_INTELLIGENCE_ROUTE,
     },
   ];
 

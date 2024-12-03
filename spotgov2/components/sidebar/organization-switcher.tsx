@@ -13,11 +13,12 @@ import { redirect } from "next/navigation";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { cn } from "@/lib/utils";
 import { OrganizationWithUserInfo } from "@/types";
+import { LOGIN_ROUTE } from "@/routes";
 
 const OrganizationSwitcher = () => {
   const { user, error } = useUser();
 
-  if (error) redirect("/auth/login");
+  if (error) redirect(LOGIN_ROUTE);
 
   const { data, isPending } = useQuery(organizationsQuery(user?.id as string));
 

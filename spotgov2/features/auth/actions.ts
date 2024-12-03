@@ -5,6 +5,7 @@ import * as z from "zod";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { loginSchema, signUpSchema } from "./schemas";
+import { HOME_ROUTE, LOGIN_ROUTE } from "@/routes";
 
 export async function signInWithPassword(data: z.infer<typeof loginSchema>) {
   const supabase = await createClient();
@@ -15,8 +16,8 @@ export async function signInWithPassword(data: z.infer<typeof loginSchema>) {
     throw error;
   }
 
-  revalidatePath("/", "layout");
-  redirect("/");
+  revalidatePath(HOME_ROUTE, "layout");
+  redirect(HOME_ROUTE);
 }
 
 export async function signUpWithPassword(data: z.infer<typeof signUpSchema>) {
@@ -36,8 +37,8 @@ export async function signUpWithPassword(data: z.infer<typeof signUpSchema>) {
     throw error;
   }
 
-  revalidatePath("/", "layout");
-  redirect("/");
+  revalidatePath(HOME_ROUTE, "layout");
+  redirect(HOME_ROUTE);
 }
 
 export async function signOut() {
@@ -45,6 +46,6 @@ export async function signOut() {
 
   await supabase.auth.signOut();
 
-  revalidatePath("/", "layout");
-  redirect("/auth/login");
+  revalidatePath(HOME_ROUTE, "layout");
+  redirect(LOGIN_ROUTE);
 }
