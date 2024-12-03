@@ -10,11 +10,7 @@ import { signOut } from "@/features/auth/actions";
 import { Separator } from "../ui/separator";
 import OrganizationSwitcher from "./organization-switcher";
 
-type SidebarFooterProps = {
-  userId: string;
-};
-
-const SidebarFooter = async ({ userId }: SidebarFooterProps) => {
+const SidebarFooter = async () => {
   const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
 

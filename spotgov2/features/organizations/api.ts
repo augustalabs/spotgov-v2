@@ -6,7 +6,7 @@ import { OrganizationWithUserInfo } from "@/types";
 import { eq } from "drizzle-orm";
 
 // TODO: Handle errors
-export async function fetchUserOrganizations(
+export async function getUserOrganizations(
   userId: string
 ): Promise<OrganizationWithUserInfo[]> {
   return await db.query.usersOrganizations.findMany({

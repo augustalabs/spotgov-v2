@@ -7,30 +7,23 @@ import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command";
 import { Skeleton } from "../ui/skeleton";
-import organizationsQuery from "@/queries/organizations-query";
-import { useUser } from "@/hooks/use-user";
-import { redirect } from "next/navigation";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { cn } from "@/lib/utils";
 import { OrganizationWithUserInfo } from "@/types";
-import { LOGIN_ROUTE } from "@/routes";
+import organizationsQuery from "@/queries/organizations-query";
 
 const OrganizationSwitcher = () => {
-  const { user, error } = useUser();
-
-  if (error) redirect(LOGIN_ROUTE);
-
-  const { data, isPending } = useQuery(organizationsQuery(user?.id as string));
+  const { data, isPending } = useQuery(organizationsQuery());
 
   const currentOrganizationStore = useCurrentOrganizationStore();
 
   useEffect(() => {
     if (
-      data &&
-      data?.length > 0 &&
+      data?.payload &&
+      data?.payload?.length > 0 &&
       !currentOrganizationStore.currentOrganization
     ) {
-      currentOrganizationStore.setCurrentOrganization(data[0]);
+      currentOrganizationStore.setCurrentOrganization(data.payload[0]);
     }
   }, [data, currentOrganizationStore]);
 
@@ -71,7 +64,7 @@ const OrganizationSwitcher = () => {
         <Command>
           <CommandList>
             <CommandGroup heading="Organizações">
-              {data?.map((v) => (
+              {data?.payload?.map((v) => (
                 <CommandItem
                   key={v.organizationId}
                   onSelect={() => handleSelection(v)}

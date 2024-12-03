@@ -1,16 +1,22 @@
-import { fetchUserOrganizations } from "@/features/organizations/actions";
+import { OrganizationWithUserInfo, Response } from "@/types";
 
-function organizationsQuery(userId: string) {
-  const queryKey = ["organizations", userId];
+function organizationsQuery() {
+  const queryKey = ["get-organizations"];
 
   const queryFn = async () => {
-    const response = await fetchUserOrganizations(userId);
-    return response;
+    const response = await fetch("/api/organizations", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data: Response<OrganizationWithUserInfo[]> = await response.json();
+
+    return data;
   };
 
-  const enabled = !!userId;
-
-  return { queryKey, queryFn, enabled };
+  return { queryKey, queryFn };
 }
 
 export default organizationsQuery;
