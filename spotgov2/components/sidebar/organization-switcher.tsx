@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "../ui/button";
@@ -10,17 +10,42 @@ import { Skeleton } from "../ui/skeleton";
 import organizationsQuery from "@/queries/organizations-query";
 import { useUser } from "@/hooks/use-user";
 import { redirect } from "next/navigation";
+import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
+import { cn } from "@/lib/utils";
+import { OrganizationWithUserInfo } from "@/types";
 
 const OrganizationSwitcher = () => {
-  const { user, isLoading, error } = useUser();
+  const { user, error } = useUser();
 
   if (error) redirect("/auth/login");
 
-  const { data, isPending } = useQuery(
-    organizationsQuery(user?.id as string, isLoading)
-  );
+  const { data, isPending } = useQuery(organizationsQuery(user?.id as string));
+
+  const currentOrganizationStore = useCurrentOrganizationStore();
+
+  useEffect(() => {
+    if (
+      data &&
+      data?.length > 0 &&
+      !currentOrganizationStore.currentOrganization
+    ) {
+      currentOrganizationStore.setCurrentOrganization(data[0]);
+    }
+  }, [data, currentOrganizationStore]);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const handleSelection = (organization: OrganizationWithUserInfo) => {
+    currentOrganizationStore.setCurrentOrganization(organization);
+    setIsOpen(false);
+  };
+
+  const isCurrentOrganization = (organization: OrganizationWithUserInfo) => {
+    return (
+      currentOrganizationStore.currentOrganization?.organizationId ===
+      organization.organizationId
+    );
+  };
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -34,7 +59,9 @@ const OrganizationSwitcher = () => {
           {isPending ? (
             <Skeleton className="w-2/3 h-2" />
           ) : (
-            <p>{data?.[0].organization?.name}</p>
+            <p>
+              {currentOrganizationStore.currentOrganization?.organization?.name}
+            </p>
           )}
           <ChevronsUpDown size={16} />
         </Button>
@@ -46,11 +73,21 @@ const OrganizationSwitcher = () => {
               {data?.map((v) => (
                 <CommandItem
                   key={v.organizationId}
-                  onSelect={() => {}}
-                  className="flex items-center justify-between cursor-pointer"
+                  onSelect={() => handleSelection(v)}
+                  className={cn(
+                    "flex items-center justify-between cursor-pointer text-foreground hover:text-foreground/70",
+                    isCurrentOrganization(v) &&
+                      "text-primary hover:text-primary/70"
+                  )}
                 >
                   <p>{v.organization?.name}</p>
-                  <Check size={16} />
+                  <Check
+                    size={16}
+                    className={cn(
+                      "opacity-0",
+                      isCurrentOrganization(v) && "opacity-100"
+                    )}
+                  />
                 </CommandItem>
               ))}
             </CommandGroup>

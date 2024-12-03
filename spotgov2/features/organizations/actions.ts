@@ -2,8 +2,8 @@
 
 import { db } from "@/database/db";
 import { usersOrganizations } from "@/database/schemas";
+import { OrganizationWithUserInfo } from "@/types";
 import { eq } from "drizzle-orm";
-import { OrganizationWithUserInfo } from "./types";
 
 // TODO: Handle errors
 export async function fetchUserOrganizations(

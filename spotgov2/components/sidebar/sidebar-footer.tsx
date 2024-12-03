@@ -20,7 +20,7 @@ const SidebarFooter = async ({ userId }: SidebarFooterProps) => {
 
   return (
     <Footer>
-      <OrganizationSwitcher userId={userId} />
+      <OrganizationSwitcher />
       <Separator className="mb-4 mx-auto max-w-[calc(100%-1rem)]" />
       <SidebarMenu>
         <SidebarMenuItem className="px-2 flex items-center justify-between">
