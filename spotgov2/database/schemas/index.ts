@@ -15,7 +15,7 @@ export { default as usages } from "./usages";
 export { default as costs } from "./costs";
 export { default as cpvs } from "./cpvs";
 export { default as features } from "./features";
-export { default as issuers } from "./issuers";
+export { default as entities } from "./entities";
 export { default as keywords } from "./keywords";
 export { default as marketintelFavourites } from "./marketintel-favourites";
 export { pipelinePhases, pipelinePhaseContract } from "./pipeline";
@@ -25,6 +25,7 @@ export {
   deepdiveVersions,
   deepdiveLatestTable,
 } from "./deepdive";
+export { default as queryUserEmails } from "./query-user-emails";
 
 // Export database types
 export type { User } from "./users";
@@ -38,7 +39,7 @@ export type { Usage } from "./usages";
 export type { Cost } from "./costs";
 export type { Cpv } from "./cpvs";
 export type { Feature } from "./features";
-export type { Issuer } from "./issuers";
+export type { Entity } from "./entities";
 export type { Keyword } from "./keywords";
 export type { MarketintelFavourite } from "./marketintel-favourites";
 export type { PipelinePhase, PipelinePhaseContract } from "./pipeline";
@@ -51,3 +52,4 @@ export type {
   DeepdiveVersion,
   DeepdiveLatestTable,
 } from "./deepdive";
+export type { QueryUserEmail } from "./query-user-emails";
