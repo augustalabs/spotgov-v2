@@ -21,9 +21,5 @@ export async function updateQueryTitle(
 
 // TODO: Handle errors
 export async function deleteQuery(queryId: string): Promise<void> {
-  try {
-    await db.delete(queries).where(eq(queries.id, queryId));
-  } catch (error) {
-    console.error(error);
-  }
+  await db.delete(queries).where(eq(queries.id, queryId));
 }
