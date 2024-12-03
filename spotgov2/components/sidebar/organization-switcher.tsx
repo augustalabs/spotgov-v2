@@ -14,7 +14,7 @@ import { redirect } from "next/navigation";
 const OrganizationSwitcher = () => {
   const { user, isLoading, error } = useUser();
 
-  if (error || (!user && !isLoading)) redirect("/auth/login");
+  if (error) redirect("/auth/login");
 
   const { data, isPending } = useQuery(
     organizationsQuery(user?.id as string, isLoading)
