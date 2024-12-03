@@ -16,3 +16,14 @@ export async function getUserOrganizations(
     },
   });
 }
+
+export async function isUserInOrganization(
+  userId: string,
+  organizationId: string
+): Promise<boolean> {
+  return !!(await db.query.usersOrganizations.findFirst({
+    where:
+      eq(usersOrganizations.userId, userId) &&
+      eq(usersOrganizations.organizationId, organizationId),
+  }));
+}

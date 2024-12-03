@@ -1,3 +1,6 @@
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -5,39 +8,46 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "../ui/sidebar";
+import queriesQuery from "@/queries/queries-query";
+import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
+import { Skeleton } from "../ui/skeleton";
+import SidebarHistoryActions from "./sidebar-history-actions";
 
-// TODO: When we have the real data, we should replace this placeholder data, and
-// add the three dots button to open the dialog to clear the history or activate email
-// notifications.
 const SidebarHistory = () => {
-  const placeholderData = [
-    {
-      name: "Pesquisa 1",
-    },
-    {
-      name: "Pesquisa 2",
-    },
-    {
-      name: "Pesquisa 3",
-    },
-    {
-      name: "Pesquisa 4",
-    },
-    {
-      name: "Pesquisa 5",
-    },
-  ];
+  const { currentOrganization } = useCurrentOrganizationStore();
+
+  const { data, isPending } = useQuery(
+    queriesQuery(currentOrganization?.organizationId as string)
+  );
 
   return (
     <SidebarGroup>
       <SidebarGroupContent>
         <SidebarGroupLabel>Histórico de Pesquisas</SidebarGroupLabel>
-        <SidebarMenu>
-          {placeholderData.map((data, index) => (
-            <SidebarMenuItem key={index}>
-              <p className="px-2">{data.name}</p>
-            </SidebarMenuItem>
-          ))}
+        <SidebarMenu className="px-2 ">
+          {isPending
+            ? Array.from({ length: 3 }).map((_, index) => (
+                <SidebarMenuItem key={index}>
+                  <Skeleton className="w-full h-4" />
+                </SidebarMenuItem>
+              ))
+            : data?.payload?.map((q) => (
+                <SidebarMenuItem
+                  key={q.id}
+                  className="flex items-center justify-between"
+                >
+                  <p
+                    className="hover:text-primary cursor-pointer "
+                    onClick={() => {}}
+                  >
+                    {q.title}
+                  </p>
+                  <SidebarHistoryActions query={q} />
+                </SidebarMenuItem>
+              ))}
+          {!isPending && data?.payload?.length === 0 && (
+            <SidebarMenuItem>Sem pesquisas realizadas.</SidebarMenuItem>
+          )}
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
