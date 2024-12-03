@@ -12,6 +12,7 @@ import queriesQuery from "@/queries/queries-query";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { Skeleton } from "../ui/skeleton";
 import SidebarHistoryActions from "./sidebar-history-actions";
+import Link from "next/link";
 
 const SidebarHistory = () => {
   const { currentOrganization } = useCurrentOrganizationStore();
@@ -36,12 +37,9 @@ const SidebarHistory = () => {
                   key={q.id}
                   className="flex items-center justify-between"
                 >
-                  <p
-                    className="hover:text-primary cursor-pointer "
-                    onClick={() => {}}
-                  >
+                  <Link className="hover:text-primary cursor-pointer" href="">
                     {q.title}
-                  </p>
+                  </Link>
                   <SidebarHistoryActions query={q} />
                 </SidebarMenuItem>
               ))}

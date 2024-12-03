@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader, MoreVertical, Trash } from "lucide-react";
+import { Edit, Loader, MoreVertical, Trash } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -120,7 +120,14 @@ const SidebarHistoryActions = ({ query }: SidebarHistoryActionsProps) => {
               )}
             />
             <Button disabled={isLoading} type="submit">
-              {isLoading ? <Loader className="animate-spin" /> : "Alterar"}
+              {isLoading ? (
+                <Loader className="animate-spin" />
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <Edit size={16} />
+                  <p>Editar</p>
+                </div>
+              )}
             </Button>
           </form>
         </Form>
