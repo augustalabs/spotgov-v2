@@ -1,5 +1,7 @@
+import { Query } from "@/database/schemas";
 import { getQueryClient } from "@/lib/react-query/client";
 import { Response } from "@/types";
+import { patch } from "@/utils/api/api";
 
 function updateQueryTitleMutation(organizationId: string) {
   const queryClient = getQueryClient();
@@ -11,19 +13,10 @@ function updateQueryTitleMutation(organizationId: string) {
   }: {
     queryId: string;
     title: string;
-  }) => {
-    const response = await fetch(`/api/queries/${organizationId}/${queryId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title }),
+  }) =>
+    await patch<Response<Query[]>>(`queries/${organizationId}/${queryId}`, {
+      title,
     });
-
-    const data: Response<undefined> = await response.json();
-
-    return data;
-  };
 
   const onSuccess = () => {
     queryClient.invalidateQueries({
