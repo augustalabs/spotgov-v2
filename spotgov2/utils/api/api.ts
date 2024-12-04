@@ -54,14 +54,14 @@ export async function put<T>(url: string, body: any): Promise<T> {
     body: JSON.stringify(body),
   });
 
-  if (!res.ok) throw new Error("Failed to patch data.");
+  if (!res.ok) throw new Error("Failed to put data.");
 
   const data = await res.json();
 
   return data as T;
 }
 
-export async function del<T>(url: string): Promise<T> {
+export async function del(url: string): Promise<void> {
   const res = await fetch(`/api/${url}`, {
     method: "DELETE",
     headers: {
@@ -70,8 +70,4 @@ export async function del<T>(url: string): Promise<T> {
   });
 
   if (!res.ok) throw new Error("Failed to delete data.");
-
-  const data = await res.json();
-
-  return data as T;
 }
