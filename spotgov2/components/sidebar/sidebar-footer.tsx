@@ -39,12 +39,14 @@ const SidebarFooter = async () => {
               {data?.user?.user_metadata?.full_name}
             </p>
           </div>
-          <SidebarFooterInfo />
-          <form className="flex items-center">
-            <button formAction={signOut} className="hover:text-primary">
-              <LogOut size={16} />
-            </button>
-          </form>
+          <div className="flex items-center gap-2">
+            <SidebarFooterInfo />
+            <form className="flex items-center">
+              <button formAction={signOut} className="hover:text-primary">
+                <LogOut size={16} />
+              </button>
+            </form>
+          </div>
         </SidebarMenuItem>
       </SidebarMenu>
     </Footer>
