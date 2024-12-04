@@ -9,6 +9,7 @@ import { LogOut, User } from "lucide-react";
 import { signOut } from "@/features/auth/actions";
 import { Separator } from "../ui/separator";
 import OrganizationSwitcher from "./organization-switcher";
+import SidebarFooterInfo from "./sidebar-footer-info";
 
 const SidebarFooter = async () => {
   const supabase = await createClient();
@@ -38,6 +39,7 @@ const SidebarFooter = async () => {
               {data?.user?.user_metadata?.full_name}
             </p>
           </div>
+          <SidebarFooterInfo />
           <form className="flex items-center">
             <button formAction={signOut} className="hover:text-primary">
               <LogOut size={16} />
