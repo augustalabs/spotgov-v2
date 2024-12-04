@@ -1,7 +1,7 @@
 import NewSearchCard from "@/features/new-search/components/new-search-card";
 import cpvsQuery from "@/queries/cpvs-query";
 import { createClient } from "@/lib/supabase/server";
-import { getFirstName } from "@/lib/utils";
+import { getFirstName } from "@/utils/utils";
 import {
   dehydrate,
   HydrationBoundary,

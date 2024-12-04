@@ -1,7 +1,14 @@
+import { NextResponse } from "next/server";
+
 import { getUserOrganizations } from "@/features/organizations/api";
 import { createClient } from "@/lib/supabase/server";
 import { OrganizationWithUserInfo, Response } from "@/types";
-import { NextResponse } from "next/server";
+import {
+  STATUS_INTERNAL_SERVER_ERROR,
+  STATUS_NOT_FOUND,
+  STATUS_OK,
+  STATUS_UNAUTHORIZED,
+} from "@/utils/api/status-messages";
 
 export async function GET(): Promise<
   NextResponse<Response<OrganizationWithUserInfo[]>>
@@ -10,43 +17,16 @@ export async function GET(): Promise<
     const supabase = await createClient();
     const { data, error } = await supabase.auth.getUser();
 
-    if (error) {
-      return NextResponse.json({
-        success: false,
-        status: 500,
-        error: error.message,
-      });
-    }
+    if (error) return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
 
-    if (!data?.user) {
-      return NextResponse.json({
-        success: false,
-        status: 401,
-        error: "Unauthorized",
-      });
-    }
+    if (!data?.user) return NextResponse.json(STATUS_UNAUTHORIZED);
 
     const organizations = await getUserOrganizations(data.user.id);
 
-    if (!organizations) {
-      return NextResponse.json({
-        success: false,
-        status: 404,
-        error: "Resource not found",
-      });
-    }
+    if (!organizations) return NextResponse.json(STATUS_NOT_FOUND);
 
-    return NextResponse.json({
-      success: true,
-      status: 200,
-      payload: organizations,
-    });
-  } catch (error) {
-    const err = error as Error;
-    return NextResponse.json({
-      success: false,
-      status: 500,
-      error: err.message,
-    });
+    return NextResponse.json({ ...STATUS_OK, payload: organizations });
+  } catch {
+    return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
   }
 }

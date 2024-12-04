@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command";
 import { Skeleton } from "../ui/skeleton";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { OrganizationWithUserInfo } from "@/types";
 import organizationsQuery from "@/queries/organizations-query";
 

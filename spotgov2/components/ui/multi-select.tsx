@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Command } from "@/components/ui/command";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
 export interface Option {

@@ -15,7 +15,7 @@ import {
 } from "../ui/sidebar";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import {
   FAVORITE_SEARCH_ROUTE,
   MARKET_INTELLIGENCE_ROUTE,
