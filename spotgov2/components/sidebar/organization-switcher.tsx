@@ -82,15 +82,21 @@ const OrganizationSwitcher = () => {
         </Button>
       </PopoverTrigger>
       <PopoverContent>
-        <Command>
+        <Command
+          value={
+            currentOrganizationStore.currentOrganization
+              ?.organizationId as string
+          }
+        >
           <CommandList>
             <CommandGroup heading="Organizações">
               {data?.payload?.map((v) => (
                 <CommandItem
                   key={v.organizationId}
+                  value={v.organizationId as string}
                   onSelect={() => handleSelection(v)}
                   className={cn(
-                    "flex items-center justify-between cursor-pointer text-foreground hover:text-foreground/70",
+                    "flex items-center justify-between cursor-pointer data-[selected='true']:bg-background text-foreground hover:text-foreground/70",
                     isCurrentOrganization(v) &&
                       "text-primary hover:text-primary/70"
                   )}
