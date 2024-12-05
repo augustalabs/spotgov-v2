@@ -11,26 +11,47 @@ import { useCurrentOrganizationStore } from "@/stores/current-organization-store
 import { cn } from "@/utils/utils";
 import { OrganizationWithUserInfo } from "@/types";
 import organizationsQuery from "@/queries/organizations-query";
+import { createClient } from "@/lib/supabase/client";
 
 const OrganizationSwitcher = () => {
+  const supabase = createClient();
+
   const { data, isPending } = useQuery(organizationsQuery());
 
   const currentOrganizationStore = useCurrentOrganizationStore();
 
   useEffect(() => {
-    if (
-      data?.payload &&
-      data?.payload?.length > 0 &&
-      !currentOrganizationStore.currentOrganization
-    ) {
-      currentOrganizationStore.setCurrentOrganization(data.payload[0]);
+    async function initializeCurrentOrganization() {
+      const { data: authData } = await supabase.auth.getUser();
+
+      if (!currentOrganizationStore.currentOrganization) {
+        if (authData.user?.user_metadata.current_organization) {
+          currentOrganizationStore.setCurrentOrganization(
+            authData.user?.user_metadata.current_organization,
+            supabase.auth
+          );
+        }
+
+        if (data?.payload && data?.payload.length > 0) {
+          currentOrganizationStore.setCurrentOrganization(
+            data.payload[0],
+            supabase.auth
+          );
+        }
+      }
     }
-  }, [data, currentOrganizationStore]);
+
+    initializeCurrentOrganization();
+  }, [data, currentOrganizationStore, supabase]);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const handleSelection = (organization: OrganizationWithUserInfo) => {
-    currentOrganizationStore.setCurrentOrganization(organization);
+  const handleSelection = async (organization: OrganizationWithUserInfo) => {
+    currentOrganizationStore.setCurrentOrganization(
+      organization,
+      supabase.auth
+    );
+
     setIsOpen(false);
   };
 
