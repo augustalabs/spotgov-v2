@@ -99,8 +99,10 @@ const SidebarHistoryActions = ({ query }: SidebarHistoryActionsProps) => {
       </DialogTrigger>
       <DialogContent>
         {/* WARNING: WITHOUT TITLE AND DESCRIPTION BROWSER CRIES */}
-        <DialogTitle>Opções</DialogTitle>
-        <DialogDescription>Descrição</DialogDescription>
+        <DialogTitle className="sr-only">Ações da pesquisa</DialogTitle>
+        <DialogDescription className="sr-only">
+          Receba atualizações, edite ou elimine a pesquisa
+        </DialogDescription>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}

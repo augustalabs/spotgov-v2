@@ -1,9 +1,18 @@
+import { NextResponse } from "next/server";
+
 import { Query } from "@/database/schemas";
 import { isUserInOrganization } from "@/features/organizations/api";
 import { getOrganizationQueries } from "@/features/queries/api";
 import { createClient } from "@/lib/supabase/server";
 import { Response } from "@/types";
-import { NextResponse } from "next/server";
+import {
+  STATUS_BAD_REQUEST,
+  STATUS_FORBIDDEN,
+  STATUS_INTERNAL_SERVER_ERROR,
+  STATUS_NOT_FOUND,
+  STATUS_OK,
+  STATUS_UNAUTHORIZED,
+} from "@/utils/api/status-messages";
 
 type Params = {
   organizationId: string;
@@ -17,59 +26,25 @@ export async function GET(
     const supabase = await createClient();
     const { data, error } = await supabase.auth.getUser();
 
-    if (error) {
-      return NextResponse.json({
-        success: false,
-        status: 500,
-        error: error.message,
-      });
-    }
+    if (error) return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
 
-    if (!data?.user) {
-      return NextResponse.json({
-        success: false,
-        status: 401,
-        error: "Unauthorized",
-      });
-    }
+    if (!data?.user) return NextResponse.json(STATUS_UNAUTHORIZED);
 
-    if (!params.organizationId) {
-      return NextResponse.json({
-        success: false,
-        status: 400,
-        error: "Bad request",
-      });
-    }
+    if (!params.organizationId) return NextResponse.json(STATUS_BAD_REQUEST);
 
     if (!isUserInOrganization(data.user.id, params.organizationId)) {
-      return NextResponse.json({
-        success: false,
-        status: 403,
-        error: "Forbidden",
-      });
+      return NextResponse.json(STATUS_FORBIDDEN);
     }
 
     const queries = await getOrganizationQueries(params.organizationId);
 
-    if (!queries) {
-      return NextResponse.json({
-        success: false,
-        status: 404,
-        error: "Resource not found",
-      });
-    }
+    if (!queries) return NextResponse.json(STATUS_NOT_FOUND);
 
     return NextResponse.json({
-      success: true,
-      status: 200,
+      ...STATUS_OK,
       payload: queries,
     });
-  } catch (error) {
-    const err = error as Error;
-    return NextResponse.json({
-      success: false,
-      status: 500,
-      error: err.message,
-    });
+  } catch {
+    return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
   }
 }

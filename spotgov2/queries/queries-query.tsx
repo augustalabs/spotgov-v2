@@ -1,22 +1,12 @@
 import { Query } from "@/database/schemas";
 import { Response } from "@/types";
+import { get } from "@/utils/api/api";
 
 function queriesQuery(organizationId: string) {
   const queryKey = ["get-queries", organizationId];
 
-  const queryFn = async () => {
-    const response = await fetch(`/api/queries/${organizationId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        // TODO: We should have authorization and accept
-      },
-    });
-
-    const data: Response<Query[]> = await response.json();
-
-    return data;
-  };
+  const queryFn = async () =>
+    await get<Response<Query[]>>(`queries/${organizationId}`);
 
   const enabled = !!organizationId;
 

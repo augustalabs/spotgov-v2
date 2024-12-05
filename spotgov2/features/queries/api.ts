@@ -15,8 +15,12 @@ export async function getOrganizationQueries(
 export async function updateQueryTitle(
   queryId: string,
   title: string
-): Promise<void> {
-  await db.update(queries).set({ title }).where(eq(queries.id, queryId));
+): Promise<Query[]> {
+  return await db
+    .update(queries)
+    .set({ title })
+    .where(eq(queries.id, queryId))
+    .returning();
 }
 
 // TODO: Handle errors

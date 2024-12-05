@@ -1,8 +1,19 @@
+import { NextResponse } from "next/server";
+
 import { isUserInOrganization } from "@/features/organizations/api";
 import { deleteQuery, updateQueryTitle } from "@/features/queries/api";
 import { createClient } from "@/lib/supabase/server";
 import { Response } from "@/types";
-import { NextResponse } from "next/server";
+import {
+  STATUS_BAD_REQUEST,
+  STATUS_FORBIDDEN,
+  STATUS_INTERNAL_SERVER_ERROR,
+  STATUS_NO_CONTENT,
+  STATUS_NOT_FOUND,
+  STATUS_OK,
+  STATUS_UNAUTHORIZED,
+} from "@/utils/api/status-messages";
+import { Query } from "@/database/schemas";
 
 type Params = {
   queryId: string;
@@ -12,58 +23,32 @@ type Params = {
 export async function PATCH(
   req: Request,
   { params }: { params: Params }
-): Promise<NextResponse<Response<void>>> {
+): Promise<NextResponse<Response<Query[]>>> {
   try {
     const supabase = await createClient();
     const { data, error } = await supabase.auth.getUser();
 
-    if (error) {
-      return NextResponse.json({
-        success: false,
-        status: 500,
-        error: error.message,
-      });
-    }
+    if (error) return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
 
-    if (!data?.user) {
-      return NextResponse.json({
-        success: false,
-        status: 401,
-        error: "Unauthorized",
-      });
-    }
+    if (!data?.user) return NextResponse.json(STATUS_UNAUTHORIZED);
 
     const { title } = await req.json();
 
     if (!params.organizationId || !params.queryId || !title) {
-      return NextResponse.json({
-        success: false,
-        status: 400,
-        error: "Bad request",
-      });
+      return NextResponse.json(STATUS_BAD_REQUEST);
     }
 
     if (!isUserInOrganization(data.user.id, params.organizationId)) {
-      return NextResponse.json({
-        success: false,
-        status: 403,
-        error: "Forbidden",
-      });
+      return NextResponse.json(STATUS_FORBIDDEN);
     }
 
-    await updateQueryTitle(params.queryId, title);
+    const query = await updateQueryTitle(params.queryId, title);
 
-    return NextResponse.json({
-      success: true,
-      status: 200,
-    });
-  } catch (error) {
-    const err = error as Error;
-    return NextResponse.json({
-      success: false,
-      status: 500,
-      error: err.message,
-    });
+    if (!query) return NextResponse.json(STATUS_NOT_FOUND);
+
+    return NextResponse.json({ ...STATUS_OK, payload: query });
+  } catch {
+    return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -75,50 +60,22 @@ export async function DELETE(
     const supabase = await createClient();
     const { data, error } = await supabase.auth.getUser();
 
-    if (error) {
-      return NextResponse.json({
-        success: false,
-        status: 500,
-        error: error.message,
-      });
-    }
+    if (error) return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
 
-    if (!data?.user) {
-      return NextResponse.json({
-        success: false,
-        status: 401,
-        error: "Unauthorized",
-      });
-    }
+    if (!data?.user) return NextResponse.json(STATUS_UNAUTHORIZED);
 
     if (!params.organizationId || !params.queryId) {
-      return NextResponse.json({
-        success: false,
-        status: 400,
-        error: "Bad request",
-      });
+      return NextResponse.json(STATUS_BAD_REQUEST);
     }
 
     if (!isUserInOrganization(data.user.id, params.organizationId)) {
-      return NextResponse.json({
-        success: false,
-        status: 403,
-        error: "Forbidden",
-      });
+      return NextResponse.json(STATUS_FORBIDDEN);
     }
 
     await deleteQuery(params.queryId);
 
-    return NextResponse.json({
-      success: true,
-      status: 200,
-    });
-  } catch (error) {
-    const err = error as Error;
-    return NextResponse.json({
-      success: false,
-      status: 500,
-      error: err.message,
-    });
+    return NextResponse.json(STATUS_NO_CONTENT);
+  } catch {
+    return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
   }
 }
