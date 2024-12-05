@@ -10,18 +10,53 @@ import {
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import AIIcon from "@/public/assets/ai-icon.svg";
-import { ScrollText, WholeWord } from "lucide-react";
+import {
+  Cat,
+  Dog,
+  Fish,
+  Rabbit,
+  ScrollText,
+  Turtle,
+  WholeWord,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import MultiSelect from "@/components/ui/multi-select";
 import { useQuery } from "@tanstack/react-query";
 import cpvsQuery from "@/queries/cpvs-query";
+import { useState } from "react";
+import MultipleSelector, { Option } from "@/components/ui/multi-select";
 
 interface NewSearchCardProps {
   title: string;
 }
 
 const NewSearchCard: React.FC<NewSearchCardProps> = ({ title }) => {
-  const { data: cpvs, error, isLoading } = useQuery(cpvsQuery());
+  const { queryKey, fetchCPVs } = cpvsQuery();
+
+  const { data: cpvs, error } = useQuery({ queryKey, queryFn: fetchCPVs });
+
+  // Process the CPVs data to create a list compatible with the MultiSelect component
+  const cpvsList = cpvs
+    ?.filter((cpv: { fullName: string | null }) => cpv.fullName !== null)
+    .map((cpv: { fullName: string | null }) => ({
+      value: cpv.fullName as string,
+      label: cpv.fullName as string,
+    }));
+
+  const OPTIONS: Option[] = [
+    { label: "nextjs", value: "Nextjs" },
+    { label: "React", value: "react" },
+    { label: "Remix", value: "remix" },
+    { label: "Vite", value: "vite" },
+    { label: "Nuxt", value: "nuxt" },
+    { label: "Vue", value: "vue" },
+    { label: "Svelte", value: "svelte" },
+    { label: "Angular", value: "angular" },
+    { label: "Ember", value: "ember" },
+    { label: "Gatsby", value: "gatsby" },
+    { label: "Astro", value: "astro" },
+  ];
+
+  const [value, setValue] = useState<Option[]>([]);
 
   const handleCPVsChange = (
     selectedOptions: { value: string; label: string }[]
@@ -59,18 +94,19 @@ const NewSearchCard: React.FC<NewSearchCardProps> = ({ title }) => {
           <div className="flex aspect-square h-12 w-12 items-center justify-center rounded-2xl border bg-[#F9F9FB] p-1">
             <ScrollText className="h-full w-full rounded-xl border bg-white p-2.5 text-gray-600" />
           </div>
-          {/*
-          <MultiSelect
-            defaultOptions={cpvs?.map((cpv) => ({
-              value: cpv,
-              label: cpv,
-            }))}
-            placeholder="Pesquisar com CPVs..."
-            variant="cpv"
-            onChange={handleCPVsChange}
+          <MultipleSelector
+            value={value}
+            onChange={setValue}
+            defaultOptions={cpvsList}
             creatable
+            placeholder="Pesquisar com CPVs..."
+            emptyIndicator={
+              <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                Sem resultados.
+              </p>
+            }
+            className="bg-white rounded-xl"
           />
-          */}
         </div>
         <Button>Pesquisar</Button>
       </CardContent>

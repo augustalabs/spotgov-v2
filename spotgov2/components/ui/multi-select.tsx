@@ -1,12 +1,29 @@
+/**
+ * Source: https://shadcnui-expansions.typeart.cc/docs/multiple-selector.
+ * Notes:
+ *   - This component requires cmdk version 0.2.0 to function correctly.
+ */
+
+/**
+ * TODO:
+ *   - List all the changes made to the original component.
+ *   - Remove "variant" prop.
+ *   - Change scrollbar style.
+ *   - FIX:
+ *     - Creatable Item is causing overflow in the dropdown. Search for "123" to see the issue.
+ *     - Overflow x
+ *     - Ensure arrow key navigation works with the Creatable Item.
+ */
+
 "use client";
 
 import { Command as CommandPrimitive, useCommandState } from "cmdk";
 import { Plus, X } from "lucide-react";
 import * as React from "react";
-import { useEffect } from "react";
+import { forwardRef, useEffect } from "react";
 
 import { Badge } from "@/components/ui/badge";
-import { Command } from "@/components/ui/command";
+import { Command, CommandItem } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
@@ -23,7 +40,7 @@ interface GroupOption {
   [key: string]: Option[];
 }
 
-interface MultiSelectProps {
+interface MultipleSelectorProps {
   value?: Option[];
   defaultOptions?: Option[];
   /** manually controlled options */
@@ -82,7 +99,7 @@ interface MultiSelectProps {
   variant?: "keywords" | "cpv";
 }
 
-export interface MultiSelectRef {
+export interface MultipleSelectorRef {
   selectedValue: Option[];
   input: HTMLInputElement;
   focus: () => void;
@@ -146,7 +163,10 @@ function isOptionsExist(groupOption: GroupOption, targetOption: Option[]) {
   return false;
 }
 
-const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
+const MultipleSelector = React.forwardRef<
+  MultipleSelectorRef,
+  MultipleSelectorProps
+>(
   (
     {
       value,
@@ -173,8 +193,8 @@ const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
       inputProps,
       hideClearAllButton = false,
       variant,
-    }: MultiSelectProps,
-    ref: React.Ref<MultiSelectRef>
+    }: MultipleSelectorProps,
+    ref: React.Ref<MultipleSelectorRef>
   ) => {
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [open, setOpen] = React.useState(false);
@@ -394,8 +414,14 @@ const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
 
     const rowVirtualizer = useVirtualizer({
       count: flatOptions.length,
-      getScrollElement: () => parentRef.current,
       estimateSize: () => 35,
+      getScrollElement: () => parentRef.current,
+      //measure dynamic row height, except in firefox because it measures table border height incorrectly
+      measureElement:
+        typeof window !== "undefined" &&
+        navigator.userAgent.indexOf("Firefox") === -1
+          ? (element) => element?.getBoundingClientRect().height
+          : undefined,
       overscan: 5,
     });
 
@@ -451,14 +477,14 @@ const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
           commandProps?.onKeyDown?.(e);
         }}
         className={cn(
-          "h-auto overflow-visible bg-transparent",
+          "h-auto overflow-visible bg-transparent !placeholder-[#9CA3AF]",
           commandProps?.className
         )}
         shouldFilter={false}
       >
         <div
           className={cn(
-            "border rounded-xl bg-white",
+            "rounded-2xl border border-input bg-white text-sm ring-offset-background focus-within:ring-2 focus-within:ring-[#4C74B9] focus-within:ring-offset-2",
             {
               "px-3 py-2": selected.length !== 0,
               "cursor-text": !disabled && selected.length !== 0,
@@ -477,7 +503,7 @@ const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
                 <Badge
                   key={option.value}
                   className={cn(
-                    "h-[30px] cursor-default rounded-md border border-[#2388FF]/50 bg-[#2388FF]/10 font-medium text-[#2388FF] hover:bg-[#2388FF]/10",
+                    "h-[30px] cursor-default rounded-md border border-[#2388FF]/50 bg-[#2388FF]/10 font-medium text-[#2388FF]",
                     badgeClassName
                   )}
                   data-fixed={option.fixed}
@@ -532,7 +558,7 @@ const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
                   : placeholder
               }
               className={cn(
-                "flex-1 bg-transparent placeholder-secondary outline-none",
+                "flex-1 bg-transparent !placeholder-[#9CA3AF] outline-none",
                 {
                   "w-full": hidePlaceholderWhenSelected,
                   "px-3 py-2": selected.length === 0,
@@ -581,7 +607,7 @@ const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
                 <>
                   {flatOptions.length === 0 && !CreatableItem() && (
                     <div className="p-2 text-center text-sm text-muted-foreground">
-                      {emptyIndicator || "Sem resultados."}
+                      {emptyIndicator || "No options found."}
                     </div>
                   )}
 
@@ -597,6 +623,7 @@ const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
                         height: `${rowVirtualizer.getTotalSize()}px`,
                         position: "relative",
                         width: "100%",
+                        padding: "2px",
                       }}
                     >
                       {rowVirtualizer.getVirtualItems().map((virtualRow) => {
@@ -622,12 +649,14 @@ const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
 
                         return (
                           <CommandPrimitive.Item
+                            data-index={virtualRow.index}
+                            ref={(node) => rowVirtualizer.measureElement(node)}
                             key={option.value}
                             className={cn(
-                              "cursor-pointer rounded-sm px-2 py-1 hover:bg-accent",
+                              "cursor-pointer rounded-sm px-2 py-1",
                               option.disable &&
                                 "cursor-default text-muted-foreground",
-                              "aria-selected:bg-gray-100"
+                              "aria-selected:bg-accent"
                             )}
                             onMouseDown={(e) => {
                               e.preventDefault();
@@ -654,11 +683,10 @@ const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
                               onChange?.(newOptions);
                             }}
                             style={{
+                              display: "flex",
                               position: "absolute",
-                              top: 0,
-                              left: 0,
-                              width: "100%",
                               transform: `translateY(${virtualRow.start}px)`,
+                              width: "100%",
                             }}
                           >
                             {option.label}
@@ -677,5 +705,5 @@ const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
   }
 );
 
-MultiSelect.displayName = "MultiSelect";
-export default MultiSelect;
+MultipleSelector.displayName = "MultipleSelector";
+export default MultipleSelector;

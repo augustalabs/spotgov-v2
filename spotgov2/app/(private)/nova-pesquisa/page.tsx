@@ -14,7 +14,9 @@ export default async function NewSearchPage() {
   const { data: user } = await supabase.auth.getUser();
 
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(cpvsQuery());
+
+  const { queryKey, fetchCPVs } = cpvsQuery();
+  await queryClient.prefetchQuery({ queryKey, queryFn: fetchCPVs });
 
   const firstName = getFirstName(user.user?.user_metadata.full_name);
 

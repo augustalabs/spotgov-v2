@@ -3,12 +3,12 @@ import { getCPVs } from "@/features/new-search/actions";
 function cpvsQuery() {
   const queryKey = ["cpvs"];
 
-  const queryFn = async () => {
+  const fetchCPVs = async () => {
     const response = await getCPVs();
     return response;
   };
 
-  return { queryKey, queryFn };
+  return { queryKey, fetchCPVs };
 }
 
 export default cpvsQuery;
