@@ -10,3 +10,9 @@ export type Response<T> = {
   payload?: T;
   error?: string;
 };
+
+export enum UserRoles {
+  Admin = "admin",
+  Member = "member",
+  Viewer = "viewer",
+}
