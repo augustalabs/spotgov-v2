@@ -70,9 +70,9 @@ const InformationForm = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex items-center justify-between"
+          className="flex flex-col sm:items-end sm:flex-row sm:justify-between space-y-4 sm:space-y-0"
         >
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 w-full">
             <FormField
               control={form.control}
               name="name"
@@ -84,7 +84,7 @@ const InformationForm = () => {
                       {...field}
                       type="text"
                       className={cn(
-                        "w-72 pl-0",
+                        "w-full sm:w-72 pl-0",
                         !isEditable &&
                           "border-background disabled:cursor-default disabled:opacity-100"
                       )}
@@ -108,7 +108,7 @@ const InformationForm = () => {
                       type="text"
                       value={field.value ?? ""}
                       className={cn(
-                        "w-40 pl-0",
+                        "w-full sm:w-40 pl-0",
                         !isEditable &&
                           "border-background disabled:cursor-default disabled:opacity-100"
                       )}
