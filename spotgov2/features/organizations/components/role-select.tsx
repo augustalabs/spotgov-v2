@@ -9,21 +9,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { UserRoles } from "@/types";
+import { mapUserRolesToPortuguese, UserRoles } from "@/types";
 import { cn } from "@/utils/utils";
 import { useMutation } from "@tanstack/react-query";
 import updateUserRoleMutation from "@/mutations/update-user-role-mutation";
 
-interface UserRoleSelectProps {
+type UserRoleSelectProps = {
   organizationId: string;
   userId: string;
   initialRole: UserRoles;
-}
-
-const mapUserRolesToPortuguese = {
-  admin: "Administrador",
-  member: "Membro",
-  viewer: "Visualizador",
 };
 
 export function RoleSelect({

@@ -4,11 +4,22 @@ import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import { RoleSelect } from "./role-select";
 import DeleteUserButton from "./delete-user-button";
+import { ArrowDownUp } from "lucide-react";
 
 export const columns: ColumnDef<UserWithOrganizationInfo>[] = [
   {
     accessorKey: "user",
-    header: "Nome",
+    header: ({ column }) => {
+      return (
+        <button
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="flex items-center gap-1"
+        >
+          Nome
+          <ArrowDownUp size={16} />
+        </button>
+      );
+    },
     cell: ({ row }) => {
       const { user } = row.original;
 
@@ -35,7 +46,17 @@ export const columns: ColumnDef<UserWithOrganizationInfo>[] = [
   },
   {
     accessorKey: "role",
-    header: "Cargo",
+    header: ({ column }) => {
+      return (
+        <button
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="flex items-center gap-1"
+        >
+          Cargo
+          <ArrowDownUp size={16} />
+        </button>
+      );
+    },
     cell: ({ row }) => {
       const { role, organizationId, userId } = row.original;
 

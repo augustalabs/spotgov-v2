@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 
 import {
   ColumnDef,
+  SortingState,
   ColumnFiltersState,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -22,6 +24,8 @@ import {
 } from "@/components/ui/table";
 import { Loader } from "lucide-react";
 import { useState } from "react";
+import { mapUserRolesToPortuguese, UserRoles } from "@/types";
+import { cn } from "@/utils/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -34,7 +38,9 @@ export function DataTable<TData, TValue>({
   data,
   isPending,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [selectedRole, setSelectedRole] = useState<string>("todos");
 
   const table = useReactTable({
     data,
@@ -43,6 +49,8 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
     initialState: {
       pagination: {
         pageSize: 10,
@@ -50,12 +58,46 @@ export function DataTable<TData, TValue>({
     },
     state: {
       columnFilters,
+      sorting,
     },
   });
 
+  const handleSelectedRole = (role: string) => {
+    setSelectedRole(role);
+
+    if (role === "todos") {
+      table.getColumn("role")?.setFilterValue(undefined);
+    } else {
+      table.getColumn("role")?.setFilterValue(role);
+    }
+  };
+
+  const userRolesWithTodos = ["todos", ...Object.values(UserRoles)];
+
   return (
     <div>
-      <div className="flex items-center py-4"></div>
+      <div className="py-4">
+        <div className="flex items-center w-fit bg-accent/20 p-1 rounded-lg">
+          {userRolesWithTodos.map((role) => (
+            <div
+              key={role}
+              className={cn(
+                "p-2 rounded-md cursor-pointer",
+                selectedRole === role && "bg-background"
+              )}
+              onClick={() => handleSelectedRole(role)}
+            >
+              <p className="text-sm">
+                {
+                  mapUserRolesToPortuguese[
+                    role as keyof typeof mapUserRolesToPortuguese
+                  ]
+                }
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -109,7 +151,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Sem resultados.
                 </TableCell>
               </TableRow>
             )}

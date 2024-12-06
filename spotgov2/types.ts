@@ -20,3 +20,10 @@ export enum UserRoles {
   Member = "member",
   Viewer = "viewer",
 }
+
+export const mapUserRolesToPortuguese = {
+  todos: "Todos",
+  admin: "Administrador",
+  member: "Membro",
+  viewer: "Visualizador",
+};
