@@ -1,3 +1,5 @@
+import OrganizationWrapper from "@/features/organizations/components/organization-wrapper";
+
 export default function OrganizationPage() {
-  return <div>org page</div>;
+  return <OrganizationWrapper>Organization page</OrganizationWrapper>;
 }
