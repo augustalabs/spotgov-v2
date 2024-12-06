@@ -1,8 +1,12 @@
 "use server";
 
 import { db } from "@/database/db";
-import { usersOrganizations } from "@/database/schemas";
-import { OrganizationWithUserInfo } from "@/types";
+import {
+  Organization,
+  organizations,
+  usersOrganizations,
+} from "@/database/schemas";
+import { OrganizationWithUserInfo, UserRoles } from "@/types";
 import { eq } from "drizzle-orm";
 
 // TODO: Handle errors
@@ -26,4 +30,30 @@ export async function isUserInOrganization(
       eq(usersOrganizations.userId, userId) &&
       eq(usersOrganizations.organizationId, organizationId),
   }));
+}
+
+export async function isUserAdmin(
+  userId: string,
+  organizationId: string
+): Promise<boolean> {
+  return (
+    (
+      await db.query.usersOrganizations.findFirst({
+        where:
+          eq(usersOrganizations.userId, userId) &&
+          eq(usersOrganizations.organizationId, organizationId),
+      })
+    )?.role === UserRoles.Admin
+  );
+}
+
+export async function updateOrganization(
+  organizationId: string,
+  name: string,
+  nif: string
+): Promise<Organization[]> {
+  return await db
+    .update(organizations)
+    .set({ name, nif, updatedAt: new Date() })
+    .where(eq(organizations.id, organizationId));
 }

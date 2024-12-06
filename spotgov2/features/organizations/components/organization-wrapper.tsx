@@ -10,7 +10,7 @@ const OrganizationWrapper = ({ children }: { children: ReactNode }) => {
   const { currentOrganization } = useCurrentOrganizationStore();
 
   useEffect(() => {
-    if (currentOrganization?.role !== UserRoles.Admin) {
+    if (currentOrganization && currentOrganization.role !== UserRoles.Admin) {
       redirect(NEW_SEARCH_ROUTE);
     }
   }, [currentOrganization?.role]);

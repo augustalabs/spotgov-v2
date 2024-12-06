@@ -1,5 +1,10 @@
+import InformationForm from "@/features/organizations/components/information-form";
 import OrganizationWrapper from "@/features/organizations/components/organization-wrapper";
 
 export default function OrganizationPage() {
-  return <OrganizationWrapper>Organization page</OrganizationWrapper>;
+  return (
+    <OrganizationWrapper>
+      <InformationForm />
+    </OrganizationWrapper>
+  );
 }
