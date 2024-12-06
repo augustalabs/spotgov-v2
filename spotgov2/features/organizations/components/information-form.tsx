@@ -57,7 +57,7 @@ const InformationForm = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-8">
         <Header title="Organização" />
         <Button
           variant="outline"

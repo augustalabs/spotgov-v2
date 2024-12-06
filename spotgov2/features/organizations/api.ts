@@ -6,7 +6,11 @@ import {
   organizations,
   usersOrganizations,
 } from "@/database/schemas";
-import { OrganizationWithUserInfo, UserRoles } from "@/types";
+import {
+  OrganizationWithUserInfo,
+  UserRoles,
+  UserWithOrganizationInfo,
+} from "@/types";
 import { eq } from "drizzle-orm";
 
 // TODO: Handle errors
@@ -56,4 +60,15 @@ export async function updateOrganization(
     .update(organizations)
     .set({ name, nif, updatedAt: new Date() })
     .where(eq(organizations.id, organizationId));
+}
+
+export async function getOrganizationUsers(
+  organizationId: string
+): Promise<UserWithOrganizationInfo[]> {
+  return await db.query.usersOrganizations.findMany({
+    where: eq(usersOrganizations.organizationId, organizationId),
+    with: {
+      user: true,
+    },
+  });
 }

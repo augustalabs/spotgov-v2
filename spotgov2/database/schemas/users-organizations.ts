@@ -34,6 +34,10 @@ export const usersOrganizationsRelations = relations(
       fields: [usersOrganizations.organizationId],
       references: [organizations.id],
     }),
+    user: one(users, {
+      fields: [usersOrganizations.userId],
+      references: [users.id],
+    }),
   })
 );
 
