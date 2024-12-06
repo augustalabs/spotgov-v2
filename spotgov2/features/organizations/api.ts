@@ -4,6 +4,7 @@ import { db } from "@/database/db";
 import {
   Organization,
   organizations,
+  UserOrganization,
   usersOrganizations,
 } from "@/database/schemas";
 import {
@@ -11,7 +12,7 @@ import {
   UserRoles,
   UserWithOrganizationInfo,
 } from "@/types";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 // TODO: Handle errors
 export async function getUserOrganizations(
@@ -71,4 +72,21 @@ export async function getOrganizationUsers(
       user: true,
     },
   });
+}
+
+export async function updateUserRole(
+  userId: string,
+  organizationId: string,
+  role: UserRoles
+): Promise<UserOrganization[]> {
+  return await db
+    .update(usersOrganizations)
+    .set({ role })
+    .where(
+      and(
+        eq(usersOrganizations.userId, userId),
+        eq(usersOrganizations.organizationId, organizationId)
+      )
+    )
+    .returning();
 }
