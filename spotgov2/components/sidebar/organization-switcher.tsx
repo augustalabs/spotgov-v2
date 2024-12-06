@@ -65,6 +65,13 @@ const OrganizationSwitcher = () => {
         supabase.auth
       );
     }
+
+    if (data?.success && data.payload?.length && !updatedOrganization) {
+      currentOrganizationStore.setCurrentOrganization(
+        data.payload[0] as OrganizationWithUserInfo,
+        supabase.auth
+      );
+    }
   }, [data]);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);

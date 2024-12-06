@@ -3,6 +3,7 @@ import { UserWithOrganizationInfo } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import { RoleSelect } from "./role-select";
+import DeleteUserButton from "./delete-user-button";
 
 export const columns: ColumnDef<UserWithOrganizationInfo>[] = [
   {
@@ -49,5 +50,10 @@ export const columns: ColumnDef<UserWithOrganizationInfo>[] = [
   },
   {
     id: "actions",
+    cell: ({ row }) => {
+      const { userId } = row.original;
+
+      return <DeleteUserButton userId={userId as string} />;
+    },
   },
 ];

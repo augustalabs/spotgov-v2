@@ -90,3 +90,17 @@ export async function updateUserRole(
     )
     .returning();
 }
+
+export async function deleteUser(
+  userId: string,
+  organizationId: string
+): Promise<void> {
+  await db
+    .delete(usersOrganizations)
+    .where(
+      and(
+        eq(usersOrganizations.userId, userId),
+        eq(usersOrganizations.organizationId, organizationId)
+      )
+    );
+}

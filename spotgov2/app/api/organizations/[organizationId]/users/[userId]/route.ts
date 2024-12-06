@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
 
 import {
-  //   deleteUser,
+  deleteUser,
   isUserAdmin,
-  isUserInOrganization,
   updateUserRole,
 } from "@/features/organizations/api";
 import { createClient } from "@/lib/supabase/server";
-import { Response, UserRoles } from "@/types";
+import { Response } from "@/types";
 import {
   STATUS_BAD_REQUEST,
   STATUS_FORBIDDEN,
@@ -60,30 +59,30 @@ export async function PATCH(
   }
 }
 
-// export async function DELETE(
-//   req: Request,
-//   { params }: { params: Params }
-// ): Promise<NextResponse<Response<void>>> {
-//   try {
-//     const supabase = await createClient();
-//     const { data, error } = await supabase.auth.getUser();
+export async function DELETE(
+  req: Request,
+  { params }: { params: Params }
+): Promise<NextResponse<Response<void>>> {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase.auth.getUser();
 
-//     if (error) return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
+    if (error) return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
 
-//     if (!data?.user) return NextResponse.json(STATUS_UNAUTHORIZED);
+    if (!data?.user) return NextResponse.json(STATUS_UNAUTHORIZED);
 
-//     if (!params.organizationId || !params.userId) {
-//       return NextResponse.json(STATUS_BAD_REQUEST);
-//     }
+    if (!params.organizationId || !params.userId) {
+      return NextResponse.json(STATUS_BAD_REQUEST);
+    }
 
-//     if (!isUserAdmin(data.user.id, params.organizationId)) {
-//       return NextResponse.json(STATUS_FORBIDDEN);
-//     }
+    if (!isUserAdmin(data.user.id, params.organizationId)) {
+      return NextResponse.json(STATUS_FORBIDDEN);
+    }
 
-//     await deleteUser(params.userId, params.organizationId);
+    await deleteUser(params.userId, params.organizationId);
 
-//     return NextResponse.json(STATUS_NO_CONTENT);
-//   } catch {
-//     return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
-//   }
-// }
+    return NextResponse.json(STATUS_NO_CONTENT);
+  } catch {
+    return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
+  }
+}
