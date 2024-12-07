@@ -8,3 +8,9 @@ export const updateOrganizationSchema = z.object({
     .or(z.null())
     .refine((arg) => validatePortugalNif(arg)),
 });
+
+export const inviteUserSchema = z.object({
+  email: z.string().email({
+    message: "O email fornecido não é válido.",
+  }),
+});

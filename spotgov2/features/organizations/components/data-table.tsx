@@ -26,6 +26,7 @@ import { Loader } from "lucide-react";
 import { useState } from "react";
 import { mapUserRolesToPortuguese, UserRoles } from "@/types";
 import { cn } from "@/utils/utils";
+import AddUserButton from "./add-user-button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -76,7 +77,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="py-4">
+      <div className="py-4 flex items-center justify-between">
         <div className="flex items-center w-fit bg-accent/20 p-1 rounded-lg">
           {userRolesWithTodos.map((role) => (
             <div
@@ -97,6 +98,7 @@ export function DataTable<TData, TValue>({
             </div>
           ))}
         </div>
+        <AddUserButton />
       </div>
       <div className="rounded-md border">
         <Table>
