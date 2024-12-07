@@ -21,6 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import useResend from "@/hooks/use-resend";
 
 const AddUserButton = () => {
   const form = useForm<z.infer<typeof inviteUserSchema>>({
@@ -34,12 +35,14 @@ const AddUserButton = () => {
 
   const onSubmit = async (values: z.infer<typeof inviteUserSchema>) => {};
 
+  const resend = useResend();
+
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button size="sm">
           <Plus size={16} />
-          Adicionar membro
+          Convidar membro
         </Button>
       </DialogTrigger>
       <DialogContent>

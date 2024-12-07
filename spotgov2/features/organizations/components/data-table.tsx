@@ -26,7 +26,7 @@ import { Loader } from "lucide-react";
 import { useState } from "react";
 import { mapUserRolesToPortuguese, UserRoles } from "@/types";
 import { cn } from "@/utils/utils";
-import AddUserButton from "./add-user-button";
+import InviteUserButton from "./invite-user-button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -98,7 +98,7 @@ export function DataTable<TData, TValue>({
             </div>
           ))}
         </div>
-        <AddUserButton />
+        <InviteUserButton />
       </div>
       <div className="rounded-md border">
         <Table>
