@@ -11,8 +11,8 @@ export type UserWithOrganizationInfo = UserOrganization & {
 export type Response<T> = {
   success: boolean;
   status: number;
+  message: string;
   payload?: T;
-  error?: string;
 };
 
 export enum UserRoles {
