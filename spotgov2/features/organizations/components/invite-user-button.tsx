@@ -21,7 +21,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import useResend from "@/hooks/use-resend";
+import { useMutation } from "@tanstack/react-query";
+import inviteUserMutation from "@/mutations/invite-user-mutation";
+import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 
 const AddUserButton = () => {
   const form = useForm<z.infer<typeof inviteUserSchema>>({
@@ -33,9 +35,17 @@ const AddUserButton = () => {
 
   const isLoading = form.formState.isSubmitting;
 
-  const onSubmit = async (values: z.infer<typeof inviteUserSchema>) => {};
+  const { currentOrganization } = useCurrentOrganizationStore();
 
-  const resend = useResend();
+  const mutation = useMutation(inviteUserMutation());
+
+  const onSubmit = async (values: z.infer<typeof inviteUserSchema>) => {
+    mutation.mutate({
+      organizationId: currentOrganization?.organizationId as string,
+      organizationName: currentOrganization?.organization?.name as string,
+      email: values.email,
+    });
+  };
 
   return (
     <Dialog>
