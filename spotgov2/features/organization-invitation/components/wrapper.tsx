@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import addUserMutation from "@/mutations/add-user-mutation";
 import acceptInviteQuery from "@/queries/accept-invite-query";
-import { NEW_SEARCH_ROUTE, SIGN_UP_ROUTE } from "@/routes";
+import { LOGIN_ROUTE, NEW_SEARCH_ROUTE, SIGN_UP_ROUTE } from "@/routes";
 import logo from "@public/assets/logo.png";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
@@ -29,14 +29,10 @@ const Wrapper = () => {
         }
 
         const supabase = createClient();
-        const { data: userData, error } = await supabase.auth.getUser();
+        const { data: authData } = await supabase.auth.getUser();
 
-        if (error) {
-          router.push(`${SIGN_UP_ROUTE}?token=${token}`);
-        }
-
-        if (!userData) {
-          router.push(`${SIGN_UP_ROUTE}?token=${token}`);
+        if (!authData) {
+          router.push(`${LOGIN_ROUTE}?token=${token}`);
         }
       }
     }

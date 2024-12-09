@@ -74,7 +74,19 @@ export async function POST(
       return NextResponse.json(STATUS_FORBIDDEN);
     }
 
-    await addUserToOrganization(params.organizationId, data.user.id);
+    const organizationWithUserInfo = (
+      await addUserToOrganization(params.organizationId, data.user.id)
+    )[0];
+
+    if (!organizationWithUserInfo) {
+      return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
+    }
+
+    await supabase.auth.updateUser({
+      data: {
+        current_organization: organizationWithUserInfo,
+      },
+    });
 
     return NextResponse.json(STATUS_NO_CONTENT);
   } catch {

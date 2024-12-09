@@ -1,15 +1,26 @@
 import { db } from "@/database/db";
 import { usersOrganizations } from "@/database/schemas";
-import { UserRoles } from "@/types";
+import { OrganizationWithUserInfo, UserRoles } from "@/types";
+import { and, eq } from "drizzle-orm";
 
 export async function addUserToOrganization(
   organizationId: string,
   userId: string
-) {
+): Promise<OrganizationWithUserInfo[]> {
   await db.insert(usersOrganizations).values({
     organizationId,
     userId,
     role: UserRoles.Member,
     lastOnline: new Date(),
+  });
+
+  return await db.query.usersOrganizations.findMany({
+    where: and(
+      eq(usersOrganizations.userId, userId),
+      eq(usersOrganizations.organizationId, organizationId)
+    ),
+    with: {
+      organization: true,
+    },
   });
 }
