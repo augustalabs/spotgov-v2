@@ -31,7 +31,7 @@ const Wrapper = () => {
         const supabase = createClient();
         const { data: authData } = await supabase.auth.getUser();
 
-        if (!authData) {
+        if (!authData.user) {
           router.push(`${LOGIN_ROUTE}?token=${token}`);
         }
       }
