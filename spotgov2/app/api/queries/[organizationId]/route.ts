@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 import { Query } from "@/database/schemas";
 import { isUserInOrganization } from "@/features/organizations/api";
 import { getOrganizationQueries } from "@/features/queries/api";
-import { createClient } from "@/lib/supabase/server";
 import { Response } from "@/types";
 import {
   STATUS_BAD_REQUEST,
@@ -11,8 +10,8 @@ import {
   STATUS_INTERNAL_SERVER_ERROR,
   STATUS_NOT_FOUND,
   STATUS_OK,
-  STATUS_UNAUTHORIZED,
 } from "@/utils/api/status-messages";
+import { checkUserAuthentication } from "@/utils/api/helpers";
 
 type Params = {
   organizationId: string;
@@ -23,27 +22,38 @@ export async function GET(
   { params }: { params: Params }
 ): Promise<NextResponse<Response<Query[]>>> {
   try {
-    const supabase = await createClient();
-    const { data, error } = await supabase.auth.getUser();
+    const userOrResponse = await checkUserAuthentication();
+    if (userOrResponse instanceof NextResponse) return userOrResponse;
 
-    if (error) return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
+    if (!params.organizationId) {
+      return NextResponse.json(STATUS_BAD_REQUEST, {
+        status: STATUS_BAD_REQUEST.status,
+      });
+    }
 
-    if (!data?.user) return NextResponse.json(STATUS_UNAUTHORIZED);
-
-    if (!params.organizationId) return NextResponse.json(STATUS_BAD_REQUEST);
-
-    if (!isUserInOrganization(data.user.id, params.organizationId)) {
-      return NextResponse.json(STATUS_FORBIDDEN);
+    if (!isUserInOrganization(userOrResponse?.id, params.organizationId)) {
+      return NextResponse.json(STATUS_FORBIDDEN, {
+        status: STATUS_FORBIDDEN.status,
+      });
     }
 
     const queries = await getOrganizationQueries(params.organizationId);
 
-    if (!queries) return NextResponse.json(STATUS_NOT_FOUND);
+    if (!queries) {
+      return NextResponse.json(STATUS_NOT_FOUND, {
+        status: STATUS_NOT_FOUND.status,
+      });
+    }
 
-    return NextResponse.json({
-      ...STATUS_OK,
-      payload: queries,
-    });
+    return NextResponse.json(
+      {
+        ...STATUS_OK,
+        payload: queries,
+      },
+      {
+        status: STATUS_OK.status,
+      }
+    );
   } catch {
     return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
   }
