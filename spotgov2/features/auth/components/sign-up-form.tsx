@@ -24,8 +24,10 @@ import GoogleButton from "./google-button";
 import AuthSeparator from "./separator";
 import { toast } from "sonner";
 import { LOGIN_ROUTE } from "@/routes";
+import { useSearchParams } from "next/navigation";
 
 const SignUpForm = () => {
+  const params = useSearchParams();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState<boolean>(false);
@@ -44,7 +46,8 @@ const SignUpForm = () => {
 
   const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
     try {
-      await signUpWithPassword(values);
+      const token = params.get("token") as string;
+      await signUpWithPassword(values, token);
 
       toast.success("Conta criada com sucesso!");
     } catch (error: unknown) {

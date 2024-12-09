@@ -42,7 +42,37 @@ const OrganizationSwitcher = () => {
     }
 
     initializeCurrentOrganization();
-  }, [data, currentOrganizationStore, supabase]);
+  }, []);
+
+  // TODO: Check if this works properly in edge cases
+  // This is necessary to sync the organization present in the store with the user metadata current organization
+  // because when we update the organization name or nif the user metadata is updated but does not trigger a change
+  // in the store.
+  useEffect(() => {
+    const storeOrganization =
+      currentOrganizationStore.currentOrganization?.organization;
+    const updatedOrganization = data?.payload?.find(
+      (v) => v.organizationId === storeOrganization?.id
+    );
+
+    if (
+      (updatedOrganization &&
+        storeOrganization?.name !== updatedOrganization?.organization?.name) ||
+      storeOrganization?.nif !== updatedOrganization?.organization?.nif
+    ) {
+      currentOrganizationStore.setCurrentOrganization(
+        updatedOrganization as OrganizationWithUserInfo,
+        supabase.auth
+      );
+    }
+
+    if (data?.success && data.payload?.length && !updatedOrganization) {
+      currentOrganizationStore.setCurrentOrganization(
+        data.payload[0] as OrganizationWithUserInfo,
+        supabase.auth
+      );
+    }
+  }, [data]);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 

@@ -9,10 +9,10 @@ export default async function Layout({
   return (
     <SidebarProvider>
       <CustomSidebar />
-      <main className="w-full">
+      <div className="w-full">
         <SidebarTrigger />
-        {children}
-      </main>
+        <main className="max-w-3xl mx-auto px-2">{children}</main>
+      </div>
     </SidebarProvider>
   );
 }

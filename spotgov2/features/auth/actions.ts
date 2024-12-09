@@ -5,9 +5,12 @@ import * as z from "zod";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { loginSchema, signUpSchema } from "./schemas";
-import { HOME_ROUTE, LOGIN_ROUTE } from "@/routes";
+import { HOME_ROUTE, LOGIN_ROUTE, ORGANIZATION_INVITE_ROUTE } from "@/routes";
 
-export async function signInWithPassword(data: z.infer<typeof loginSchema>) {
+export async function signInWithPassword(
+  data: z.infer<typeof loginSchema>,
+  token?: string
+) {
   const supabase = await createClient();
 
   const { error } = await supabase.auth.signInWithPassword(data);
@@ -17,10 +20,13 @@ export async function signInWithPassword(data: z.infer<typeof loginSchema>) {
   }
 
   revalidatePath(HOME_ROUTE, "layout");
-  redirect(HOME_ROUTE);
+  redirect(token ? `${ORGANIZATION_INVITE_ROUTE}/${token}` : HOME_ROUTE);
 }
 
-export async function signUpWithPassword(data: z.infer<typeof signUpSchema>) {
+export async function signUpWithPassword(
+  data: z.infer<typeof signUpSchema>,
+  token?: string
+) {
   const supabase = await createClient();
 
   const { error } = await supabase.auth.signUp({
@@ -38,7 +44,7 @@ export async function signUpWithPassword(data: z.infer<typeof signUpSchema>) {
   }
 
   revalidatePath(HOME_ROUTE, "layout");
-  redirect(HOME_ROUTE);
+  redirect(token ? `${ORGANIZATION_INVITE_ROUTE}/${token}` : HOME_ROUTE);
 }
 
 export async function signOut() {

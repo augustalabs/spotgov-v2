@@ -1,7 +1,11 @@
-import { Organization, UserOrganization } from "@/database/schemas";
+import { Organization, User, UserOrganization } from "@/database/schemas";
 
 export type OrganizationWithUserInfo = UserOrganization & {
   organization: Organization | null;
+};
+
+export type UserWithOrganizationInfo = UserOrganization & {
+  user: User | null;
 };
 
 export type Response<T> = {
@@ -9,4 +13,17 @@ export type Response<T> = {
   status: number;
   message: string;
   payload?: T;
+};
+
+export enum UserRoles {
+  Admin = "admin",
+  Member = "member",
+  Viewer = "viewer",
+}
+
+export const mapUserRolesToPortuguese = {
+  todos: "Todos",
+  admin: "Administrador",
+  member: "Membro",
+  viewer: "Visualizador",
 };

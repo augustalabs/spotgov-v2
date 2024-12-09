@@ -10,6 +10,7 @@ import { signOut } from "@/features/auth/actions";
 import { Separator } from "../ui/separator";
 import OrganizationSwitcher from "./organization-switcher";
 import SidebarFooterInfo from "./sidebar-footer-info";
+import AvatarIcon from "../avatar-icon";
 
 const SidebarFooter = async () => {
   const supabase = await createClient();
@@ -31,9 +32,7 @@ const SidebarFooter = async () => {
                 height={28}
               />
             ) : (
-              <div className="size-7 border bg-primary/10 text-primary rounded-full flex items-center justify-center">
-                <User size={16} />
-              </div>
+              <AvatarIcon size={16} />
             )}
             <p className="text-sm max-w-32 truncate">
               {data?.user?.user_metadata?.full_name}
