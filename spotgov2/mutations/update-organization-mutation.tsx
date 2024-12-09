@@ -5,7 +5,7 @@ import { patch } from "@/utils/api/api";
 
 function updateOrganizationMutation() {
   const queryClient = getQueryClient();
-  const mutationKey = ["updateOrganization"];
+  const mutationKey = ["update-organization"];
 
   const mutationFn = async ({
     organizationId,
@@ -15,18 +15,16 @@ function updateOrganizationMutation() {
     organizationId: string;
     name: string;
     nif: string;
-  }) => {
+  }) =>
     await patch<Response<Organization[]>>(`organizations/${organizationId}`, {
       name,
       nif,
     });
-  };
 
-  const onSuccess = () => {
-    queryClient.invalidateQueries({
+  const onSuccess = async () =>
+    await queryClient.invalidateQueries({
       queryKey: ["get-organizations"],
     });
-  };
 
   return { mutationKey, mutationFn, onSuccess };
 }

@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/utils";
 import { useMutation } from "@tanstack/react-query";
 import updateOrganizationMutation from "@/mutations/update-organization-mutation";
+import { toast } from "sonner";
 
 const InformationForm = () => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
@@ -39,20 +40,34 @@ const InformationForm = () => {
     if (currentOrganization) {
       form.reset({
         name: currentOrganization.organization?.name,
-        nif: currentOrganization.organization?.nif,
+        nif: currentOrganization.organization?.nif ?? "",
       });
     }
   }, [currentOrganization, form]);
 
   const mutation = useMutation(updateOrganizationMutation());
 
-  const onSubmit = (values: z.infer<typeof updateOrganizationSchema>) => {
-    mutation.mutate({
-      organizationId: currentOrganization?.organization?.id as string,
-      name: values.name,
-      nif: values.nif ?? "",
-    });
-    setIsEditable(false);
+  const onSubmit = async (values: z.infer<typeof updateOrganizationSchema>) => {
+    try {
+      const res = await mutation.mutateAsync({
+        organizationId: currentOrganization?.organization?.id as string,
+        name: values.name,
+        nif: values.nif ?? "",
+      });
+
+      if (res.success) {
+        toast.success("Organização atualizada com sucesso.");
+        setIsEditable(false);
+      } else {
+        toast.error(
+          "Ocorreu um erro ao atualizar a organização. Por favor, tente novamente."
+        );
+      }
+    } catch {
+      toast.error(
+        "Ocorreu um erro ao atualizar a organização. Por favor, tente novamente."
+      );
+    }
   };
 
   return (

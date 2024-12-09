@@ -5,18 +5,16 @@ import {
   isUserAdmin,
   updateUserRole,
 } from "@/features/organizations/api";
-import { createClient } from "@/lib/supabase/server";
 import { Response } from "@/types";
 import {
   STATUS_BAD_REQUEST,
   STATUS_FORBIDDEN,
   STATUS_INTERNAL_SERVER_ERROR,
-  STATUS_NO_CONTENT,
   STATUS_NOT_FOUND,
   STATUS_OK,
-  STATUS_UNAUTHORIZED,
 } from "@/utils/api/status-messages";
 import { UserOrganization } from "@/database/schemas";
+import { checkUserAuthentication } from "@/utils/api/helpers";
 
 type Params = {
   organizationId: string;
@@ -28,21 +26,21 @@ export async function PATCH(
   { params }: { params: Params }
 ): Promise<NextResponse<Response<UserOrganization[]>>> {
   try {
-    const supabase = await createClient();
-    const { data, error } = await supabase.auth.getUser();
-
-    if (error) return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
-
-    if (!data?.user) return NextResponse.json(STATUS_UNAUTHORIZED);
+    const userOrResponse = await checkUserAuthentication();
+    if (userOrResponse instanceof NextResponse) return userOrResponse;
 
     const { role } = await req.json();
 
     if (!params.organizationId || !params.userId || !role) {
-      return NextResponse.json(STATUS_BAD_REQUEST);
+      return NextResponse.json(STATUS_BAD_REQUEST, {
+        status: STATUS_BAD_REQUEST.status,
+      });
     }
 
-    if (!isUserAdmin(data.user.id, params.organizationId)) {
-      return NextResponse.json(STATUS_FORBIDDEN);
+    if (!isUserAdmin(userOrResponse.id, params.organizationId)) {
+      return NextResponse.json(STATUS_FORBIDDEN, {
+        status: STATUS_FORBIDDEN.status,
+      });
     }
 
     const userOrganization = await updateUserRole(
@@ -51,11 +49,20 @@ export async function PATCH(
       role
     );
 
-    if (!userOrganization) return NextResponse.json(STATUS_NOT_FOUND);
+    if (!userOrganization) {
+      return NextResponse.json(STATUS_NOT_FOUND, {
+        status: STATUS_NOT_FOUND.status,
+      });
+    }
 
-    return NextResponse.json({ ...STATUS_OK, payload: userOrganization });
+    return NextResponse.json(
+      { ...STATUS_OK, payload: userOrganization },
+      { status: STATUS_OK.status }
+    );
   } catch {
-    return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
+    return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
+      status: STATUS_INTERNAL_SERVER_ERROR.status,
+    });
   }
 }
 
@@ -64,24 +71,30 @@ export async function DELETE(
   { params }: { params: Params }
 ): Promise<NextResponse<Response<void>>> {
   try {
-    const supabase = await createClient();
-    const { data, error } = await supabase.auth.getUser();
-
-    if (error) return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
-
-    if (!data?.user) return NextResponse.json(STATUS_UNAUTHORIZED);
+    const userOrResponse = await checkUserAuthentication();
+    if (userOrResponse instanceof NextResponse) return userOrResponse;
 
     if (!params.organizationId || !params.userId) {
-      return NextResponse.json(STATUS_BAD_REQUEST);
+      return NextResponse.json(STATUS_BAD_REQUEST, {
+        status: STATUS_BAD_REQUEST.status,
+      });
     }
 
-    if (!isUserAdmin(data.user.id, params.organizationId)) {
-      return NextResponse.json(STATUS_FORBIDDEN);
+    if (!isUserAdmin(userOrResponse.id, params.organizationId)) {
+      return NextResponse.json(STATUS_FORBIDDEN, {
+        status: STATUS_FORBIDDEN.status,
+      });
     }
 
-    await deleteUser(params.userId, params.organizationId);
+    const deletedUser = await deleteUser(params.userId, params.organizationId);
 
-    return NextResponse.json(STATUS_NO_CONTENT);
+    if (!deletedUser) {
+      return NextResponse.json(STATUS_NOT_FOUND, {
+        status: STATUS_NOT_FOUND.status,
+      });
+    }
+
+    return NextResponse.json(STATUS_OK, { status: STATUS_OK.status });
   } catch {
     return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
   }

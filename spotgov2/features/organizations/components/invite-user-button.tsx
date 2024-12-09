@@ -24,6 +24,8 @@ import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
 import inviteUserMutation from "@/mutations/invite-user-mutation";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
+import { toast } from "sonner";
+import { useState } from "react";
 
 const AddUserButton = () => {
   const form = useForm<z.infer<typeof inviteUserSchema>>({
@@ -40,15 +42,28 @@ const AddUserButton = () => {
   const mutation = useMutation(inviteUserMutation());
 
   const onSubmit = async (values: z.infer<typeof inviteUserSchema>) => {
-    mutation.mutate({
-      organizationId: currentOrganization?.organizationId as string,
-      organizationName: currentOrganization?.organization?.name as string,
-      email: values.email,
-    });
+    try {
+      const res = await mutation.mutateAsync({
+        organizationId: currentOrganization?.organizationId as string,
+        organizationName: currentOrganization?.organization?.name as string,
+        email: values.email,
+      });
+
+      if (res.success) {
+        toast.success("Convite enviado com sucesso!");
+        setIsOpen(false);
+      } else {
+        toast.error("Erro ao enviar convite. Por favor tente novamente.");
+      }
+    } catch {
+      toast.error("Erro ao enviar convite. Por favor tente novamente.");
+    }
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={() => setIsOpen((v) => !v)}>
       <DialogTrigger asChild>
         <Button size="sm">
           <Plus size={16} />

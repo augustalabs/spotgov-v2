@@ -16,7 +16,11 @@ export async function GET(req: Request, { params }: { params: Params }) {
   try {
     const { token } = params;
 
-    if (!token) return NextResponse.json(STATUS_BAD_REQUEST);
+    if (!token) {
+      return NextResponse.json(STATUS_BAD_REQUEST, {
+        status: STATUS_BAD_REQUEST.status,
+      });
+    }
 
     const tokenPayload = jwt.verify(
       token,
@@ -26,15 +30,26 @@ export async function GET(req: Request, { params }: { params: Params }) {
       email: string;
     };
 
-    if (!tokenPayload) return NextResponse.json(STATUS_NOT_FOUND);
+    if (!tokenPayload) {
+      return NextResponse.json(STATUS_NOT_FOUND, {
+        status: STATUS_NOT_FOUND.status,
+      });
+    }
 
     const userExists = await doesUserExist(tokenPayload.email);
 
-    return NextResponse.json({
-      ...STATUS_OK,
-      payload: { ...tokenPayload, userExists },
-    });
+    return NextResponse.json(
+      {
+        ...STATUS_OK,
+        payload: { ...tokenPayload, userExists },
+      },
+      {
+        status: STATUS_OK.status,
+      }
+    );
   } catch {
-    return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
+    return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
+      status: STATUS_INTERNAL_SERVER_ERROR.status,
+    });
   }
 }

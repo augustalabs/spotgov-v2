@@ -5,7 +5,7 @@ import { patch } from "@/utils/api/api";
 
 function updateUserRoleMutation(organizationId: string, userId: string) {
   const queryClient = getQueryClient();
-  const mutationKey = ["updateUserRole", organizationId, userId];
+  const mutationKey = ["update-user-role", organizationId, userId];
 
   const mutationFn = async ({ role }: { role: UserRoles }) =>
     await patch<Response<Query[]>>(
@@ -15,11 +15,10 @@ function updateUserRoleMutation(organizationId: string, userId: string) {
       }
     );
 
-  const onSuccess = () => {
-    queryClient.invalidateQueries({
+  const onSuccess = async () =>
+    await queryClient.invalidateQueries({
       queryKey: ["get-organization-users", organizationId],
     });
-  };
 
   return { mutationKey, mutationFn, onSuccess };
 }

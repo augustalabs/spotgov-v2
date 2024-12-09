@@ -1,14 +1,13 @@
 import { Organization } from "@/database/schemas";
 import { isUserAdmin, updateOrganization } from "@/features/organizations/api";
-import { createClient } from "@/lib/supabase/server";
 import { Response } from "@/types";
+import { checkUserAuthentication } from "@/utils/api/helpers";
 import {
   STATUS_BAD_REQUEST,
   STATUS_FORBIDDEN,
   STATUS_INTERNAL_SERVER_ERROR,
   STATUS_NOT_FOUND,
   STATUS_OK,
-  STATUS_UNAUTHORIZED,
 } from "@/utils/api/status-messages";
 import { NextResponse } from "next/server";
 
@@ -21,19 +20,21 @@ export async function PATCH(
   { params }: { params: Params }
 ): Promise<NextResponse<Response<Organization[]>>> {
   try {
-    const supabase = await createClient();
-    const { data, error } = await supabase.auth.getUser();
-
-    if (error) return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
-
-    if (!data?.user) return NextResponse.json(STATUS_UNAUTHORIZED);
+    const userOrResponse = await checkUserAuthentication();
+    if (userOrResponse instanceof NextResponse) return userOrResponse;
 
     const { name, nif } = await req.json();
 
-    if (!name) return NextResponse.json(STATUS_BAD_REQUEST);
+    if (!name || !nif) {
+      return NextResponse.json(STATUS_BAD_REQUEST, {
+        status: STATUS_BAD_REQUEST.status,
+      });
+    }
 
-    if (!isUserAdmin(data.user.id, params.organizationId)) {
-      return NextResponse.json(STATUS_FORBIDDEN);
+    if (!isUserAdmin(userOrResponse.id, params.organizationId)) {
+      return NextResponse.json(STATUS_FORBIDDEN, {
+        status: STATUS_FORBIDDEN.status,
+      });
     }
 
     const organizations = await updateOrganization(
@@ -42,10 +43,19 @@ export async function PATCH(
       nif
     );
 
-    if (!organizations) return NextResponse.json(STATUS_NOT_FOUND);
+    if (!organizations) {
+      return NextResponse.json(STATUS_NOT_FOUND, {
+        status: STATUS_NOT_FOUND.status,
+      });
+    }
 
-    return NextResponse.json({ ...STATUS_OK, payload: organizations });
+    return NextResponse.json(
+      { ...STATUS_OK, payload: organizations },
+      { status: STATUS_OK.status }
+    );
   } catch {
-    return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
+    return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
+      status: STATUS_INTERNAL_SERVER_ERROR.status,
+    });
   }
 }

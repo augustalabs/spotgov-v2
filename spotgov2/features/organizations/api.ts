@@ -14,7 +14,6 @@ import {
 } from "@/types";
 import { and, eq } from "drizzle-orm";
 
-// TODO: Handle errors
 export async function getUserOrganizations(
   userId: string
 ): Promise<OrganizationWithUserInfo[]> {
@@ -41,15 +40,13 @@ export async function isUserAdmin(
   userId: string,
   organizationId: string
 ): Promise<boolean> {
-  return (
-    (
-      await db.query.usersOrganizations.findFirst({
-        where:
-          eq(usersOrganizations.userId, userId) &&
-          eq(usersOrganizations.organizationId, organizationId),
-      })
-    )?.role === UserRoles.Admin
-  );
+  const userOrganization = await db.query.usersOrganizations.findFirst({
+    where:
+      eq(usersOrganizations.userId, userId) &&
+      eq(usersOrganizations.organizationId, organizationId),
+  });
+
+  return userOrganization?.role === UserRoles.Admin;
 }
 
 export async function updateOrganization(
@@ -94,13 +91,14 @@ export async function updateUserRole(
 export async function deleteUser(
   userId: string,
   organizationId: string
-): Promise<void> {
-  await db
+): Promise<UserOrganization[]> {
+  return await db
     .delete(usersOrganizations)
     .where(
       and(
         eq(usersOrganizations.userId, userId),
         eq(usersOrganizations.organizationId, organizationId)
       )
-    );
+    )
+    .returning();
 }

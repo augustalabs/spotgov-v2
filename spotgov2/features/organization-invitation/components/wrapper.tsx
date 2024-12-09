@@ -10,6 +10,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 const Wrapper = () => {
   const { token } = useParams();
@@ -42,15 +43,22 @@ const Wrapper = () => {
 
   const mutation = useMutation(addUserMutation());
 
-  const handleAcceptInvite = () => {
+  const handleAcceptInvite = async () => {
     try {
-      mutation.mutate({
+      const res = await mutation.mutateAsync({
         organizationId: data?.payload?.organizationId as string,
         email: data?.payload?.email as string,
       });
 
-      router.push(NEW_SEARCH_ROUTE);
-    } catch {}
+      if (res.success) {
+        toast.success("Convite aceite com sucesso!");
+        router.push(NEW_SEARCH_ROUTE);
+      } else {
+        toast.error("Erro ao aceitar convite. Por favor, tente novamente.");
+      }
+    } catch {
+      toast.error("Erro ao aceitar convite. Por favor, tente novamente.");
+    }
   };
 
   return (

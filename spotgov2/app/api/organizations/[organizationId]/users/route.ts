@@ -10,12 +10,11 @@ import {
   STATUS_BAD_REQUEST,
   STATUS_FORBIDDEN,
   STATUS_INTERNAL_SERVER_ERROR,
-  STATUS_NO_CONTENT,
   STATUS_NOT_FOUND,
   STATUS_OK,
-  STATUS_UNAUTHORIZED,
 } from "@/utils/api/status-messages";
 import { addUserToOrganization } from "@/features/organization-invitation/api";
+import { checkUserAuthentication } from "@/utils/api/helpers";
 
 type Params = {
   organizationId: string;
@@ -26,29 +25,42 @@ export async function GET(
   { params }: { params: Params }
 ): Promise<NextResponse<Response<UserWithOrganizationInfo[]>>> {
   try {
-    const supabase = await createClient();
-    const { data, error } = await supabase.auth.getUser();
+    const userOrResponse = await checkUserAuthentication();
+    if (userOrResponse instanceof NextResponse) return userOrResponse;
 
-    if (error) return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
+    if (!params.organizationId) {
+      return NextResponse.json(STATUS_BAD_REQUEST, {
+        status: STATUS_BAD_REQUEST.status,
+      });
+    }
 
-    if (!data?.user) return NextResponse.json(STATUS_UNAUTHORIZED);
-
-    if (!params.organizationId) return NextResponse.json(STATUS_BAD_REQUEST);
-
-    if (!isUserAdmin(data.user.id, params.organizationId)) {
-      return NextResponse.json(STATUS_FORBIDDEN);
+    if (!isUserAdmin(userOrResponse.id, params.organizationId)) {
+      return NextResponse.json(STATUS_FORBIDDEN, {
+        status: STATUS_FORBIDDEN.status,
+      });
     }
 
     const users = await getOrganizationUsers(params.organizationId);
 
-    if (!users) return NextResponse.json(STATUS_NOT_FOUND);
+    if (!users) {
+      return NextResponse.json(STATUS_NOT_FOUND, {
+        status: STATUS_NOT_FOUND.status,
+      });
+    }
 
-    return NextResponse.json({
-      ...STATUS_OK,
-      payload: users,
-    });
+    return NextResponse.json(
+      {
+        ...STATUS_OK,
+        payload: users,
+      },
+      {
+        status: STATUS_OK.status,
+      }
+    );
   } catch {
-    return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
+    return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
+      status: STATUS_INTERNAL_SERVER_ERROR.status,
+    });
   }
 }
 
@@ -57,39 +69,52 @@ export async function POST(
   { params }: { params: Params }
 ): Promise<NextResponse<Response<UserWithOrganizationInfo[]>>> {
   try {
-    const supabase = await createClient();
-    const { data, error } = await supabase.auth.getUser();
+    const userOrResponse = await checkUserAuthentication();
+    if (userOrResponse instanceof NextResponse) return userOrResponse;
 
-    if (error) return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
-
-    if (!data?.user) return NextResponse.json(STATUS_UNAUTHORIZED);
-
-    if (!params.organizationId) return NextResponse.json(STATUS_BAD_REQUEST);
+    if (!params.organizationId) {
+      return NextResponse.json(STATUS_BAD_REQUEST, {
+        status: STATUS_BAD_REQUEST.status,
+      });
+    }
 
     const { email } = await req.json();
 
-    if (!email) return NextResponse.json(STATUS_BAD_REQUEST);
+    if (!email) {
+      return NextResponse.json(STATUS_BAD_REQUEST, {
+        status: STATUS_BAD_REQUEST.status,
+      });
+    }
 
-    if (email !== data.user.email) {
-      return NextResponse.json(STATUS_FORBIDDEN);
+    if (email !== userOrResponse.email) {
+      return NextResponse.json(STATUS_FORBIDDEN, {
+        status: STATUS_FORBIDDEN.status,
+      });
     }
 
     const organizationWithUserInfo = (
-      await addUserToOrganization(params.organizationId, data.user.id)
+      await addUserToOrganization(params.organizationId, userOrResponse.id)
     )[0];
 
     if (!organizationWithUserInfo) {
-      return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
+      return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
+        status: STATUS_INTERNAL_SERVER_ERROR.status,
+      });
     }
 
+    const supabase = await createClient();
     await supabase.auth.updateUser({
       data: {
         current_organization: organizationWithUserInfo,
       },
     });
 
-    return NextResponse.json(STATUS_NO_CONTENT);
+    return NextResponse.json(STATUS_OK, {
+      status: STATUS_OK.status,
+    });
   } catch {
-    return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);
+    return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
+      status: STATUS_INTERNAL_SERVER_ERROR.status,
+    });
   }
 }

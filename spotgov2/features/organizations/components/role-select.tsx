@@ -13,6 +13,7 @@ import { mapUserRolesToPortuguese, UserRoles } from "@/types";
 import { cn } from "@/utils/utils";
 import { useMutation } from "@tanstack/react-query";
 import updateUserRoleMutation from "@/mutations/update-user-role-mutation";
+import { toast } from "sonner";
 
 type UserRoleSelectProps = {
   organizationId: string;
@@ -29,9 +30,19 @@ export function RoleSelect({
 
   const mutation = useMutation(updateUserRoleMutation(organizationId, userId));
 
-  const handleRoleChange = (newRole: UserRoles) => {
-    setRole(newRole);
-    mutation.mutate({ role: newRole });
+  const handleRoleChange = async (newRole: UserRoles) => {
+    try {
+      const res = await mutation.mutateAsync({ role: newRole });
+
+      if (res.success) {
+        setRole(newRole);
+        toast.success("Cargo atualizado com sucesso!");
+      } else {
+        toast.error("Erro ao atualizar cargo. Por favor tente novamente.");
+      }
+    } catch {
+      toast.error("Erro ao atualizar cargo. Por favor tente novamente.");
+    }
   };
 
   return (

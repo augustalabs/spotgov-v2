@@ -10,11 +10,10 @@ function addUserMutation() {
   }: {
     organizationId: string;
     email: string;
-  }) => {
-    return await post<Response<void>>(`organizations/${organizationId}/users`, {
+  }) =>
+    await post<Response<void>>(`organizations/${organizationId}/users`, {
       email,
     });
-  };
 
   return { mutationKey, mutationFn };
 }
