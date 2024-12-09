@@ -7,7 +7,6 @@ import {
   STATUS_BAD_REQUEST,
   STATUS_FORBIDDEN,
   STATUS_INTERNAL_SERVER_ERROR,
-  STATUS_NO_CONTENT,
   STATUS_NOT_FOUND,
   STATUS_OK,
 } from "@/utils/api/status-messages";
@@ -84,8 +83,8 @@ export async function DELETE(
 
     await deleteQuery(params.queryId);
 
-    return NextResponse.json(STATUS_NO_CONTENT, {
-      status: STATUS_NO_CONTENT.status,
+    return NextResponse.json(STATUS_OK, {
+      status: STATUS_OK.status,
     });
   } catch {
     return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {

@@ -14,12 +14,6 @@ export const STATUS_CREATED: Omit<Response<unknown>, "payload"> = {
   message: "Created",
 };
 
-export const STATUS_NO_CONTENT: Omit<Response<unknown>, "payload"> = {
-  success: true,
-  status: 204,
-  message: "No Content",
-};
-
 /** ERROR STATUS */
 
 export const STATUS_BAD_REQUEST: Omit<Response<unknown>, "payload"> = {

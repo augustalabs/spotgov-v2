@@ -28,6 +28,7 @@ import { useMutation } from "@tanstack/react-query";
 import updateQueryTitleMutation from "@/mutations/update-query-title-mutation";
 import { toast } from "sonner";
 import deleteQueryMutation from "@/mutations/delete-query-mutation";
+import { cn } from "@/utils/utils";
 
 type SidebarHistoryActionsProps = {
   query: Query;
@@ -57,15 +58,22 @@ const SidebarHistoryActions = ({ query }: SidebarHistoryActionsProps) => {
     )
   );
 
-  const onSubmit = async (values: z.infer<typeof updateQueryTitleSchema>) => {
+  const handleUpdate = async (
+    values: z.infer<typeof updateQueryTitleSchema>
+  ) => {
     try {
-      await updateMutation.mutate({
+      const res = await updateMutation.mutateAsync({
         queryId: query.id,
         title: values.title,
       });
 
-      // TODO: Check if it was actually a success
-      toast.success("Título alterado com sucesso.");
+      if (res.success) {
+        toast.success("Título alterado com sucesso.");
+      } else {
+        toast.error(
+          "Não foi possível realizar a alteração do título. Por favor, tente novamente."
+        );
+      }
     } catch {
       toast.error(
         "Não foi possível realizar a alteração do título. Por favor, tente novamente."
@@ -81,10 +89,15 @@ const SidebarHistoryActions = ({ query }: SidebarHistoryActionsProps) => {
 
   const handleDelete = async () => {
     try {
-      await deleteMutation.mutate({ queryId: query.id });
+      const res = await deleteMutation.mutateAsync({ queryId: query.id });
 
-      // TODO: Check if it was actually a success
-      toast.success("Pesquisa eliminada com sucesso.");
+      if (res.success) {
+        toast.success("Pesquisa eliminada com sucesso.");
+      } else {
+        toast.error(
+          "Não foi possível realizar a eliminação da pesquisa. Por favor, tente novamente."
+        );
+      }
     } catch {
       toast.error(
         "Não foi possível realizar a eliminação da pesquisa. Por favor, tente novamente."
@@ -105,7 +118,7 @@ const SidebarHistoryActions = ({ query }: SidebarHistoryActionsProps) => {
         </DialogDescription>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(handleUpdate)}
             className="flex items-end gap-2"
           >
             <FormField
@@ -122,14 +135,15 @@ const SidebarHistoryActions = ({ query }: SidebarHistoryActionsProps) => {
               )}
             />
             <Button disabled={isLoading} type="submit">
-              {isLoading ? (
-                <Loader className="animate-spin" />
-              ) : (
-                <div className="flex items-center space-x-2">
-                  <Edit size={16} />
-                  <p>Editar</p>
-                </div>
-              )}
+              <div
+                className={cn(
+                  "flex items-center space-x-2",
+                  isLoading && "animate-pulse"
+                )}
+              >
+                <Edit size={16} />
+                <p>Editar</p>
+              </div>
             </Button>
           </form>
         </Form>
@@ -138,8 +152,12 @@ const SidebarHistoryActions = ({ query }: SidebarHistoryActionsProps) => {
         <Separator />
         <Button
           variant="destructive"
-          className="flex items-center gap-2"
+          className={cn(
+            "flex items-center gap-2",
+            deleteMutation.isPending && "animate-pulse"
+          )}
           onClick={handleDelete}
+          disabled={deleteMutation.isPending}
         >
           <Trash size={16} />
           <p>Eliminar</p>

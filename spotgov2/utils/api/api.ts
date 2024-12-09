@@ -61,7 +61,7 @@ export async function put<T>(url: string, body: any): Promise<T> {
   return data as T;
 }
 
-export async function del(url: string): Promise<void> {
+export async function del<T>(url: string): Promise<T> {
   const res = await fetch(`/api/${url}`, {
     method: "DELETE",
     headers: {
@@ -70,4 +70,8 @@ export async function del(url: string): Promise<void> {
   });
 
   if (!res.ok) throw new Error("Failed to delete data.");
+
+  const data = await res.json();
+
+  return data as T;
 }
