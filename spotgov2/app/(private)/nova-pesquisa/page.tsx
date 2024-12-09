@@ -7,6 +7,10 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { getKeywords } from "@/features/new-search/api/get-keywords";
+import { getCPVs } from "@/features/new-search/api/get-cpvs";
+import PreviousSearches from "@/features/new-search/components/previous-searches";
+import { getAdjudicatingEntities } from "@/features/new-search/api/get-adjudicating-entities";
 
 export default async function NewSearchPage() {
   const supabase = await createClient();
@@ -15,8 +19,25 @@ export default async function NewSearchPage() {
 
   const queryClient = new QueryClient();
 
-  const { queryKey, fetchCPVs } = cpvsQuery();
-  await queryClient.prefetchQuery({ queryKey, queryFn: fetchCPVs });
+  await queryClient.prefetchQuery({
+    queryKey: ["cpvs"],
+    queryFn: async () => {
+      return await getCPVs();
+    },
+  });
+
+  const organizationId =
+    user.user?.user_metadata.current_organization.organizationId;
+
+  await queryClient.prefetchQuery({
+    queryKey: ["keywords", organizationId],
+    queryFn: async () => await getKeywords({ organizationId }),
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: ["adjudicatingEntities"],
+    queryFn: async () => await getAdjudicatingEntities(),
+  });
 
   const firstName = getFirstName(user.user?.user_metadata.full_name);
 
@@ -27,8 +48,9 @@ export default async function NewSearchPage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="p-4 w-full flex flex-col items-center">
-        <NewSearchCard title={title} />
+      <div className="flex w-full flex-col items-center p-4">
+        <NewSearchCard title={title} organizationId={organizationId} />
+        <PreviousSearches organizationId={organizationId} />
       </div>
     </HydrationBoundary>
   );

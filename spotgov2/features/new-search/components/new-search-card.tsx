@@ -10,64 +10,72 @@ import {
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import AIIcon from "@/public/assets/ai-icon.svg";
-import {
-  Cat,
-  Dog,
-  Fish,
-  Rabbit,
-  ScrollText,
-  Turtle,
-  WholeWord,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
-import cpvsQuery from "@/queries/cpvs-query";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import MultipleSelector, { Option } from "@/components/ui/multi-select";
+import { Option as MultiSelectOption } from "@/components/ui/multi-select";
+import { addKeywords } from "../api/add-keywords";
+import PriceRangeSelector from "./price-range-selector";
+import { DateRange } from "react-day-picker";
+import AdjudicatingEntitySelector from "./adjudicating-entity-selector";
+import DateNewQuery from "./date-new-query";
+import CPVSelector from "./cpv-selector";
+import KeywordsSelector from "./keywords-selector";
 
 interface NewSearchCardProps {
   title: string;
+  organizationId: string;
 }
 
-const NewSearchCard: React.FC<NewSearchCardProps> = ({ title }) => {
-  const { queryKey, fetchCPVs } = cpvsQuery();
+const NewSearchCard: React.FC<NewSearchCardProps> = ({
+  title,
+  organizationId,
+}) => {
+  const [selectedAdjudicatingEntities, setSelectedAdjudicatingEntities] =
+    useState<string[]>([]);
 
-  const { data: cpvs, error } = useQuery({ queryKey, queryFn: fetchCPVs });
+  const [selectedDateRange, setSelectedDateRange] = useState<
+    DateRange | undefined
+  >();
 
-  // Process the CPVs data to create a list compatible with the MultiSelect component
-  const cpvsList = cpvs
-    ?.filter((cpv: { fullName: string | null }) => cpv.fullName !== null)
-    .map((cpv: { fullName: string | null }) => ({
-      value: cpv.fullName as string,
-      label: cpv.fullName as string,
-    }));
+  const [selectedPriceRange, setSelectedPriceRange] = useState<
+    [number, number]
+  >([0, 100000000]);
 
-  const OPTIONS: Option[] = [
-    { label: "nextjs", value: "Nextjs" },
-    { label: "React", value: "react" },
-    { label: "Remix", value: "remix" },
-    { label: "Vite", value: "vite" },
-    { label: "Nuxt", value: "nuxt" },
-    { label: "Vue", value: "vue" },
-    { label: "Svelte", value: "svelte" },
-    { label: "Angular", value: "angular" },
-    { label: "Ember", value: "ember" },
-    { label: "Gatsby", value: "gatsby" },
-    { label: "Astro", value: "astro" },
-  ];
+  const [newKeywords, setNewKeywords] = useState<string[]>([]);
 
-  const [value, setValue] = useState<Option[]>([]);
+  const addKeywordsMutation = useMutation({
+    mutationFn: async (keywords: string[]) => {
+      if (!organizationId) {
+        throw new Error("Organization ID is required.");
+      }
+      return await addKeywords({ organizationId, keywords });
+    },
+    onError: (error) => {
+      console.error("Error saving keywords:", error);
+    },
+  });
 
-  const handleCPVsChange = (
-    selectedOptions: { value: string; label: string }[]
-  ) => {
-    console.log(selectedOptions);
+  const [aiSearchValue, setAiSearchValue] = useState("");
+  const [selectedKeywords, setSelectedKeywords] = useState<MultiSelectOption[]>(
+    [],
+  );
+  const [selectedCPVs, setSelectedCPVs] = useState<MultiSelectOption[]>([]);
+
+  const handleSubmit = () => {
+    // 1. Save the new keywords
+    if (newKeywords.length > 0) {
+      addKeywordsMutation.mutate(newKeywords);
+    }
+
+    // 2. Search
+    window.location.href = "/pesquisa/8dcd1455-1951-4cc0-b1a1-5b2385ce120e";
   };
 
   return (
-    <Card className="rounded-2xl w-full max-w-3xl border-[#2388FF]/30 bg-gradient-to-t from-[#2388FF]/10 to-white shadow-sm backdrop-blur-lg backdrop-filter">
+    <Card className="w-full max-w-3xl rounded-2xl border-[#2388FF]/30 bg-gradient-to-t from-[#2388FF]/10 to-white shadow-sm backdrop-blur-lg backdrop-filter">
       <CardHeader className="text-center">
-        <CardTitle className="font-semibold text-xl">{title}</CardTitle>
+        <CardTitle className="text-xl font-semibold">{title}</CardTitle>
         <CardDescription>
           Pesquise por qualquer concurso público em Portugal.
         </CardDescription>
@@ -82,33 +90,34 @@ const NewSearchCard: React.FC<NewSearchCardProps> = ({ title }) => {
               priority
             />
           </div>
-          <Input placeholder="Pesquisar com AI..." />
-        </div>
-        <div className="mx-auto flex w-full items-center justify-between gap-2 bg-transparent text-sm">
-          <div className="flex aspect-square h-12 w-12 items-center justify-center rounded-2xl border bg-[#F9F9FB] p-1">
-            <WholeWord className="h-full w-full rounded-xl border bg-white p-2.5 text-gray-600" />
-          </div>
-          <Input placeholder="Pesquisar com Palavras-Chave..." />
-        </div>
-        <div className="mx-auto flex w-full items-center justify-between gap-2 bg-transparent text-sm">
-          <div className="flex aspect-square h-12 w-12 items-center justify-center rounded-2xl border bg-[#F9F9FB] p-1">
-            <ScrollText className="h-full w-full rounded-xl border bg-white p-2.5 text-gray-600" />
-          </div>
-          <MultipleSelector
-            value={value}
-            onChange={setValue}
-            defaultOptions={cpvsList}
-            creatable
-            placeholder="Pesquisar com CPVs..."
-            emptyIndicator={
-              <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                Sem resultados.
-              </p>
-            }
-            className="bg-white rounded-xl"
+          <Input
+            placeholder="Pesquisar com AI..."
+            value={aiSearchValue}
+            onChange={(e) => setAiSearchValue(e.target.value)}
           />
         </div>
-        <Button>Pesquisar</Button>
+        <KeywordsSelector
+          selectedKeywords={selectedKeywords}
+          setSelectedKeywords={setSelectedKeywords}
+          setNewKeywords={setNewKeywords}
+          organizationId={organizationId}
+        />
+        <CPVSelector selectedCPVs={selectedCPVs} onChange={setSelectedCPVs} />
+        <div className="flex items-center justify-center gap-2">
+          <AdjudicatingEntitySelector
+            setSelectedAdjudicatingEntities={setSelectedAdjudicatingEntities}
+          />
+          <PriceRangeSelector
+            value={selectedPriceRange}
+            onValueChange={setSelectedPriceRange}
+          />
+          <DateNewQuery
+            selected={selectedDateRange}
+            onSelect={setSelectedDateRange}
+            className="flex-1"
+          />
+        </div>
+        <Button onClick={handleSubmit}>Pesquisar</Button>
       </CardContent>
     </Card>
   );
