@@ -30,7 +30,7 @@ export async function PATCH(
 
     const { name, nif } = await req.json();
 
-    if (!name || !nif) return NextResponse.json(STATUS_BAD_REQUEST);
+    if (!name) return NextResponse.json(STATUS_BAD_REQUEST);
 
     if (!isUserAdmin(data.user.id, params.organizationId)) {
       return NextResponse.json(STATUS_FORBIDDEN);
