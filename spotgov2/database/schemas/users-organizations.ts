@@ -11,8 +11,9 @@ import { InferSelectModel, relations } from "drizzle-orm";
 import { UserRoles } from "@/types";
 
 const userOrganizationRoleEnum = pgEnum("user_organization_role", [
+  UserRoles.Owner,
   UserRoles.Admin,
-  UserRoles.Member,
+  UserRoles.Editor,
   UserRoles.Viewer,
 ]);
 

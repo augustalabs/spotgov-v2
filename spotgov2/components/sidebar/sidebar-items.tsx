@@ -73,7 +73,11 @@ const SidebarItems = () => {
 
   const { currentOrganization } = useCurrentOrganizationStore();
 
-  if (currentOrganization?.role === UserRoles.Admin) items.push(adminItem);
+  const userRole = currentOrganization?.role;
+
+  if (userRole === UserRoles.Admin || userRole === UserRoles.Owner) {
+    items.push(adminItem);
+  }
 
   return (
     <SidebarGroup>

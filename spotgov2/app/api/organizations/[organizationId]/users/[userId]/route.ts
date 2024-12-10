@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import {
   deleteUser,
-  isUserAdmin,
+  isUserAdminOrOwner,
   updateUserRole,
 } from "@/features/organizations/api";
 import { Response } from "@/types";
@@ -37,7 +37,7 @@ export async function PATCH(
       });
     }
 
-    if (!isUserAdmin(userOrResponse.id, params.organizationId)) {
+    if (!isUserAdminOrOwner(userOrResponse.id, params.organizationId)) {
       return NextResponse.json(STATUS_FORBIDDEN, {
         status: STATUS_FORBIDDEN.status,
       });
@@ -49,7 +49,7 @@ export async function PATCH(
       role
     );
 
-    if (!userOrganization) {
+    if (!userOrganization?.length) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
       });
@@ -80,7 +80,7 @@ export async function DELETE(
       });
     }
 
-    if (!isUserAdmin(userOrResponse.id, params.organizationId)) {
+    if (!isUserAdminOrOwner(userOrResponse.id, params.organizationId)) {
       return NextResponse.json(STATUS_FORBIDDEN, {
         status: STATUS_FORBIDDEN.status,
       });
@@ -88,7 +88,7 @@ export async function DELETE(
 
     const deletedUser = await deleteUser(params.userId, params.organizationId);
 
-    if (!deletedUser) {
+    if (!deletedUser?.length) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
       });

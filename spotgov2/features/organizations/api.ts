@@ -12,7 +12,7 @@ import {
   UserRoles,
   UserWithOrganizationInfo,
 } from "@/types";
-import { and, eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 
 export async function getUserOrganizations(
   userId: string
@@ -36,7 +36,7 @@ export async function isUserInOrganization(
   }));
 }
 
-export async function isUserAdmin(
+export async function isUserAdminOrOwner(
   userId: string,
   organizationId: string
 ): Promise<boolean> {
@@ -46,7 +46,10 @@ export async function isUserAdmin(
       eq(usersOrganizations.organizationId, organizationId),
   });
 
-  return userOrganization?.role === UserRoles.Admin;
+  return (
+    userOrganization?.role === UserRoles.Admin ||
+    userOrganization?.role === UserRoles.Owner
+  );
 }
 
 export async function updateOrganization(
@@ -82,7 +85,8 @@ export async function updateUserRole(
     .where(
       and(
         eq(usersOrganizations.userId, userId),
-        eq(usersOrganizations.organizationId, organizationId)
+        eq(usersOrganizations.organizationId, organizationId),
+        ne(usersOrganizations.role, UserRoles.Owner)
       )
     )
     .returning();

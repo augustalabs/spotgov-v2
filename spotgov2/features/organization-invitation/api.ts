@@ -10,7 +10,7 @@ export async function addUserToOrganization(
   await db.insert(usersOrganizations).values({
     organizationId,
     userId,
-    role: UserRoles.Member,
+    role: UserRoles.Viewer,
     lastOnline: new Date(),
   });
 

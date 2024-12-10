@@ -16,14 +16,16 @@ export type Response<T> = {
 };
 
 export enum UserRoles {
+  Owner = "owner",
   Admin = "admin",
-  Member = "member",
+  Editor = "editor",
   Viewer = "viewer",
 }
 
 export const mapUserRolesToPortuguese = {
   todos: "Todos",
+  owner: "Proprietário",
   admin: "Administrador",
-  member: "Membro",
+  editor: "Editor",
   viewer: "Visualizador",
 };

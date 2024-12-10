@@ -42,7 +42,7 @@ export async function PATCH(
 
     const query = await updateQueryTitle(params.queryId, title);
 
-    if (!query) {
+    if (!query?.length) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
       });

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import {
   getOrganizationUsers,
-  isUserAdmin,
+  isUserAdminOrOwner,
 } from "@/features/organizations/api";
 import { createClient } from "@/lib/supabase/server";
 import { Response, UserWithOrganizationInfo } from "@/types";
@@ -34,7 +34,7 @@ export async function GET(
       });
     }
 
-    if (!isUserAdmin(userOrResponse.id, params.organizationId)) {
+    if (!isUserAdminOrOwner(userOrResponse.id, params.organizationId)) {
       return NextResponse.json(STATUS_FORBIDDEN, {
         status: STATUS_FORBIDDEN.status,
       });
@@ -42,7 +42,7 @@ export async function GET(
 
     const users = await getOrganizationUsers(params.organizationId);
 
-    if (!users) {
+    if (!users?.length) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
       });

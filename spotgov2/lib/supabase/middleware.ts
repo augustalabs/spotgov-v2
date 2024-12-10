@@ -66,7 +66,8 @@ export async function updateSession(request: NextRequest) {
 
   if (
     request.nextUrl.pathname.startsWith(ORGANIZATION_ROUTE) &&
-    user?.user_metadata.current_organization.role !== UserRoles.Admin
+    user?.user_metadata.current_organization.role !== UserRoles.Admin &&
+    user?.user_metadata.current_organization.role !== UserRoles.Owner
   ) {
     const url = request.nextUrl.clone();
     url.pathname = NEW_SEARCH_ROUTE;

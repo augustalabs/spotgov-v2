@@ -1,5 +1,8 @@
 import { Organization } from "@/database/schemas";
-import { isUserAdmin, updateOrganization } from "@/features/organizations/api";
+import {
+  isUserAdminOrOwner,
+  updateOrganization,
+} from "@/features/organizations/api";
 import { Response } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";
 import {
@@ -31,7 +34,7 @@ export async function PATCH(
       });
     }
 
-    if (!isUserAdmin(userOrResponse.id, params.organizationId)) {
+    if (!isUserAdminOrOwner(userOrResponse.id, params.organizationId)) {
       return NextResponse.json(STATUS_FORBIDDEN, {
         status: STATUS_FORBIDDEN.status,
       });
@@ -43,7 +46,7 @@ export async function PATCH(
       nif
     );
 
-    if (!organizations) {
+    if (!organizations?.length) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
       });

@@ -1,5 +1,9 @@
 import AvatarIcon from "@/components/avatar-icon";
-import { UserWithOrganizationInfo } from "@/types";
+import {
+  mapUserRolesToPortuguese,
+  UserRoles,
+  UserWithOrganizationInfo,
+} from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import { RoleSelect } from "./role-select";
@@ -59,6 +63,10 @@ export const columns: ColumnDef<UserWithOrganizationInfo>[] = [
     },
     cell: ({ row }) => {
       const { role, organizationId, userId } = row.original;
+
+      if (role === UserRoles.Owner) {
+        return <p>{mapUserRolesToPortuguese[role]}</p>;
+      }
 
       return (
         <RoleSelect
