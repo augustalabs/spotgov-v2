@@ -45,13 +45,17 @@ export function RoleSelect({
     }
   };
 
+  const filteredRoles = Object.values(UserRoles).filter(
+    (role) => role !== UserRoles.Owner
+  );
+
   return (
     <Select value={role} onValueChange={handleRoleChange}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder={mapUserRolesToPortuguese[role]} />
       </SelectTrigger>
       <SelectContent>
-        {Object.values(UserRoles).map((roleOption) => (
+        {filteredRoles.map((roleOption) => (
           <SelectItem
             key={roleOption}
             value={roleOption}

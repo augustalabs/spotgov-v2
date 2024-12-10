@@ -5,7 +5,7 @@ import {
   isUserAdminOrOwner,
   updateUserRole,
 } from "@/features/organizations/api";
-import { Response } from "@/types";
+import { Response, UserRoles } from "@/types";
 import {
   STATUS_BAD_REQUEST,
   STATUS_FORBIDDEN,
@@ -38,6 +38,12 @@ export async function PATCH(
     }
 
     if (!isUserAdminOrOwner(userOrResponse.id, params.organizationId)) {
+      return NextResponse.json(STATUS_FORBIDDEN, {
+        status: STATUS_FORBIDDEN.status,
+      });
+    }
+
+    if (role === UserRoles.Owner) {
       return NextResponse.json(STATUS_FORBIDDEN, {
         status: STATUS_FORBIDDEN.status,
       });
