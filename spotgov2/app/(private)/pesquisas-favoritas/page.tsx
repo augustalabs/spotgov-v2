@@ -1,5 +1,9 @@
-import Wrapper from "@/features/favorite-queries/components/wrapper";
+import CustomTable from "@/features/favorite-queries/components/custom-table";
 
 export default function FavoriteSearchesPage() {
-  return <Wrapper />;
+  return (
+    <section className="mx-auto max-w-5xl px-2">
+      <CustomTable />
+    </section>
+  );
 }

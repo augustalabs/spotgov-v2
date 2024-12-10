@@ -1,21 +1,12 @@
 import { db } from "@/database/db";
 import {
-  Contract,
   contracts,
+  contractsOrganizations,
   contractsQueries,
   queries,
 } from "@/database/schemas";
+import { ContractsWithMatchTypeAndReasonPerQuery } from "@/types";
 import { and, eq } from "drizzle-orm";
-
-type ContractsWithMatchTypeAndReasonPerQuery = {
-  [queryId: string]: {
-    contracts: (Contract & {
-      matchTypeFull: boolean | null;
-      // TODO: Check why this is unknown
-      reason: unknown;
-    })[];
-  };
-};
 
 export async function getFavoriteQueriesContracts(organizationId: string) {
   const res = await db
@@ -24,10 +15,16 @@ export async function getFavoriteQueriesContracts(organizationId: string) {
       reason: contractsQueries.reason,
       queryId: queries.id,
       contracts: contracts,
+      saved: contractsOrganizations.saved,
+      queryTitle: queries.title,
     })
     .from(queries)
     .innerJoin(contractsQueries, eq(contractsQueries.queryId, queries.id))
     .innerJoin(contracts, eq(contracts.id, contractsQueries.contractId))
+    .innerJoin(
+      contractsOrganizations,
+      eq(contractsOrganizations.contractId, contracts.id),
+    )
     .where(
       and(
         eq(queries.organizationId, organizationId),
@@ -47,6 +44,8 @@ export async function getFavoriteQueriesContracts(organizationId: string) {
     contractsPerQuery[r.queryId].contracts.push({
       ...r.contracts,
       matchTypeFull: r.matchTypeFull,
+      saved: r.saved,
+      queryTitle: r.queryTitle,
       reason: r.reason,
     });
   });

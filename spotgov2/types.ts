@@ -1,12 +1,20 @@
-import { Organization, Query, UserOrganization } from "@/database/schemas";
+import { Contract, Organization, UserOrganization } from "@/database/schemas";
 
 export type OrganizationWithUserInfo = UserOrganization & {
   organization: Organization | null;
 };
 
-export type QueryWithContractId = {
-  query: Query;
-  contractId: string | null;
+export type ContractWithMatchTypeAndReason = Contract & {
+  matchTypeFull: boolean | null;
+  saved: boolean | null;
+  queryTitle: string | null;
+  reason: unknown;
+};
+
+export type ContractsWithMatchTypeAndReasonPerQuery = {
+  [queryId: string]: {
+    contracts: ContractWithMatchTypeAndReason[];
+  };
 };
 
 export type Response<T> = {

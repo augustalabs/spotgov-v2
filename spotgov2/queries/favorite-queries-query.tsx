@@ -1,4 +1,4 @@
-import { QueryWithContractId, Response } from "@/types";
+import { ContractsWithMatchTypeAndReasonPerQuery, Response } from "@/types";
 import { get } from "@/utils/api/api";
 
 function favoriteQueriesQuery(organizationId: string) {
@@ -6,7 +6,7 @@ function favoriteQueriesQuery(organizationId: string) {
 
   const queryFn = async () => {
     console.log(organizationId);
-    return await get<Response<QueryWithContractId[]>>(
+    return await get<Response<ContractsWithMatchTypeAndReasonPerQuery>>(
       `organizations/${organizationId}/favorite-queries-contracts`,
     );
   };
