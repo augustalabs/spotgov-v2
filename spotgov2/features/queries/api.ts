@@ -1,5 +1,5 @@
 import { db } from "@/database/db";
-import { queries, Query } from "@/database/schemas";
+import { contractsQueries, queries, Query } from "@/database/schemas";
 import { eq } from "drizzle-orm";
 
 export async function getOrganizationQueries(

@@ -29,3 +29,13 @@ export const mapUserRolesToPortuguese = {
   editor: "Editor",
   viewer: "Visualizador",
 };
+
+// Filters
+export type RelevanceType = "all" | "relevant" | "very-relevant";
+export type OrderType =
+  | "publish-date-desc"
+  | "publish-date-asc"
+  | "base-price-desc"
+  | "base-price-asc"
+  | "deadline-asc"
+  | "deadline-desc";
