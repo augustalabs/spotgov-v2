@@ -1,3 +1,5 @@
+import Wrapper from "@/features/favorite-queries/components/wrapper";
+
 export default function FavoriteSearchesPage() {
-  return <div>Favorite Searches Page</div>;
+  return <Wrapper />;
 }
