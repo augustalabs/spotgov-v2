@@ -18,22 +18,50 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Dispatch, SetStateAction } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  isPending: boolean;
+  page: number;
+  setPage: Dispatch<SetStateAction<number>>;
+  pageSize: number;
+  totalItems: number;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  isPending,
+  page,
+  setPage,
+  pageSize,
+  totalItems,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    initialState: {
+      pagination: {
+        pageIndex: page - 1,
+        pageSize,
+      },
+    },
   });
+
+  const handlePagePrevious = () => {
+    setPage((prevPage) => Math.max(prevPage - 1, 1));
+    table.previousPage();
+  };
+
+  const handlePageNext = () => {
+    setPage((prevPage) => prevPage + 1);
+    table.nextPage();
+  };
 
   return (
     <div>
@@ -58,32 +86,38 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
+            {table.getRowModel().rows?.length
+              ? table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              : Array.from({ length: isPending ? pageSize : 1 }).map(
+                  (_, index) => (
+                    <TableRow key={index}>
+                      <TableCell
+                        colSpan={columns.length}
+                        className="h-full text-center"
+                      >
+                        {isPending ? (
+                          <Skeleton className="h-10 w-full" />
+                        ) : (
+                          <p>No results.</p>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ),
+                )}
           </TableBody>
         </Table>
       </div>
@@ -91,16 +125,16 @@ export function DataTable<TData, TValue>({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
+          onClick={handlePagePrevious}
+          disabled={page === 1}
         >
           Previous
         </Button>
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
+          onClick={handlePageNext}
+          disabled={(page - 1) * pageSize + data.length >= totalItems}
         >
           Next
         </Button>

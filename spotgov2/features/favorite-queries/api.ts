@@ -6,24 +6,22 @@ import {
   queries,
 } from "@/database/schemas";
 import { ContractsWithMatchTypeAndReasonPerQuery } from "@/types";
-import { and, eq } from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 
-export async function getFavoriteQueriesContracts(organizationId: string) {
+export async function getFavoriteQueriesContractsCount(organizationId: string) {
   const res = await db
     .select({
-      matchTypeFull: contractsQueries.matchTypeFull,
-      reason: contractsQueries.reason,
-      queryId: queries.id,
-      contracts: contracts,
-      saved: contractsOrganizations.saved,
-      queryTitle: queries.title,
+      count: count(contractsQueries.contractId),
     })
-    .from(queries)
-    .innerJoin(contractsQueries, eq(contractsQueries.queryId, queries.id))
+    .from(contractsQueries)
     .innerJoin(contracts, eq(contracts.id, contractsQueries.contractId))
+    .innerJoin(queries, eq(queries.id, contractsQueries.queryId))
     .innerJoin(
       contractsOrganizations,
-      eq(contractsOrganizations.contractId, contracts.id),
+      and(
+        eq(contractsOrganizations.contractId, contractsQueries.contractId),
+        eq(contractsOrganizations.organizationId, organizationId),
+      ),
     )
     .where(
       and(
@@ -31,6 +29,44 @@ export async function getFavoriteQueriesContracts(organizationId: string) {
         eq(queries.starred, true),
       ),
     );
+
+  return res.map((value) => value.count)[0] || 0;
+}
+
+export async function getFavoriteQueriesContracts(
+  organizationId: string,
+  page: number = 1,
+  pageSize: number = 10,
+) {
+  const offset = (page - 1) * pageSize;
+
+  const res = await db
+    .select({
+      contracts: contracts,
+      queryId: queries.id,
+      matchTypeFull: contractsQueries.matchTypeFull,
+      reason: contractsQueries.reason,
+      saved: contractsOrganizations.saved,
+      queryTitle: queries.title,
+    })
+    .from(contractsQueries)
+    .innerJoin(contracts, eq(contracts.id, contractsQueries.contractId))
+    .innerJoin(queries, eq(queries.id, contractsQueries.queryId))
+    .innerJoin(
+      contractsOrganizations,
+      and(
+        eq(contractsOrganizations.contractId, contractsQueries.contractId),
+        eq(contractsOrganizations.organizationId, organizationId),
+      ),
+    )
+    .where(
+      and(
+        eq(queries.organizationId, organizationId),
+        eq(queries.starred, true),
+      ),
+    )
+    .limit(pageSize)
+    .offset(offset);
 
   let contractsPerQuery = {} as ContractsWithMatchTypeAndReasonPerQuery;
 

@@ -7,13 +7,17 @@ import {
   STATUS_OK,
 } from "@/utils/api/status-messages";
 import { checkUserAuthentication } from "@/utils/api/helpers";
-import { getFavoriteQueriesContracts } from "@/features/favorite-queries/api";
+import { getFavoriteQueriesContractsCount } from "@/features/favorite-queries/api";
+import { Response } from "@/types";
 
 type Params = {
   organizationId: string;
 };
 
-export async function GET(req: Request, { params }: { params: Params }) {
+export async function GET(
+  req: Request,
+  { params }: { params: Params },
+): Promise<NextResponse<Response<number>>> {
   try {
     const userOrResponse = await checkUserAuthentication();
     if (userOrResponse instanceof NextResponse) return userOrResponse;
@@ -24,24 +28,18 @@ export async function GET(req: Request, { params }: { params: Params }) {
       });
     }
 
-    const { searchParams } = new URL(req.url);
-    const page = searchParams.get("page") ?? 1;
-    const pageSize = searchParams.get("pageSize") ?? 10;
-
-    const favoriteQueries = await getFavoriteQueriesContracts(
+    const favoriteQueriesCount = await getFavoriteQueriesContractsCount(
       params.organizationId,
-      parseInt(page as string),
-      parseInt(pageSize as string),
     );
 
-    if (!favoriteQueries) {
+    if (favoriteQueriesCount === 0) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
       });
     }
 
     return NextResponse.json(
-      { ...STATUS_OK, payload: favoriteQueries },
+      { ...STATUS_OK, payload: favoriteQueriesCount },
       {
         status: STATUS_OK.status,
       },
