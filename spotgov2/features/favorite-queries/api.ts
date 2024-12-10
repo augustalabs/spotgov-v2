@@ -83,6 +83,7 @@ export async function getFavoriteQueriesContracts(
       saved: r.saved,
       queryTitle: r.queryTitle,
       reason: r.reason,
+      queryId: r.queryId,
     });
   });
 

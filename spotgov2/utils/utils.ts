@@ -70,3 +70,11 @@ export const getRemainingDaysColor = (date: string) => {
   if (remainingDays < 7) return "bg-yellow-500";
   return "bg-green-500";
 };
+
+export const formatBasePrice = (price: number) => {
+  const formattedPrice = new Intl.NumberFormat("de-DE", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price);
+  return `${formattedPrice}€`;
+};

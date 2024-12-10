@@ -8,6 +8,7 @@ export type ContractWithMatchTypeAndReason = Contract & {
   matchTypeFull: boolean | null;
   saved: boolean | null;
   queryTitle: string | null;
+  queryId: string | null;
   reason: unknown;
 };
 
