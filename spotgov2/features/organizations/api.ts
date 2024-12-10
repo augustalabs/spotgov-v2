@@ -101,7 +101,8 @@ export async function deleteUser(
     .where(
       and(
         eq(usersOrganizations.userId, userId),
-        eq(usersOrganizations.organizationId, organizationId)
+        eq(usersOrganizations.organizationId, organizationId),
+        ne(usersOrganizations.role, UserRoles.Owner)
       )
     )
     .returning();

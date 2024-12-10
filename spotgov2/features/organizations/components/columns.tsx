@@ -80,7 +80,9 @@ export const columns: ColumnDef<UserWithOrganizationInfo>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const { userId } = row.original;
+      const { userId, role } = row.original;
+
+      if (role === UserRoles.Owner) return null;
 
       return <DeleteUserButton userId={userId as string} />;
     },

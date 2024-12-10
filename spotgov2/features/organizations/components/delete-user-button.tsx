@@ -1,7 +1,13 @@
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import deleteUserMutation from "@/mutations/delete-user-mutation";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { useMutation } from "@tanstack/react-query";
+import { Trash } from "lucide-react";
 import { toast } from "sonner";
 
 const DeleteUserButton = ({ userId }: { userId: string }) => {
@@ -30,9 +36,14 @@ const DeleteUserButton = ({ userId }: { userId: string }) => {
   };
 
   return (
-    <Button variant="destructive" size="sm" onClick={handleDelete}>
-      Remover
-    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button variant="destructive" size="sm" onClick={handleDelete}>
+          <Trash size={16} />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>Remover utilizador</TooltipContent>
+    </Tooltip>
   );
 };
 

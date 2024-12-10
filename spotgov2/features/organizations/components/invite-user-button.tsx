@@ -26,6 +26,11 @@ import inviteUserMutation from "@/mutations/invite-user-mutation";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { toast } from "sonner";
 import { useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const AddUserButton = () => {
   const form = useForm<z.infer<typeof inviteUserSchema>>({
@@ -64,12 +69,16 @@ const AddUserButton = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={() => setIsOpen((v) => !v)}>
-      <DialogTrigger asChild>
-        <Button size="sm">
-          <Plus size={16} />
-          Convidar membro
-        </Button>
-      </DialogTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DialogTrigger asChild>
+            <Button size="sm">
+              <Plus size={16} />
+            </Button>
+          </DialogTrigger>
+        </TooltipTrigger>
+        <TooltipContent>Convidar utilizador</TooltipContent>
+      </Tooltip>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Convidar membro</DialogTitle>
