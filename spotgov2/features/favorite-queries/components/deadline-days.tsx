@@ -26,7 +26,7 @@ const DeadlineDays = ({ date }: DeadlineDaysProps) => {
           )}
         />
       </div>
-      <p>{getDifferenceInDays()[0]}</p>
+      <p className="truncate">{getDifferenceInDays()[0]}</p>
     </div>
   );
 };

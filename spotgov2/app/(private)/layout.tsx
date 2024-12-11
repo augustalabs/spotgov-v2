@@ -13,7 +13,7 @@ export default async function Layout({
         <CustomSidebar />
         <div className="w-full">
           <SidebarTrigger />
-          <main className="max-w-3xl mx-auto px-2">{children}</main>
+          <main className="mx-auto max-w-5xl px-2">{children}</main>
         </div>
       </SidebarProvider>
     </TooltipProvider>

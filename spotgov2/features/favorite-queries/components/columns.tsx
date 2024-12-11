@@ -47,6 +47,9 @@ export const columns: ColumnDef<ContractWithMatchTypeAndReason>[] = [
   {
     accessorKey: "queryTitle",
     header: "Pesquisa",
+    cell: ({ row }) => (
+      <p className="truncate">{row.original.queryTitle as string}</p>
+    ),
   },
   {
     accessorKey: "saved",
