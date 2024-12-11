@@ -6,9 +6,12 @@ import {
   queries,
 } from "@/database/schemas";
 import { ContractsWithMatchTypeAndReasonPerQuery } from "@/types";
-import { and, count, eq } from "drizzle-orm";
+import { and, count, eq, ilike, or } from "drizzle-orm";
 
-export async function getFavoriteQueriesContractsCount(organizationId: string) {
+export async function getFavoriteQueriesContractsCount(
+  organizationId: string,
+  searchTextInput: string = "",
+) {
   const res = await db
     .select({
       count: count(contractsQueries.contractId),
@@ -27,6 +30,10 @@ export async function getFavoriteQueriesContractsCount(organizationId: string) {
       and(
         eq(queries.organizationId, organizationId),
         eq(queries.starred, true),
+        or(
+          ilike(contracts.title, `%${searchTextInput}%`),
+          ilike(contracts.issuerName, `%${searchTextInput}%`),
+        ),
       ),
     );
 
@@ -37,6 +44,7 @@ export async function getFavoriteQueriesContracts(
   organizationId: string,
   page: number = 1,
   pageSize: number = 10,
+  searchTextInput: string = "",
 ) {
   const offset = (page - 1) * pageSize;
 
@@ -63,6 +71,10 @@ export async function getFavoriteQueriesContracts(
       and(
         eq(queries.organizationId, organizationId),
         eq(queries.starred, true),
+        or(
+          ilike(contracts.title, `%${searchTextInput}%`),
+          ilike(contracts.issuerName, `%${searchTextInput}%`),
+        ),
       ),
     )
     .limit(pageSize)

@@ -28,8 +28,12 @@ export async function GET(
       });
     }
 
+    const { searchParams } = new URL(req.url);
+    const search = searchParams.get("search") ?? "";
+
     const favoriteQueriesCount = await getFavoriteQueriesContractsCount(
       params.organizationId,
+      search,
     );
 
     if (favoriteQueriesCount === 0) {

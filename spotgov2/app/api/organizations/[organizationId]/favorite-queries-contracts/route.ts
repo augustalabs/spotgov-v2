@@ -27,11 +27,13 @@ export async function GET(req: Request, { params }: { params: Params }) {
     const { searchParams } = new URL(req.url);
     const page = searchParams.get("page") ?? 1;
     const pageSize = searchParams.get("pageSize") ?? 10;
+    const search = searchParams.get("search") ?? "";
 
     const favoriteQueries = await getFavoriteQueriesContracts(
       params.organizationId,
       parseInt(page as string),
       parseInt(pageSize as string),
+      search,
     );
 
     if (!favoriteQueries) {
