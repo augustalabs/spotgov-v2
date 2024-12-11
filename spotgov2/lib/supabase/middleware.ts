@@ -1,4 +1,10 @@
-import { HOME_ROUTE, LOGIN_ROUTE, NEW_SEARCH_ROUTE } from "@/routes";
+import {
+  HOME_ROUTE,
+  LOGIN_ROUTE,
+  NEW_SEARCH_ROUTE,
+  ORGANIZATION_ROUTE,
+} from "@/routes";
+import { UserRoles } from "@/types";
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -48,11 +54,24 @@ export async function updateSession(request: NextRequest) {
   if (
     !user &&
     !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
+    !request.nextUrl.pathname.startsWith("/auth") &&
+    !request.nextUrl.pathname.startsWith("/aceitar-convite") &&
+    !request.nextUrl.pathname.startsWith("/api/organizations/accept-invite")
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
     url.pathname = LOGIN_ROUTE;
+    return NextResponse.redirect(url);
+  }
+
+  if (
+    request.nextUrl.pathname.startsWith(ORGANIZATION_ROUTE) &&
+    user?.user_metadata.current_organization.role !== UserRoles.Admin &&
+    user?.user_metadata.current_organization.role !== UserRoles.Owner
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = NEW_SEARCH_ROUTE;
+
     return NextResponse.redirect(url);
   }
 

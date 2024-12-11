@@ -73,7 +73,7 @@ const NewSearchCard: React.FC<NewSearchCardProps> = ({
   };
 
   return (
-    <Card className="w-full max-w-3xl rounded-2xl border-[#2388FF]/30 bg-gradient-to-t from-[#2388FF]/10 to-white shadow-sm backdrop-blur-lg backdrop-filter">
+    <Card className="card-gradient w-full rounded-2xl shadow-sm backdrop-blur-lg backdrop-filter">
       <CardHeader className="text-center">
         <CardTitle className="text-xl font-semibold">{title}</CardTitle>
         <CardDescription>

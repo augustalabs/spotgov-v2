@@ -43,7 +43,7 @@ const SidebarHistory = () => {
                   <SidebarHistoryActions query={q} />
                 </SidebarMenuItem>
               ))}
-          {!isPending && data?.payload?.length === 0 && (
+          {!isPending && !data?.success && (
             <SidebarMenuItem>Sem pesquisas realizadas.</SidebarMenuItem>
           )}
         </SidebarMenu>

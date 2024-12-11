@@ -39,7 +39,7 @@ export async function GET(
 
     const queries = await getOrganizationQueries(params.organizationId);
 
-    if (!queries) {
+    if (!queries?.length) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
       });

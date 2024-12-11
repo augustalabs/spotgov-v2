@@ -121,3 +121,9 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .card-gradient {
+    @apply border-[#2388FF]/30 bg-gradient-to-t from-[#2388FF]/10 to-white;
+  }
+}

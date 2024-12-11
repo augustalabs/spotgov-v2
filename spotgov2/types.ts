@@ -1,7 +1,16 @@
-import { Contract, Organization, UserOrganization } from "@/database/schemas";
+import {
+  Contract,
+  Organization,
+  User,
+  UserOrganization,
+} from "@/database/schemas";
 
 export type OrganizationWithUserInfo = UserOrganization & {
   organization: Organization | null;
+};
+
+export type UserWithOrganizationInfo = UserOrganization & {
+  user: User | null;
 };
 
 export type ContractWithMatchTypeAndReason = Contract & {
@@ -23,6 +32,21 @@ export type Response<T> = {
   status: number;
   message: string;
   payload?: T;
+};
+
+export enum UserRoles {
+  Owner = "owner",
+  Admin = "admin",
+  Editor = "editor",
+  Viewer = "viewer",
+}
+
+export const mapUserRolesToPortuguese = {
+  todos: "Todos",
+  owner: "Proprietário",
+  admin: "Administrador",
+  editor: "Editor",
+  viewer: "Visualizador",
 };
 
 // Filters
