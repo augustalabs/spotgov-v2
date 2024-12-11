@@ -23,8 +23,10 @@ import GoogleButton from "./google-button";
 import AuthSeparator from "./separator";
 import { loginSchema } from "../schemas";
 import { toast } from "sonner";
+import { useSearchParams } from "next/navigation";
 
 const LoginForm = () => {
+  const params = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -39,7 +41,8 @@ const LoginForm = () => {
 
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     try {
-      await signInWithPassword(values);
+      const token = params.get("token") as string;
+      await signInWithPassword(values, token);
 
       toast.success("Login efetuado com sucesso!");
     } catch {
