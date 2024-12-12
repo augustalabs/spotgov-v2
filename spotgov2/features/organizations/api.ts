@@ -15,7 +15,7 @@ import {
 import { and, eq, ne } from "drizzle-orm";
 
 export async function getUserOrganizations(
-  userId: string
+  userId: string,
 ): Promise<OrganizationWithUserInfo[]> {
   return await db.query.usersOrganizations.findMany({
     where: eq(usersOrganizations.userId, userId),
@@ -27,7 +27,7 @@ export async function getUserOrganizations(
 
 export async function isUserInOrganization(
   userId: string,
-  organizationId: string
+  organizationId: string,
 ): Promise<boolean> {
   return !!(await db.query.usersOrganizations.findFirst({
     where:
@@ -38,7 +38,7 @@ export async function isUserInOrganization(
 
 export async function isUserAdminOrOwner(
   userId: string,
-  organizationId: string
+  organizationId: string,
 ): Promise<boolean> {
   const userOrganization = await db.query.usersOrganizations.findFirst({
     where:
@@ -52,10 +52,27 @@ export async function isUserAdminOrOwner(
   );
 }
 
+export async function isUserEditorOrAdminOrOwner(
+  userId: string,
+  organizationId: string,
+): Promise<boolean> {
+  const userOrganization = await db.query.usersOrganizations.findFirst({
+    where:
+      eq(usersOrganizations.userId, userId) &&
+      eq(usersOrganizations.organizationId, organizationId),
+  });
+
+  return (
+    userOrganization?.role === UserRoles.Admin ||
+    userOrganization?.role === UserRoles.Owner ||
+    userOrganization?.role === UserRoles.Editor
+  );
+}
+
 export async function updateOrganization(
   organizationId: string,
   name: string,
-  nif: string
+  nif: string,
 ): Promise<Organization[]> {
   return await db
     .update(organizations)
@@ -64,7 +81,7 @@ export async function updateOrganization(
 }
 
 export async function getOrganizationUsers(
-  organizationId: string
+  organizationId: string,
 ): Promise<UserWithOrganizationInfo[]> {
   return await db.query.usersOrganizations.findMany({
     where: eq(usersOrganizations.organizationId, organizationId),
@@ -77,7 +94,7 @@ export async function getOrganizationUsers(
 export async function updateUserRole(
   userId: string,
   organizationId: string,
-  role: UserRoles
+  role: UserRoles,
 ): Promise<UserOrganization[]> {
   return await db
     .update(usersOrganizations)
@@ -86,15 +103,15 @@ export async function updateUserRole(
       and(
         eq(usersOrganizations.userId, userId),
         eq(usersOrganizations.organizationId, organizationId),
-        ne(usersOrganizations.role, UserRoles.Owner)
-      )
+        ne(usersOrganizations.role, UserRoles.Owner),
+      ),
     )
     .returning();
 }
 
 export async function deleteUser(
   userId: string,
-  organizationId: string
+  organizationId: string,
 ): Promise<UserOrganization[]> {
   return await db
     .delete(usersOrganizations)
@@ -102,8 +119,8 @@ export async function deleteUser(
       and(
         eq(usersOrganizations.userId, userId),
         eq(usersOrganizations.organizationId, organizationId),
-        ne(usersOrganizations.role, UserRoles.Owner)
-      )
+        ne(usersOrganizations.role, UserRoles.Owner),
+      ),
     )
     .returning();
 }

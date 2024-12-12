@@ -1,6 +1,7 @@
 import { db } from "@/database/db";
 import {
   contracts,
+  ContractsOrganization,
   contractsOrganizations,
   contractsQueries,
   queries,
@@ -76,4 +77,23 @@ export async function getFavoriteQueriesData(
     distinctAdjudicators: data[0]?.distinctAdjudicators ?? [],
     distinctQueryTitles: data[0]?.distinctQueryTitles ?? [],
   };
+}
+
+export async function updateContractSaved(
+  organizationId: string,
+  contractId: string,
+  saved: boolean,
+): Promise<ContractsOrganization[]> {
+  return await db
+    .update(contractsOrganizations)
+    .set({
+      saved,
+    })
+    .where(
+      and(
+        eq(contractsOrganizations.contractId, contractId),
+        eq(contractsOrganizations.organizationId, organizationId),
+      ),
+    )
+    .returning();
 }

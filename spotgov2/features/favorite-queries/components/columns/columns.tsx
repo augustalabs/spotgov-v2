@@ -59,6 +59,11 @@ export const columns: ColumnDef<PaginatedContractsType>[] = [
   {
     accessorKey: "saved",
     header: "Interesse",
-    cell: ({ row }) => <Saved isSaved={row.original.saved as boolean} />,
+    cell: ({ row }) => (
+      <Saved
+        saved={row.original.saved as boolean}
+        contractId={row.original.contract.id}
+      />
+    ),
   },
 ];

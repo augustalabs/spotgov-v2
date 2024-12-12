@@ -34,6 +34,7 @@ export type { UserOrganization } from "./users-organizations";
 export type { Contract } from "./contracts";
 export type { Lot } from "./lots";
 export type { Table } from "./tables";
+export type { ContractsOrganization } from "./contracts-organizations";
 export type { Query } from "./queries";
 export type { Usage } from "./usages";
 export type { Cost } from "./costs";
