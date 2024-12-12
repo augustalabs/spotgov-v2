@@ -14,6 +14,9 @@ type FavoriteQueriesFiltersStoreProps = {
   setQueryTitlesInput: (value: string[]) => void;
   queryTitlesDefaultValues: string[];
   setQueryTitlesDefaultValues: (value: string[]) => void;
+  // Search for contracts by saved status
+  savedInput: boolean | null;
+  setSavedInput: (value: boolean | null) => void;
 };
 
 export const useFavoriteQueriesFiltersStore =
@@ -30,4 +33,6 @@ export const useFavoriteQueriesFiltersStore =
     queryTitlesDefaultValues: [],
     setQueryTitlesDefaultValues: (value) =>
       set({ queryTitlesDefaultValues: value }),
+    savedInput: null,
+    setSavedInput: (value) => set({ savedInput: value }),
   }));

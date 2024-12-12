@@ -10,6 +10,7 @@ function favoriteQueriesQuery(
   searchInputText: string,
   adjudicatorsInput: string[],
   titlesInput: string[],
+  savedInput: boolean | null,
 ) {
   const queryKey = [
     "get-favorite-queries",
@@ -19,6 +20,7 @@ function favoriteQueriesQuery(
     searchInputText,
     adjudicatorsInput,
     titlesInput,
+    savedInput,
   ];
 
   const queryFn = async () => {
@@ -37,6 +39,8 @@ function favoriteQueriesQuery(
         if (title) searchParams += `&title=${title}`;
       });
     }
+
+    if (savedInput !== null) searchParams += `&saved=${savedInput}`;
 
     return await get<Response<FavoriteContractsDataType>>(
       `organizations/${organizationId}/favorite-queries${searchParams}`,

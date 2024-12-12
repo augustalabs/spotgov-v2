@@ -25,8 +25,9 @@ export async function GET(
     const page = searchParams.get("page") ?? "1";
     const pageSize = searchParams.get("pageSize") ?? "8";
     const search = searchParams.get("search") ?? "";
-    const adjudicators = searchParams.getAll("adjudicator");
-    const titles = searchParams.getAll("title");
+    const adjudicators = searchParams.getAll("adjudicator") ?? [];
+    const titles = searchParams.getAll("title") ?? [];
+    const saved = searchParams.get("saved") ?? "";
 
     const favoriteQueries = await getFavoriteQueriesData(
       params.organizationId,
@@ -35,6 +36,7 @@ export async function GET(
       search,
       adjudicators,
       titles,
+      saved,
     );
 
     if (!favoriteQueries) {

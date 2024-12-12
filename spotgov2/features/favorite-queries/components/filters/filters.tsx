@@ -1,5 +1,6 @@
 import AdjudicatorsFilter from "./adjudicators-filter";
 import QueryTitlesFilter from "./query-titles-filter";
+import SavedFilter from "./saved-filter";
 import SearchFilter from "./search-filter";
 
 const Filters = () => {
@@ -8,6 +9,7 @@ const Filters = () => {
       <SearchFilter />
       <QueryTitlesFilter />
       <AdjudicatorsFilter />
+      <SavedFilter />
     </div>
   );
 };

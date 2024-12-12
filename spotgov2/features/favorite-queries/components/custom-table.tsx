@@ -21,6 +21,7 @@ const CustomTable = () => {
     queryTitlesInput,
     queryTitlesDefaultValues,
     setQueryTitlesDefaultValues,
+    savedInput,
   } = useFavoriteQueriesFiltersStore();
   const { currentOrganization } = useCurrentOrganizationStore();
 
@@ -38,6 +39,7 @@ const CustomTable = () => {
       searchTextInput,
       adjudicatorsInput,
       queryTitlesInput,
+      savedInput,
     ),
   );
 

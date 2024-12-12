@@ -15,6 +15,7 @@ export async function getFavoriteQueriesData(
   searchTextInput: string = "",
   adjudicatorsInput: string[] = [],
   titlesInput: string[] = [],
+  saved: string | null = null,
 ): Promise<FavoriteContractsDataType> {
   const offset = (page - 1) * pageSize;
 
@@ -53,6 +54,9 @@ export async function getFavoriteQueriesData(
           : sql`true`,
         titlesInput.length > 0
           ? inArray(sql`LOWER(${queries.title})`, titlesInput)
+          : sql`true`,
+        saved !== null
+          ? eq(contractsOrganizations.saved, saved === "true")
           : sql`true`,
       ),
     )
