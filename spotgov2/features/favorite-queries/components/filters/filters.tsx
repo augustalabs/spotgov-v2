@@ -4,11 +4,11 @@ import SearchFilter from "./search-filter";
 
 const Filters = () => {
   return (
-    <>
+    <div className="my-5 flex flex-wrap gap-2">
       <SearchFilter />
       <QueryTitlesFilter />
       <AdjudicatorsFilter />
-    </>
+    </div>
   );
 };
 

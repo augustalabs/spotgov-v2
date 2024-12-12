@@ -1,5 +1,5 @@
 const Header = ({ title }: { title: string }) => {
-  return <h1 className="font-bold text-foreground text-lg">{title}</h1>;
+  return <h1 className="text-lg font-bold text-foreground">{title}</h1>;
 };
 
 export default Header;

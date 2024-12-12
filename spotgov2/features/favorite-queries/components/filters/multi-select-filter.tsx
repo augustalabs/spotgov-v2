@@ -13,7 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/utils/utils";
-import { Check, LucideIcon } from "lucide-react";
+import { Check, ChevronDown, LucideIcon } from "lucide-react";
 
 type MultiSelectFilterProps = {
   input: string[];
@@ -49,6 +49,7 @@ const MultiSelectFilter = ({
           <div className="rounded-md border border-primary bg-primary/10 px-1">
             {input.length}
           </div>
+          <ChevronDown size={16} />
         </Button>
       </PopoverTrigger>
       <PopoverContent>

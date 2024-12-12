@@ -8,14 +8,12 @@ const SearchFilter = () => {
     useFavoriteQueriesFiltersStore();
 
   return (
-    <div className="flex items-center py-4">
-      <Input
-        placeholder="Procurar pesquisas..."
-        value={searchTextInput}
-        onChange={(event) => setSearchTextInput(event.target.value)}
-        className="max-w-sm"
-      />
-    </div>
+    <Input
+      placeholder="Procurar pesquisas..."
+      value={searchTextInput}
+      onChange={(event) => setSearchTextInput(event.target.value)}
+      className="max-w-xs"
+    />
   );
 };
 

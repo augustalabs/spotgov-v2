@@ -63,7 +63,7 @@ const CustomTable = () => {
   }, [isPending, data?.payload]);
 
   return (
-    <>
+    <div className="my-6">
       <Filters />
       <DataTable
         data={data?.payload?.paginatedContracts ?? []}
@@ -74,7 +74,7 @@ const CustomTable = () => {
         pageSize={PAGE_SIZE}
         totalItems={data?.payload?.totalCount ?? 0}
       />
-    </>
+    </div>
   );
 };
 
