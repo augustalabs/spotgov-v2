@@ -52,7 +52,7 @@ const Saved = ({ saved, contractId }: SavedProps) => {
       variant="outline"
       size="sm"
       onClick={handleSaveContract}
-      className={cn(isSaved && "bg-primary/10 text-primary")}
+      className={cn(isSaved && "border-primary bg-primary/10 text-primary")}
     >
       <Bookmark size={16} />
       <p>{isSaved ? "Guardado" : "Guardar"}</p>
