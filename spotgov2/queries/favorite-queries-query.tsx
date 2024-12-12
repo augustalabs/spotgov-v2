@@ -8,6 +8,7 @@ function favoriteQueriesQuery(
   page: number,
   pageSize: number,
   searchInputText: string,
+  adjudicatorsInput: string[],
 ) {
   const queryKey = [
     "get-favorite-queries",
@@ -15,12 +16,19 @@ function favoriteQueriesQuery(
     page,
     pageSize,
     searchInputText,
+    adjudicatorsInput,
   ];
 
   const queryFn = async () => {
     let searchParams = `?page=${page}&pageSize=${pageSize}`;
 
     if (searchInputText) searchParams += `&search=${searchInputText}`;
+
+    if (adjudicatorsInput.length) {
+      adjudicatorsInput.forEach((adjudicator) => {
+        if (adjudicator) searchParams += `&adjudicator=${adjudicator}`;
+      });
+    }
 
     return await get<Response<FavoriteContractsDataType>>(
       `organizations/${organizationId}/favorite-queries${searchParams}`,

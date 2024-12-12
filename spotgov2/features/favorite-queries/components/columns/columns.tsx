@@ -6,7 +6,7 @@ import { formatDate } from "date-fns";
 import DeadlineDays from "./deadline-days";
 import Saved from "./saved";
 import ContractTitle from "./contract-title";
-import { PaginatedContractsType } from "../type";
+import { PaginatedContractsType } from "../../type";
 
 export const columns: ColumnDef<PaginatedContractsType>[] = [
   {

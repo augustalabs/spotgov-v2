@@ -8,19 +8,24 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import favoriteQueriesQuery from "@/queries/favorite-queries-query";
 import { DataTable } from "./data-table";
-import { columns } from "./columns";
+import { columns } from "./columns/columns";
 
 const PAGE_SIZE = 8;
 
 const CustomTable = () => {
-  const { searchTextInput } = useFavoriteQueriesFiltersStore();
+  const {
+    searchTextInput,
+    adjudicatorsInput,
+    adjudicatorsDefaultValues,
+    setAdjudicatorsDefaultValues,
+  } = useFavoriteQueriesFiltersStore();
   const { currentOrganization } = useCurrentOrganizationStore();
 
   const [page, setPage] = useState<number>(1);
 
   useEffect(() => {
     setPage(1);
-  }, [searchTextInput]);
+  }, [searchTextInput, adjudicatorsInput]);
 
   const { data, isPending, isFetching } = useQuery(
     favoriteQueriesQuery(
@@ -28,8 +33,21 @@ const CustomTable = () => {
       page,
       PAGE_SIZE,
       searchTextInput,
+      adjudicatorsInput,
     ),
   );
+
+  // This is necessary to update the default values of the select components
+  useEffect(() => {
+    if (
+      !isPending &&
+      data?.payload?.distinctAdjudicators &&
+      data?.payload?.distinctAdjudicators.length >
+        adjudicatorsDefaultValues.length
+    ) {
+      setAdjudicatorsDefaultValues(data?.payload?.distinctAdjudicators);
+    }
+  }, [isPending, data?.payload]);
 
   return (
     <>

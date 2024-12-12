@@ -5,7 +5,7 @@ import {
   contractsQueries,
   queries,
 } from "@/database/schemas";
-import { and, eq, ilike, or, sql } from "drizzle-orm";
+import { and, eq, ilike, inArray, or, sql } from "drizzle-orm";
 import { FavoriteContractsDataType } from "./type";
 
 export async function getFavoriteQueriesData(
@@ -13,6 +13,7 @@ export async function getFavoriteQueriesData(
   page: number = 1,
   pageSize: number = 8,
   searchTextInput: string = "",
+  adjudicatorsInput: string[] = [],
 ): Promise<FavoriteContractsDataType> {
   const offset = (page - 1) * pageSize;
 
@@ -25,7 +26,9 @@ export async function getFavoriteQueriesData(
       saved: contractsOrganizations.saved,
       queryTitle: queries.title,
       totalCount: sql<number>`COUNT(*) OVER()`,
-      distinctAdjudicators: sql<string>`array_agg(${contracts.issuerName}) OVER()`,
+      distinctAdjudicators: sql<
+        string[]
+      >`array_agg(${contracts.issuerName}) OVER()`,
     })
     .from(contractsQueries)
     .innerJoin(contracts, eq(contracts.id, contractsQueries.contractId))
@@ -45,6 +48,9 @@ export async function getFavoriteQueriesData(
           ilike(contracts.title, `%${searchTextInput}%`),
           ilike(contracts.issuerName, `%${searchTextInput}%`),
         ),
+        adjudicatorsInput.length > 0
+          ? inArray(sql`LOWER(${contracts.issuerName})`, adjudicatorsInput)
+          : sql`true`,
       ),
     )
     .limit(pageSize)
