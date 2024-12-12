@@ -5,57 +5,27 @@ import {
   contractsQueries,
   queries,
 } from "@/database/schemas";
-import { ContractsWithMatchTypeAndReasonPerQuery } from "@/types";
-import { and, count, eq, ilike, or } from "drizzle-orm";
+import { and, eq, ilike, or, sql } from "drizzle-orm";
+import { FavoriteContractsDataType } from "./type";
 
-export async function getFavoriteQueriesContractsCount(
-  organizationId: string,
-  searchTextInput: string = "",
-) {
-  const res = await db
-    .select({
-      count: count(contractsQueries.contractId),
-    })
-    .from(contractsQueries)
-    .innerJoin(contracts, eq(contracts.id, contractsQueries.contractId))
-    .innerJoin(queries, eq(queries.id, contractsQueries.queryId))
-    .innerJoin(
-      contractsOrganizations,
-      and(
-        eq(contractsOrganizations.contractId, contractsQueries.contractId),
-        eq(contractsOrganizations.organizationId, organizationId),
-      ),
-    )
-    .where(
-      and(
-        eq(queries.organizationId, organizationId),
-        eq(queries.starred, true),
-        or(
-          ilike(contracts.title, `%${searchTextInput}%`),
-          ilike(contracts.issuerName, `%${searchTextInput}%`),
-        ),
-      ),
-    );
-
-  return res.map((value) => value.count)[0] || 0;
-}
-
-export async function getFavoriteQueriesContracts(
+export async function getFavoriteQueriesData(
   organizationId: string,
   page: number = 1,
-  pageSize: number = 10,
+  pageSize: number = 8,
   searchTextInput: string = "",
-) {
+): Promise<FavoriteContractsDataType> {
   const offset = (page - 1) * pageSize;
 
   const res = await db
     .select({
-      contracts: contracts,
+      contract: contracts,
       queryId: queries.id,
       matchTypeFull: contractsQueries.matchTypeFull,
       reason: contractsQueries.reason,
       saved: contractsOrganizations.saved,
       queryTitle: queries.title,
+      totalCount: sql<number>`COUNT(*) OVER()`,
+      distinctAdjudicators: sql<string>`array_agg(${contracts.issuerName}) OVER()`,
     })
     .from(contractsQueries)
     .innerJoin(contracts, eq(contracts.id, contractsQueries.contractId))
@@ -80,24 +50,15 @@ export async function getFavoriteQueriesContracts(
     .limit(pageSize)
     .offset(offset);
 
-  let contractsPerQuery = {} as ContractsWithMatchTypeAndReasonPerQuery;
+  const data = res.map((row) => ({
+    ...row,
+    totalCount: row.totalCount,
+    distinctAdjudicators: Array.from(new Set(row.distinctAdjudicators)),
+  }));
 
-  res.map((r) => {
-    if (!contractsPerQuery[r.queryId]) {
-      contractsPerQuery[r.queryId] = {
-        contracts: [],
-      };
-    }
-
-    contractsPerQuery[r.queryId].contracts.push({
-      ...r.contracts,
-      matchTypeFull: r.matchTypeFull,
-      saved: r.saved,
-      queryTitle: r.queryTitle,
-      reason: r.reason,
-      queryId: r.queryId,
-    });
-  });
-
-  return contractsPerQuery;
+  return {
+    paginatedContracts: data,
+    totalCount: data[0]?.totalCount ?? 0,
+    distinctAdjudicators: data[0]?.distinctAdjudicators ?? [],
+  };
 }

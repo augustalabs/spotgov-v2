@@ -1,38 +1,35 @@
-import { NextResponse } from "next/server";
-
+import { getFavoriteQueriesData } from "@/features/favorite-queries/api";
+import { FavoriteContractsDataType } from "@/features/favorite-queries/type";
+import { Response } from "@/types";
+import { checkUserAuthentication } from "@/utils/api/helpers";
 import {
-  STATUS_BAD_REQUEST,
   STATUS_INTERNAL_SERVER_ERROR,
   STATUS_NOT_FOUND,
   STATUS_OK,
 } from "@/utils/api/status-messages";
-import { checkUserAuthentication } from "@/utils/api/helpers";
-import { getFavoriteQueriesContracts } from "@/features/favorite-queries/api";
+import { NextResponse } from "next/server";
 
 type Params = {
   organizationId: string;
 };
 
-export async function GET(req: Request, { params }: { params: Params }) {
+export async function GET(
+  req: Request,
+  { params }: { params: Params },
+): Promise<NextResponse<Response<FavoriteContractsDataType>>> {
   try {
     const userOrResponse = await checkUserAuthentication();
     if (userOrResponse instanceof NextResponse) return userOrResponse;
 
-    if (!params.organizationId) {
-      return NextResponse.json(STATUS_BAD_REQUEST, {
-        status: STATUS_BAD_REQUEST.status,
-      });
-    }
-
     const { searchParams } = new URL(req.url);
-    const page = searchParams.get("page") ?? 1;
-    const pageSize = searchParams.get("pageSize") ?? 10;
+    const page = searchParams.get("page") ?? "1";
+    const pageSize = searchParams.get("pageSize") ?? "8";
     const search = searchParams.get("search") ?? "";
 
-    const favoriteQueries = await getFavoriteQueriesContracts(
+    const favoriteQueries = await getFavoriteQueriesData(
       params.organizationId,
-      parseInt(page as string),
-      parseInt(pageSize as string),
+      parseInt(page),
+      parseInt(pageSize),
       search,
     );
 
@@ -44,11 +41,10 @@ export async function GET(req: Request, { params }: { params: Params }) {
 
     return NextResponse.json(
       { ...STATUS_OK, payload: favoriteQueries },
-      {
-        status: STATUS_OK.status,
-      },
+      { status: STATUS_OK.status },
     );
-  } catch {
+  } catch (error) {
+    console.log(error);
     return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
       status: STATUS_INTERNAL_SERVER_ERROR.status,
     });

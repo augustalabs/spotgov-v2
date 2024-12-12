@@ -1,21 +1,21 @@
 "use client";
 
-import { ContractWithMatchTypeAndReason } from "@/types";
 import { formatBasePrice } from "@/utils/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { formatDate } from "date-fns";
 import DeadlineDays from "./deadline-days";
 import Saved from "./saved";
 import ContractTitle from "./contract-title";
+import { PaginatedContractsType } from "../type";
 
-export const columns: ColumnDef<ContractWithMatchTypeAndReason>[] = [
+export const columns: ColumnDef<PaginatedContractsType>[] = [
   {
     accessorKey: "title",
     header: "Título",
     cell: ({ row }) => (
       <ContractTitle
-        title={row.original.title as string}
-        issuerName={row.original.issuerName as string}
+        title={row.original.contract.title as string}
+        issuerName={row.original.contract.issuerName as string}
       />
     ),
   },
@@ -23,25 +23,30 @@ export const columns: ColumnDef<ContractWithMatchTypeAndReason>[] = [
     accessorKey: "basePrice",
     header: "Preço base",
     cell: ({ row }) =>
-      formatBasePrice(parseInt(row.original.basePrice as string)),
+      formatBasePrice(parseInt(row.original.contract.basePrice as string)),
   },
   {
     accessorKey: "publishDate",
     header: "Data de publicação",
     cell: ({ row }) =>
-      formatDate(row.original.publishDate as Date, "dd/MM/yyyy"),
+      formatDate(row.original.contract.publishDate as Date, "dd/MM/yyyy"),
   },
   {
     accessorKey: "submissionDeadlineDate",
     header: "Prazo de submissão",
     cell: ({ row }) =>
-      formatDate(row.original.submissionDeadlineDate as Date, "dd/MM/yyyy"),
+      formatDate(
+        row.original.contract.submissionDeadlineDate as Date,
+        "dd/MM/yyyy",
+      ),
   },
   {
     accessorKey: "executionDeadlineDays",
     header: "Tempo restante",
     cell: ({ row }) => (
-      <DeadlineDays date={row.original.submissionDeadlineDate as Date} />
+      <DeadlineDays
+        date={row.original.contract.submissionDeadlineDate as Date}
+      />
     ),
   },
   {

@@ -1,4 +1,5 @@
-import { ContractsWithMatchTypeAndReasonPerQuery, Response } from "@/types";
+import { FavoriteContractsDataType } from "@/features/favorite-queries/type";
+import { Response } from "@/types";
 import { get } from "@/utils/api/api";
 import { keepPreviousData } from "@tanstack/react-query";
 
@@ -6,23 +7,29 @@ function favoriteQueriesQuery(
   organizationId: string,
   page: number,
   pageSize: number,
-  searchTextInput?: string,
+  searchInputText: string,
 ) {
   const queryKey = [
-    "get-favorite-queries-contracts",
+    "get-favorite-queries",
     organizationId,
     page,
-    searchTextInput,
+    pageSize,
+    searchInputText,
   ];
 
-  const queryFn = async () =>
-    await get<Response<ContractsWithMatchTypeAndReasonPerQuery>>(
-      `organizations/${organizationId}/favorite-queries-contracts?page=${page}&pageSize=${pageSize}&search=${searchTextInput}`,
-    );
+  const queryFn = async () => {
+    let searchParams = `?page=${page}&pageSize=${pageSize}`;
 
-  const placeholderData = keepPreviousData;
+    if (searchInputText) searchParams += `&search=${searchInputText}`;
+
+    return await get<Response<FavoriteContractsDataType>>(
+      `organizations/${organizationId}/favorite-queries${searchParams}`,
+    );
+  };
 
   const enabled = !!organizationId;
+
+  const placeholderData = keepPreviousData;
 
   return { queryKey, queryFn, enabled, placeholderData };
 }

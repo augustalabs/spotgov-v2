@@ -13,20 +13,6 @@ export type UserWithOrganizationInfo = UserOrganization & {
   user: User | null;
 };
 
-export type ContractWithMatchTypeAndReason = Contract & {
-  matchTypeFull: boolean | null;
-  saved: boolean | null;
-  queryTitle: string | null;
-  queryId: string | null;
-  reason: unknown;
-};
-
-export type ContractsWithMatchTypeAndReasonPerQuery = {
-  [queryId: string]: {
-    contracts: ContractWithMatchTypeAndReason[];
-  };
-};
-
 export type Response<T> = {
   success: boolean;
   status: number;
