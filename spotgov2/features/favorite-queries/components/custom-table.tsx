@@ -18,6 +18,9 @@ const CustomTable = () => {
     adjudicatorsInput,
     adjudicatorsDefaultValues,
     setAdjudicatorsDefaultValues,
+    queryTitlesInput,
+    queryTitlesDefaultValues,
+    setQueryTitlesDefaultValues,
   } = useFavoriteQueriesFiltersStore();
   const { currentOrganization } = useCurrentOrganizationStore();
 
@@ -34,18 +37,28 @@ const CustomTable = () => {
       PAGE_SIZE,
       searchTextInput,
       adjudicatorsInput,
+      queryTitlesInput,
     ),
   );
 
   // This is necessary to update the default values of the select components
   useEffect(() => {
-    if (
-      !isPending &&
-      data?.payload?.distinctAdjudicators &&
-      data?.payload?.distinctAdjudicators.length >
-        adjudicatorsDefaultValues.length
-    ) {
-      setAdjudicatorsDefaultValues(data?.payload?.distinctAdjudicators);
+    const payload = data?.payload;
+
+    if (!isPending && payload) {
+      const shouldSetAdjudicators =
+        payload.distinctAdjudicators.length > adjudicatorsDefaultValues.length;
+
+      const shouldSetQueryTitles =
+        payload.distinctQueryTitles.length > queryTitlesDefaultValues.length;
+
+      if (shouldSetAdjudicators) {
+        setAdjudicatorsDefaultValues(payload.distinctAdjudicators);
+      }
+
+      if (shouldSetQueryTitles) {
+        setQueryTitlesDefaultValues(payload.distinctQueryTitles);
+      }
     }
   }, [isPending, data?.payload]);
 

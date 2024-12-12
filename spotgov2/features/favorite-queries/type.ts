@@ -13,4 +13,5 @@ export type FavoriteContractsDataType = {
   paginatedContracts: PaginatedContractsType[];
   totalCount: number;
   distinctAdjudicators: string[];
+  distinctQueryTitles: string[];
 };

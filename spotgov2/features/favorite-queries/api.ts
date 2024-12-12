@@ -14,6 +14,7 @@ export async function getFavoriteQueriesData(
   pageSize: number = 8,
   searchTextInput: string = "",
   adjudicatorsInput: string[] = [],
+  titlesInput: string[] = [],
 ): Promise<FavoriteContractsDataType> {
   const offset = (page - 1) * pageSize;
 
@@ -26,9 +27,8 @@ export async function getFavoriteQueriesData(
       saved: contractsOrganizations.saved,
       queryTitle: queries.title,
       totalCount: sql<number>`COUNT(*) OVER()`,
-      distinctAdjudicators: sql<
-        string[]
-      >`array_agg(${contracts.issuerName}) OVER()`,
+      adjudicators: sql<string[]>`array_agg(${contracts.issuerName}) OVER()`,
+      queryTitles: sql<string[]>`array_agg(${queries.title}) OVER()`,
     })
     .from(contractsQueries)
     .innerJoin(contracts, eq(contracts.id, contractsQueries.contractId))
@@ -51,6 +51,9 @@ export async function getFavoriteQueriesData(
         adjudicatorsInput.length > 0
           ? inArray(sql`LOWER(${contracts.issuerName})`, adjudicatorsInput)
           : sql`true`,
+        titlesInput.length > 0
+          ? inArray(sql`LOWER(${queries.title})`, titlesInput)
+          : sql`true`,
       ),
     )
     .limit(pageSize)
@@ -59,12 +62,14 @@ export async function getFavoriteQueriesData(
   const data = res.map((row) => ({
     ...row,
     totalCount: row.totalCount,
-    distinctAdjudicators: Array.from(new Set(row.distinctAdjudicators)),
+    distinctAdjudicators: Array.from(new Set(row.adjudicators)),
+    distinctQueryTitles: Array.from(new Set(row.queryTitles)),
   }));
 
   return {
     paginatedContracts: data,
     totalCount: data[0]?.totalCount ?? 0,
     distinctAdjudicators: data[0]?.distinctAdjudicators ?? [],
+    distinctQueryTitles: data[0]?.distinctQueryTitles ?? [],
   };
 }
