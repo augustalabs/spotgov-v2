@@ -32,7 +32,7 @@ async function getFavoriteQueriesData(
   adjudicatorsInput: string[] = [],
   titlesInput: string[] = [],
   savedInput: string | null = null,
-  sortInput: OrderType = "base-price-asc",
+  sortInput: OrderType = "publish-date-desc",
 ): Promise<FavoriteContractsDataType> {
   const offset = (page - 1) * pageSize;
 

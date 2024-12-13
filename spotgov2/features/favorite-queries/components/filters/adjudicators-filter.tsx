@@ -2,7 +2,7 @@ import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filter
 import { Landmark } from "lucide-react";
 import MultiSelectFilter from "./multi-select-filter";
 
-const AdjudicatorsFilter = () => {
+const AdjudicatorsFilter = ({ className }: { className?: string }) => {
   const { adjudicatorsInput, setAdjudicatorsInput, adjudicatorsDefaultValues } =
     useFavoriteQueriesFiltersStore();
 
@@ -13,6 +13,7 @@ const AdjudicatorsFilter = () => {
       defaultValues={adjudicatorsDefaultValues}
       selectLabel="Adjudicantes"
       selectIcon={Landmark}
+      className={className}
     />
   );
 };

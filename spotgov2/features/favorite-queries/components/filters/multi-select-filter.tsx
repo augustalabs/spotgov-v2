@@ -21,6 +21,7 @@ type MultiSelectFilterProps = {
   defaultValues: string[];
   selectLabel: string;
   selectIcon: LucideIcon;
+  className?: string;
 };
 
 const MultiSelectFilter = ({
@@ -29,6 +30,7 @@ const MultiSelectFilter = ({
   defaultValues,
   selectLabel,
   selectIcon: SelectIcon,
+  className,
 }: MultiSelectFilterProps) => {
   const onSelectionChange = (value: string) => {
     if (input.includes(value)) {
@@ -43,7 +45,7 @@ const MultiSelectFilter = ({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" className={className}>
           <SelectIcon size={16} />
           <p>{selectLabel}</p>
           <div className="rounded-md border border-primary bg-primary/10 px-1">
@@ -64,7 +66,7 @@ const MultiSelectFilter = ({
                   value={value}
                   onSelect={onSelectionChange}
                   className={cn(
-                    "flex items-center justify-between data-[selected='true']:bg-background data-[selected=true]:text-foreground",
+                    "flex items-center justify-between data-[selected='true']:bg-background data-[selected=true]:text-foreground data-[selected='true']:hover:text-primary",
                     isSelected(value) &&
                       "text-primary data-[selected=true]:text-primary",
                   )}

@@ -7,11 +7,11 @@ import SearchFilter from "./search-filter";
 const Filters = () => {
   return (
     <div className="my-5 flex flex-wrap gap-2">
-      <SearchFilter />
-      <QueryTitlesFilter />
-      <AdjudicatorsFilter />
-      <SavedFilter />
-      <Sort />
+      <SearchFilter className="flex-grow basis-1/6" />
+      <QueryTitlesFilter className="flex-grow basis-1/6" />
+      <AdjudicatorsFilter className="flex-grow basis-1/6" />
+      <SavedFilter className="flex-grow basis-1/6" />
+      <Sort className="flex-grow basis-1/6" />
     </div>
   );
 };

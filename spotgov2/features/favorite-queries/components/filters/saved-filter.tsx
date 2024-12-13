@@ -35,7 +35,7 @@ const DEFAULT_VALUES: DefaultValuesProps[] = [
   },
 ];
 
-const SavedFilter = () => {
+const SavedFilter = ({ className }: { className?: string }) => {
   const { savedInput, setSavedInput } = useFavoriteQueriesFiltersStore();
 
   const [selectedSaved, setSelectedSaved] = useState<string>(
@@ -55,7 +55,7 @@ const SavedFilter = () => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" className={className}>
           <Bookmark size={16} />
           <p>Interesse</p>
           <ChevronDown size={16} />
@@ -71,7 +71,7 @@ const SavedFilter = () => {
                   value={v.value}
                   onSelect={onSelectionChange}
                   className={cn(
-                    "flex items-center justify-between data-[selected='true']:bg-background data-[selected=true]:text-foreground",
+                    "flex items-center justify-between hover:text-primary data-[selected='true']:bg-background data-[selected=true]:text-foreground",
                     isSelected(v.value) &&
                       "text-primary data-[selected=true]:text-primary",
                   )}

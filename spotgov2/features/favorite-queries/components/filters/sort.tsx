@@ -38,16 +38,16 @@ const DEFAULT_VALUES: DefaultValuesProps[] = [
     value: "base-price-asc",
   },
   {
-    label: "Prazo mais próximo",
+    label: "Prazo mais distante",
     value: "deadline-desc",
   },
   {
-    label: "Prazo mais distante",
+    label: "Prazo mais próximo",
     value: "deadline-asc",
   },
 ];
 
-const Sort = () => {
+const Sort = ({ className }: { className?: string }) => {
   const { selectedSortInput, setSelectedSortInput } =
     useFavoriteQueriesFiltersStore();
 
@@ -61,7 +61,7 @@ const Sort = () => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" className={className}>
           <ListFilter size={16} />
           <p>
             {
@@ -82,7 +82,7 @@ const Sort = () => {
                   value={v.value}
                   onSelect={() => onSelectionChange(v)}
                   className={cn(
-                    "flex items-center justify-between data-[selected='true']:bg-background data-[selected=true]:text-foreground",
+                    "flex items-center justify-between hover:text-primary data-[selected='true']:bg-background data-[selected=true]:text-foreground",
                     isSelected(v) &&
                       "text-primary data-[selected=true]:text-primary",
                   )}

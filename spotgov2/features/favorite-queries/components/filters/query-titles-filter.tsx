@@ -2,7 +2,7 @@ import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filter
 import { FileStack } from "lucide-react";
 import MultiSelectFilter from "./multi-select-filter";
 
-const QueryTitlesFilter = () => {
+const QueryTitlesFilter = ({ className }: { className?: string }) => {
   const { queryTitlesInput, setQueryTitlesInput, queryTitlesDefaultValues } =
     useFavoriteQueriesFiltersStore();
 
@@ -13,6 +13,7 @@ const QueryTitlesFilter = () => {
       defaultValues={queryTitlesDefaultValues}
       selectLabel="Pesquisas"
       selectIcon={FileStack}
+      className={className}
     />
   );
 };

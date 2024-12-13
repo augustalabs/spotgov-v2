@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filters-store";
 
-const SearchFilter = () => {
+const SearchFilter = ({ className }: { className?: string }) => {
   const { searchTextInput, setSearchTextInput } =
     useFavoriteQueriesFiltersStore();
 
@@ -12,7 +12,7 @@ const SearchFilter = () => {
       placeholder="Procurar pesquisas..."
       value={searchTextInput}
       onChange={(event) => setSearchTextInput(event.target.value)}
-      className="max-w-xs"
+      className={className}
     />
   );
 };
