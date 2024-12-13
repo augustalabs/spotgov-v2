@@ -20,7 +20,7 @@ type Params = {
 
 export async function PATCH(
   req: Request,
-  { params }: { params: Params }
+  { params }: { params: Params },
 ): Promise<NextResponse<Response<Organization[]>>> {
   try {
     const userOrResponse = await checkUserAuthentication();
@@ -43,7 +43,7 @@ export async function PATCH(
     const organizations = await updateOrganization(
       params.organizationId,
       name,
-      nif
+      nif,
     );
 
     if (!organizations?.length) {
@@ -54,7 +54,7 @@ export async function PATCH(
 
     return NextResponse.json(
       { ...STATUS_OK, payload: organizations },
-      { status: STATUS_OK.status }
+      { status: STATUS_OK.status },
     );
   } catch {
     return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {

@@ -12,7 +12,7 @@ import {
 import { mapUserRolesToPortuguese, UserRoles } from "@/types";
 import { cn } from "@/utils/utils";
 import { useMutation } from "@tanstack/react-query";
-import updateUserRoleMutation from "@/mutations/update-user-role-mutation";
+import { updateUserRoleMutation } from "@/features/organizations/services";
 import { toast } from "sonner";
 
 type UserRoleSelectProps = {
@@ -32,10 +32,12 @@ export function RoleSelect({
 
   const handleRoleChange = async (newRole: UserRoles) => {
     try {
+      // Optimistic update
+      setRole(newRole);
+
       const res = await mutation.mutateAsync({ role: newRole });
 
       if (res.success) {
-        setRole(newRole);
         toast.success("Cargo atualizado com sucesso!");
       } else {
         toast.error("Erro ao atualizar cargo. Por favor tente novamente.");
@@ -46,7 +48,7 @@ export function RoleSelect({
   };
 
   const filteredRoles = Object.values(UserRoles).filter(
-    (role) => role !== UserRoles.Owner
+    (role) => role !== UserRoles.Owner,
   );
 
   return (
@@ -61,7 +63,7 @@ export function RoleSelect({
             value={roleOption}
             className={cn(
               "hover:bg-background",
-              role === roleOption && "text-primary"
+              role === roleOption && "text-primary",
             )}
           >
             {mapUserRolesToPortuguese[roleOption]}

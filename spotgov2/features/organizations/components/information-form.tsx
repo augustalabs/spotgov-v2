@@ -19,7 +19,7 @@ import { Pencil, PencilOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/utils";
 import { useMutation } from "@tanstack/react-query";
-import updateOrganizationMutation from "@/mutations/update-organization-mutation";
+import { updateOrganizationMutation } from "@/features/organizations/services";
 import { toast } from "sonner";
 
 const InformationForm = () => {
@@ -55,24 +55,26 @@ const InformationForm = () => {
         nif: values.nif ?? "",
       });
 
+      console.log(res);
+
       if (res.success) {
         toast.success("Organização atualizada com sucesso.");
         setIsEditable(false);
       } else {
         toast.error(
-          "Ocorreu um erro ao atualizar a organização. Por favor, tente novamente."
+          "Ocorreu um erro ao atualizar a organização. Por favor, tente novamente.",
         );
       }
     } catch {
       toast.error(
-        "Ocorreu um erro ao atualizar a organização. Por favor, tente novamente."
+        "Ocorreu um erro ao atualizar a organização. Por favor, tente novamente.",
       );
     }
   };
 
   return (
     <>
-      <div className="flex items-center justify-between mb-8">
+      <div className="mb-8 flex items-center justify-between">
         <Header title="Organização" />
         <Button
           variant="outline"
@@ -85,9 +87,9 @@ const InformationForm = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col sm:items-end sm:flex-row sm:justify-between space-y-4 sm:space-y-0"
+          className="flex flex-col space-y-4 sm:flex-row sm:items-end sm:justify-between sm:space-y-0"
         >
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4 w-full">
+          <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-center">
             <FormField
               control={form.control}
               name="name"
@@ -99,9 +101,9 @@ const InformationForm = () => {
                       {...field}
                       type="text"
                       className={cn(
-                        "w-full sm:w-72 pl-0",
+                        "w-full pl-0 sm:w-72",
                         !isEditable &&
-                          "border-background disabled:cursor-default disabled:opacity-100"
+                          "border-background disabled:cursor-default disabled:opacity-100",
                       )}
                       placeholder="Nome da organização"
                       disabled={!isEditable}
@@ -123,9 +125,9 @@ const InformationForm = () => {
                       type="text"
                       value={field.value ?? ""}
                       className={cn(
-                        "w-full sm:w-40 pl-0",
+                        "w-full pl-0 sm:w-40",
                         !isEditable &&
-                          "border-background disabled:cursor-default disabled:opacity-100"
+                          "border-background disabled:cursor-default disabled:opacity-100",
                       )}
                       placeholder="NIF da organização"
                       disabled={!isEditable}

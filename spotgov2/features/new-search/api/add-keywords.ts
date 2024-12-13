@@ -3,18 +3,20 @@
 import { db } from "@/database/db";
 import { keywords as keywordsTable } from "@/database/schemas";
 
-export async function addKeywords({
-    organizationId,
-    keywords,
+async function addKeywords({
+  organizationId,
+  keywords,
 }: {
-    organizationId: string;
-    keywords: string[];
+  organizationId: string;
+  keywords: string[];
 }) {
-    const data = keywords.map((k) => ({
-        organizationId,
-        keyword: k,
-        createdAt: new Date(),
-    }));
+  const data = keywords.map((k) => ({
+    organizationId,
+    keyword: k,
+    createdAt: new Date(),
+  }));
 
-    return await db.insert(keywordsTable).values(data);
+  return await db.insert(keywordsTable).values(data);
 }
+
+export default addKeywords;

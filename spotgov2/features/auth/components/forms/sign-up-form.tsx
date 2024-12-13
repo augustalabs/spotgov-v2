@@ -17,7 +17,7 @@ import {
 
 import { signUpSchema } from "../../schemas";
 import CardForm from "./card-form";
-import { signUpWithPassword } from "../../actions";
+import { signUpWithPassword } from "../../api";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Loader } from "lucide-react";
 import GoogleButton from "../google-button";

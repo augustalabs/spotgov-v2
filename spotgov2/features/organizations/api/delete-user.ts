@@ -1,3 +1,5 @@
+"use server";
+
 import { db } from "@/database/db";
 import { UserOrganization, usersOrganizations } from "@/database/schemas";
 import { UserRoles } from "@/types";

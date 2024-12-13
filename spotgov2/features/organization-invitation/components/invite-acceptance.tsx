@@ -2,8 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
-import addUserMutation from "@/mutations/add-user-mutation";
-import acceptInviteQuery from "@/queries/accept-invite-query";
+import {
+  addUserMutation,
+  acceptInviteQuery,
+} from "@/features/organization-invitation/services";
 import { LOGIN_ROUTE, NEW_SEARCH_ROUTE, SIGN_UP_ROUTE } from "@/routes";
 import logo from "@public/assets/logo.png";
 import { useMutation, useQuery } from "@tanstack/react-query";

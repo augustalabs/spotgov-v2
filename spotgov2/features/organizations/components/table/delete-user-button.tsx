@@ -5,7 +5,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import deleteUserMutation from "@/mutations/delete-user-mutation";
+import { deleteUserMutation } from "@/features/organizations/services";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { useMutation } from "@tanstack/react-query";
 import { Trash } from "lucide-react";

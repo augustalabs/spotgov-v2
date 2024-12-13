@@ -5,7 +5,7 @@ import MultipleSelector, {
 } from "@/components/ui/multi-select";
 import { useQuery } from "@tanstack/react-query";
 import { WholeWord } from "lucide-react";
-import { getKeywords } from "../api/get-keywords";
+import { getKeywords } from "../api";
 import { memo } from "react";
 
 interface KeywordsSelectorProps {

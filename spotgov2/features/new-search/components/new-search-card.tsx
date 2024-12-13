@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Option as MultiSelectOption } from "@/components/ui/multi-select";
-import { addKeywords } from "../api/add-keywords";
+import { addKeywords } from "../api";
 import PriceRangeSelector from "./price-range-selector";
 import { DateRange } from "react-day-picker";
 import AdjudicatingEntitySelector from "./adjudicating-entity-selector";

@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { signInWithPassword } from "../../actions";
+import { signInWithPassword } from "../../api";
 import CardForm from "./card-form";
 import { Eye, EyeOff, Loader } from "lucide-react";
 import GoogleButton from "../google-button";

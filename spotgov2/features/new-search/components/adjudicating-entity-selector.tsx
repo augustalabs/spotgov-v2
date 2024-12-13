@@ -1,7 +1,7 @@
 import { VirtualizedCombobox } from "@/components/ui/virtualized-combobox";
 import { useQuery } from "@tanstack/react-query";
 import React, { memo, useCallback } from "react";
-import { getAdjudicatingEntities } from "../api/get-adjudicating-entities";
+import { getAdjudicatingEntities } from "../api";
 import { Landmark } from "lucide-react";
 
 interface AdjudicatingEntitySelectorProps {

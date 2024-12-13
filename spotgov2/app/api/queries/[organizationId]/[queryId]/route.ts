@@ -81,7 +81,13 @@ export async function DELETE(
       });
     }
 
-    await deleteQuery(params.queryId);
+    const queries = await deleteQuery(params.queryId);
+
+    if (!queries?.length) {
+      return NextResponse.json(STATUS_NOT_FOUND, {
+        status: STATUS_NOT_FOUND.status,
+      });
+    }
 
     return NextResponse.json(STATUS_OK, {
       status: STATUS_OK.status,

@@ -1,5 +1,5 @@
 import { Response, UserWithOrganizationInfo } from "@/types";
-import { get } from "@/utils/api/api";
+import { get } from "@/utils/api/functions";
 
 function organizationUsersQuery(organizationId: string) {
   const queryKey = ["get-organization-users", organizationId];

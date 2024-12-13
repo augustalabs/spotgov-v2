@@ -5,7 +5,7 @@ import MultipleSelector, {
 } from "@/components/ui/multi-select";
 import { useQuery } from "@tanstack/react-query";
 import { ScrollText } from "lucide-react";
-import { getCPVs } from "../api/get-cpvs";
+import { getCpvs } from "../api";
 import { memo } from "react";
 
 interface CPVSelectorProps {
@@ -19,7 +19,7 @@ const CPVSelector = memo(function CPVSelector({
 }: CPVSelectorProps) {
   const { data: cpvs } = useQuery({
     queryKey: ["cpvs"],
-    queryFn: getCPVs,
+    queryFn: getCpvs,
     enabled: false,
   });
 

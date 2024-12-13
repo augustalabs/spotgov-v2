@@ -10,7 +10,8 @@ async function updateOrganization(
   return await db
     .update(organizations)
     .set({ name, nif, updatedAt: new Date() })
-    .where(eq(organizations.id, organizationId));
+    .where(eq(organizations.id, organizationId))
+    .returning();
 }
 
 export default updateOrganization;

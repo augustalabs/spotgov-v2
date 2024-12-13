@@ -1,6 +1,6 @@
 import { getQueryClient } from "@/lib/react-query/client";
 import { Response } from "@/types";
-import { del } from "@/utils/api/api";
+import { del } from "@/utils/api/functions";
 
 function deleteQueryMutation(organizationId: string) {
   const queryClient = getQueryClient();

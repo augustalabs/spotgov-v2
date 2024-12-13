@@ -1,5 +1,5 @@
 import { Response } from "@/types";
-import { post } from "@/utils/api/api";
+import { post } from "@/utils/api/functions";
 
 function inviteUserMutation() {
   const mutationKey = ["invite-user"];

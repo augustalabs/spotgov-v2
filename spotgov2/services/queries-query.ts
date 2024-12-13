@@ -1,6 +1,6 @@
 import { Query } from "@/database/schemas";
 import { Response } from "@/types";
-import { get } from "@/utils/api/api";
+import { get } from "@/utils/api/functions";
 
 function queriesQuery(organizationId: string) {
   const queryKey = ["get-queries", organizationId];

@@ -1,5 +1,5 @@
 import { Response } from "@/types";
-import { get } from "@/utils/api/api";
+import { get } from "@/utils/api/functions";
 
 type TokenAnswer = {
   organizationId: string;

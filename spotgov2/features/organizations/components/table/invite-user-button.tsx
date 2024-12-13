@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
-import inviteUserMutation from "@/mutations/invite-user-mutation";
+import { inviteUserMutation } from "@/features/organizations/services";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { toast } from "sonner";
 import { useState } from "react";

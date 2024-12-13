@@ -1,7 +1,7 @@
 import { Query } from "@/database/schemas";
 import { getQueryClient } from "@/lib/react-query/client";
 import { Response, UserRoles } from "@/types";
-import { patch } from "@/utils/api/api";
+import { patch } from "@/utils/api/functions";
 
 function updateUserRoleMutation(organizationId: string, userId: string) {
   const queryClient = getQueryClient();

@@ -25,9 +25,9 @@ import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { useMutation } from "@tanstack/react-query";
-import updateQueryTitleMutation from "@/mutations/update-query-title-mutation";
+import updateQueryTitleMutation from "@/services/update-query-title-mutation";
 import { toast } from "sonner";
-import deleteQueryMutation from "@/mutations/delete-query-mutation";
+import deleteQueryMutation from "@/services/delete-query-mutation";
 import { cn } from "@/utils/utils";
 
 type SidebarHistoryActionsProps = {
@@ -54,12 +54,12 @@ const SidebarHistoryActions = ({ query }: SidebarHistoryActionsProps) => {
 
   const updateMutation = useMutation(
     updateQueryTitleMutation(
-      currentOrganizationStore.currentOrganization?.organizationId as string
-    )
+      currentOrganizationStore.currentOrganization?.organizationId as string,
+    ),
   );
 
   const handleUpdate = async (
-    values: z.infer<typeof updateQueryTitleSchema>
+    values: z.infer<typeof updateQueryTitleSchema>,
   ) => {
     try {
       const res = await updateMutation.mutateAsync({
@@ -71,20 +71,20 @@ const SidebarHistoryActions = ({ query }: SidebarHistoryActionsProps) => {
         toast.success("Título alterado com sucesso.");
       } else {
         toast.error(
-          "Não foi possível realizar a alteração do título. Por favor, tente novamente."
+          "Não foi possível realizar a alteração do título. Por favor, tente novamente.",
         );
       }
     } catch {
       toast.error(
-        "Não foi possível realizar a alteração do título. Por favor, tente novamente."
+        "Não foi possível realizar a alteração do título. Por favor, tente novamente.",
       );
     }
   };
 
   const deleteMutation = useMutation(
     deleteQueryMutation(
-      currentOrganizationStore.currentOrganization?.organizationId as string
-    )
+      currentOrganizationStore.currentOrganization?.organizationId as string,
+    ),
   );
 
   const handleDelete = async () => {
@@ -95,12 +95,12 @@ const SidebarHistoryActions = ({ query }: SidebarHistoryActionsProps) => {
         toast.success("Pesquisa eliminada com sucesso.");
       } else {
         toast.error(
-          "Não foi possível realizar a eliminação da pesquisa. Por favor, tente novamente."
+          "Não foi possível realizar a eliminação da pesquisa. Por favor, tente novamente.",
         );
       }
     } catch {
       toast.error(
-        "Não foi possível realizar a eliminação da pesquisa. Por favor, tente novamente."
+        "Não foi possível realizar a eliminação da pesquisa. Por favor, tente novamente.",
       );
     }
   };
@@ -138,7 +138,7 @@ const SidebarHistoryActions = ({ query }: SidebarHistoryActionsProps) => {
               <div
                 className={cn(
                   "flex items-center space-x-2",
-                  isLoading && "animate-pulse"
+                  isLoading && "animate-pulse",
                 )}
               >
                 <Edit size={16} />
@@ -154,7 +154,7 @@ const SidebarHistoryActions = ({ query }: SidebarHistoryActionsProps) => {
           variant="destructive"
           className={cn(
             "flex items-center gap-2",
-            deleteMutation.isPending && "animate-pulse"
+            deleteMutation.isPending && "animate-pulse",
           )}
           onClick={handleDelete}
           disabled={deleteMutation.isPending}
