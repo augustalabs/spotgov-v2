@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { Query } from "@/database/schemas";
-import { isUserInOrganization } from "@/features/organizations/api";
+import { getUserFromOrganization } from "@/features/organizations/api";
 import { getOrganizationQueries } from "@/features/queries/api";
 import { Response } from "@/types";
 import {
@@ -31,7 +31,12 @@ export async function GET(
       });
     }
 
-    if (!isUserInOrganization(userOrResponse?.id, params.organizationId)) {
+    const user = await getUserFromOrganization(
+      userOrResponse?.id,
+      params.organizationId,
+    );
+
+    if (!user) {
       return NextResponse.json(STATUS_FORBIDDEN, {
         status: STATUS_FORBIDDEN.status,
       });

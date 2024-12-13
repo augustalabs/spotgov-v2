@@ -1,9 +1,12 @@
+import { getUserFromOrganization } from "@/features/organizations/api";
+import { canInviteUser } from "@/features/organizations/permissions";
 import { resend } from "@/lib/resend/client";
 import { ORGANIZATION_INVITE_ROUTE } from "@/routes";
 import { Response } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";
 import {
   STATUS_BAD_REQUEST,
+  STATUS_FORBIDDEN,
   STATUS_INTERNAL_SERVER_ERROR,
   STATUS_NOT_FOUND,
   STATUS_OK,
@@ -11,22 +14,44 @@ import {
 import { generateInviteToken } from "@/utils/utils";
 import { NextResponse } from "next/server";
 
+type Params = {
+  organizationId: string;
+};
+
 export async function POST(
-  req: Request
+  req: Request,
+  { params }: { params: Params },
 ): Promise<NextResponse<Response<string>>> {
   try {
     const userOrResponse = await checkUserAuthentication();
     if (userOrResponse instanceof NextResponse) return userOrResponse;
 
-    const { organizationId, organizationName, email } = await req.json();
+    const { organizationName, email } = await req.json();
 
-    if (!organizationId || !organizationName || !email) {
+    if (!organizationName || !email) {
       return NextResponse.json(STATUS_BAD_REQUEST, {
         status: STATUS_BAD_REQUEST.status,
       });
     }
 
-    const token = generateInviteToken(organizationId, email);
+    if (!params.organizationId) {
+      return NextResponse.json(STATUS_BAD_REQUEST, {
+        status: STATUS_BAD_REQUEST.status,
+      });
+    }
+
+    const user = await getUserFromOrganization(
+      userOrResponse.id,
+      params.organizationId,
+    );
+
+    if (!user || !canInviteUser(user.role)) {
+      return NextResponse.json(STATUS_FORBIDDEN, {
+        status: STATUS_FORBIDDEN.status,
+      });
+    }
+
+    const token = generateInviteToken(params.organizationId, email);
 
     if (!token) {
       return NextResponse.json(STATUS_NOT_FOUND, {
@@ -63,7 +88,7 @@ export async function POST(
       { ...STATUS_OK, payload: inviteUrl },
       {
         status: STATUS_OK.status,
-      }
+      },
     );
   } catch {
     return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {

@@ -1,10 +1,10 @@
+import { canViewOrganization } from "@/features/organizations/permissions";
 import {
   HOME_ROUTE,
   LOGIN_ROUTE,
   NEW_SEARCH_ROUTE,
   ORGANIZATION_ROUTE,
 } from "@/routes";
-import { UserRoles } from "@/types";
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -23,17 +23,17 @@ export async function updateSession(request: NextRequest) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) =>
-            request.cookies.set(name, value)
+            request.cookies.set(name, value),
           );
           supabaseResponse = NextResponse.next({
             request,
           });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+            supabaseResponse.cookies.set(name, value, options),
           );
         },
       },
-    }
+    },
   );
 
   // IMPORTANT: Avoid writing any logic between createServerClient and
@@ -66,8 +66,7 @@ export async function updateSession(request: NextRequest) {
 
   if (
     request.nextUrl.pathname.startsWith(ORGANIZATION_ROUTE) &&
-    user?.user_metadata.current_organization.role !== UserRoles.Admin &&
-    user?.user_metadata.current_organization.role !== UserRoles.Owner
+    !canViewOrganization(user?.user_metadata.current_organization.role)
   ) {
     const url = request.nextUrl.clone();
     url.pathname = NEW_SEARCH_ROUTE;

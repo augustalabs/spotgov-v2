@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { isUserInOrganization } from "@/features/organizations/api";
+import { getUserFromOrganization } from "@/features/organizations/api";
 import { deleteQuery, updateQueryTitle } from "@/features/queries/api";
 import { Response } from "@/types";
 import {
@@ -12,6 +12,10 @@ import {
 } from "@/utils/api/status-messages";
 import { Query } from "@/database/schemas";
 import { checkUserAuthentication } from "@/utils/api/helpers";
+import {
+  canEditQuery,
+  canRemoveQuery,
+} from "@/features/organizations/permissions";
 
 type Params = {
   queryId: string;
@@ -34,7 +38,12 @@ export async function PATCH(
       });
     }
 
-    if (!isUserInOrganization(userOrResponse.id, params.organizationId)) {
+    const user = await getUserFromOrganization(
+      userOrResponse?.id,
+      params.organizationId,
+    );
+
+    if (!user || !canEditQuery(user.role)) {
       return NextResponse.json(STATUS_FORBIDDEN, {
         status: STATUS_FORBIDDEN.status,
       });
@@ -75,7 +84,12 @@ export async function DELETE(
       });
     }
 
-    if (!isUserInOrganization(userOrResponse.id, params.organizationId)) {
+    const user = await getUserFromOrganization(
+      userOrResponse?.id,
+      params.organizationId,
+    );
+
+    if (!user || !canRemoveQuery(user.role)) {
       return NextResponse.json(STATUS_FORBIDDEN, {
         status: STATUS_FORBIDDEN.status,
       });

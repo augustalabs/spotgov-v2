@@ -14,9 +14,8 @@ function inviteUserMutation() {
     email: string;
   }) =>
     await post<Response<string>>({
-      url: `organizations/invite`,
+      url: `organizations/${organizationId}/invite`,
       body: {
-        organizationId,
         organizationName,
         email,
       },

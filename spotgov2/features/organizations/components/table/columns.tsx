@@ -1,14 +1,11 @@
 import AvatarIcon from "@/components/avatar-icon";
-import {
-  mapUserRolesToPortuguese,
-  UserRoles,
-  UserWithOrganizationInfo,
-} from "@/types";
+import { mapUserRolesToPortuguese, UserWithOrganizationInfo } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import { RoleSelect } from "./role-select";
 import DeleteUserButton from "./delete-user-button";
 import { ArrowDownUp } from "lucide-react";
+import { canBeRemoved, canRoleBeChanged } from "../../permissions";
 
 export const columns: ColumnDef<UserWithOrganizationInfo>[] = [
   {
@@ -64,7 +61,7 @@ export const columns: ColumnDef<UserWithOrganizationInfo>[] = [
     cell: ({ row }) => {
       const { role, organizationId, userId } = row.original;
 
-      if (role === UserRoles.Owner) {
+      if (!canRoleBeChanged(role)) {
         return <p>{mapUserRolesToPortuguese[role]}</p>;
       }
 
@@ -82,7 +79,7 @@ export const columns: ColumnDef<UserWithOrganizationInfo>[] = [
     cell: ({ row }) => {
       const { userId, role } = row.original;
 
-      if (role === UserRoles.Owner) return null;
+      if (!canBeRemoved(role)) return null;
 
       return <DeleteUserButton userId={userId as string} />;
     },

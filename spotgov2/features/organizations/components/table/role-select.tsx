@@ -14,6 +14,7 @@ import { cn } from "@/utils/utils";
 import { useMutation } from "@tanstack/react-query";
 import { updateUserRoleMutation } from "@/features/organizations/services";
 import { toast } from "sonner";
+import { canRoleBeChanged } from "../../permissions";
 
 type UserRoleSelectProps = {
   organizationId: string;
@@ -47,8 +48,8 @@ export function RoleSelect({
     }
   };
 
-  const filteredRoles = Object.values(UserRoles).filter(
-    (role) => role !== UserRoles.Owner,
+  const filteredRoles = Object.values(UserRoles).filter((role) =>
+    canRoleBeChanged(role),
   );
 
   return (

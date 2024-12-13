@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 
-import { getUsers, isUserAdminOrOwner } from "@/features/organizations/api";
+import {
+  getUserFromOrganization,
+  getUsers,
+} from "@/features/organizations/api";
 import { createClient } from "@/lib/supabase/server";
 import { Response, UserWithOrganizationInfo } from "@/types";
 import {
@@ -12,6 +15,7 @@ import {
 } from "@/utils/api/status-messages";
 import { addUserToOrganization } from "@/features/organization-invitation/api";
 import { checkUserAuthentication } from "@/utils/api/helpers";
+import { canViewOrganization } from "@/features/organizations/permissions";
 
 type Params = {
   organizationId: string;
@@ -31,7 +35,12 @@ export async function GET(
       });
     }
 
-    if (!isUserAdminOrOwner(userOrResponse.id, params.organizationId)) {
+    const user = await getUserFromOrganization(
+      userOrResponse.id,
+      params.organizationId,
+    );
+
+    if (!user || !canViewOrganization(user.role)) {
       return NextResponse.json(STATUS_FORBIDDEN, {
         status: STATUS_FORBIDDEN.status,
       });
