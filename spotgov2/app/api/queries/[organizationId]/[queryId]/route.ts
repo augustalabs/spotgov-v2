@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { isUserInOrganization } from "@/features/organizations/api";
+import { getUserFromOrganization } from "@/features/organizations/api";
 import { deleteQuery, updateQueryTitle } from "@/features/queries/api";
 import { Response } from "@/types";
 import {
@@ -12,6 +12,10 @@ import {
 } from "@/utils/api/status-messages";
 import { Query } from "@/database/schemas";
 import { checkUserAuthentication } from "@/utils/api/helpers";
+import {
+  canEditQuery,
+  canRemoveQuery,
+} from "@/features/organizations/permissions";
 
 type Params = {
   queryId: string;
@@ -20,7 +24,7 @@ type Params = {
 
 export async function PATCH(
   req: Request,
-  { params }: { params: Params }
+  { params }: { params: Params },
 ): Promise<NextResponse<Response<Query[]>>> {
   try {
     const userOrResponse = await checkUserAuthentication();
@@ -34,7 +38,12 @@ export async function PATCH(
       });
     }
 
-    if (!isUserInOrganization(userOrResponse.id, params.organizationId)) {
+    const user = await getUserFromOrganization(
+      userOrResponse?.id,
+      params.organizationId,
+    );
+
+    if (!user || !canEditQuery(user.role)) {
       return NextResponse.json(STATUS_FORBIDDEN, {
         status: STATUS_FORBIDDEN.status,
       });
@@ -52,7 +61,7 @@ export async function PATCH(
       { ...STATUS_OK, payload: query },
       {
         status: STATUS_OK.status,
-      }
+      },
     );
   } catch {
     return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
@@ -63,7 +72,7 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: Params }
+  { params }: { params: Params },
 ): Promise<NextResponse<Response<void>>> {
   try {
     const userOrResponse = await checkUserAuthentication();
@@ -75,13 +84,24 @@ export async function DELETE(
       });
     }
 
-    if (!isUserInOrganization(userOrResponse.id, params.organizationId)) {
+    const user = await getUserFromOrganization(
+      userOrResponse?.id,
+      params.organizationId,
+    );
+
+    if (!user || !canRemoveQuery(user.role)) {
       return NextResponse.json(STATUS_FORBIDDEN, {
         status: STATUS_FORBIDDEN.status,
       });
     }
 
-    await deleteQuery(params.queryId);
+    const queries = await deleteQuery(params.queryId);
+
+    if (!queries?.length) {
+      return NextResponse.json(STATUS_NOT_FOUND, {
+        status: STATUS_NOT_FOUND.status,
+      });
+    }
 
     return NextResponse.json(STATUS_OK, {
       status: STATUS_OK.status,

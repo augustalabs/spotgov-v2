@@ -1,8 +1,9 @@
 import { Organization } from "@/database/schemas";
 import {
-  isUserAdminOrOwner,
+  getUserFromOrganization,
   updateOrganization,
 } from "@/features/organizations/api";
+import { canEditOrganization } from "@/features/organizations/permissions";
 import { Response } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";
 import {
@@ -20,7 +21,7 @@ type Params = {
 
 export async function PATCH(
   req: Request,
-  { params }: { params: Params }
+  { params }: { params: Params },
 ): Promise<NextResponse<Response<Organization[]>>> {
   try {
     const userOrResponse = await checkUserAuthentication();
@@ -34,7 +35,12 @@ export async function PATCH(
       });
     }
 
-    if (!isUserAdminOrOwner(userOrResponse.id, params.organizationId)) {
+    const user = await getUserFromOrganization(
+      userOrResponse.id,
+      params.organizationId,
+    );
+
+    if (!user || !canEditOrganization(user.role)) {
       return NextResponse.json(STATUS_FORBIDDEN, {
         status: STATUS_FORBIDDEN.status,
       });
@@ -43,7 +49,7 @@ export async function PATCH(
     const organizations = await updateOrganization(
       params.organizationId,
       name,
-      nif
+      nif,
     );
 
     if (!organizations?.length) {
@@ -54,7 +60,7 @@ export async function PATCH(
 
     return NextResponse.json(
       { ...STATUS_OK, payload: organizations },
-      { status: STATUS_OK.status }
+      { status: STATUS_OK.status },
     );
   } catch {
     return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {

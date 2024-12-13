@@ -1,4 +1,4 @@
-import { act, ReactNode } from "react";
+import { ReactNode } from "react";
 import {
   Dialog,
   DialogContent,

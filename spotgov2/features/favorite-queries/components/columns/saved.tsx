@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import updateContractSavedMutation from "@/mutations/update-contract-saved-mutation";
+import { updateContractSavedMutation } from "../../services";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { cn } from "@/utils/utils";
 import { useMutation } from "@tanstack/react-query";

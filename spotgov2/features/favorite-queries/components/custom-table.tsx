@@ -6,7 +6,7 @@ import Filters from "./filters/filters";
 import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filters-store";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import favoriteQueriesQuery from "@/queries/favorite-queries-query";
+import { favoriteQueriesQuery } from "../services";
 import { DataTable } from "./data-table";
 import { columns } from "./columns/columns";
 
@@ -63,6 +63,8 @@ const CustomTable = () => {
       }
     }
   }, [isPending, data?.payload]);
+
+  console.log(data);
 
   return (
     <div className="my-6">

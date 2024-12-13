@@ -1,5 +1,5 @@
 import { getFavoriteQueriesData } from "@/features/favorite-queries/api";
-import { FavoriteContractsDataType } from "@/features/favorite-queries/type";
+import { FavoriteContractsDataType } from "@/features/favorite-queries/types";
 import { Response } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";
 import {
@@ -49,8 +49,7 @@ export async function GET(
       { ...STATUS_OK, payload: favoriteQueries },
       { status: STATUS_OK.status },
     );
-  } catch (error) {
-    console.log(error);
+  } catch {
     return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
       status: STATUS_INTERNAL_SERVER_ERROR.status,
     });

@@ -1,7 +1,6 @@
 "use client";
 
-import { getQueryById } from "@/features/queries/api/get-query";
-import { getQueryContracts } from "@/features/queries/api/get-query-contracts";
+import { getQueryById, getQueryContracts } from "@/features/queries/api";
 import ContractCard from "@/features/queries/components/contract-card";
 import QueryFilters from "@/features/queries/components/query-filters";
 import { OrderType, RelevanceType } from "@/types";

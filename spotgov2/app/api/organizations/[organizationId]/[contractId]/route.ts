@@ -1,6 +1,7 @@
 import { ContractsOrganization } from "@/database/schemas";
 import { updateContractSaved } from "@/features/favorite-queries/api";
-import { isUserEditorOrAdminOrOwner } from "@/features/organizations/api";
+import { getUserFromOrganization } from "@/features/organizations/api";
+import { canSaveContract } from "@/features/organizations/permissions";
 import { Response } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";
 import {
@@ -33,7 +34,12 @@ export async function PATCH(
       });
     }
 
-    if (!isUserEditorOrAdminOrOwner(userOrResponse.id, params.organizationId)) {
+    const user = await getUserFromOrganization(
+      userOrResponse.id,
+      params.organizationId,
+    );
+
+    if (!user || !canSaveContract(user.role)) {
       return NextResponse.json(STATUS_FORBIDDEN, {
         status: STATUS_FORBIDDEN.status,
       });

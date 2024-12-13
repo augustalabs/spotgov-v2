@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import organizationUsersQuery from "@/queries/organization-users";
+import { organizationUsersQuery } from "@/features/organizations/services";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { useQuery } from "@tanstack/react-query";
 import { LucideIcon, Search, Sparkles, Users } from "lucide-react";
@@ -22,7 +22,7 @@ const InformationCards = () => {
   const { currentOrganization } = useCurrentOrganizationStore();
 
   const { data, isPending } = useQuery(
-    organizationUsersQuery(currentOrganization?.organizationId as string)
+    organizationUsersQuery(currentOrganization?.organizationId as string),
   );
 
   const numberOfUsers = data?.payload?.length;
@@ -49,9 +49,9 @@ const InformationCards = () => {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+    <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
       {cardsInfo.map((i) => (
-        <Card key={i.label} className="w-full card-gradient">
+        <Card key={i.label} className="card-gradient w-full">
           <CardHeader className="p-4">
             <CardDescription className="flex items-center justify-between">
               <p className="text-xs">{i.label}</p>
@@ -59,7 +59,7 @@ const InformationCards = () => {
             </CardDescription>
             <CardTitle>
               {isPending ? (
-                <Skeleton className="w-1/2 h-6" />
+                <Skeleton className="h-6 w-1/2" />
               ) : (
                 <p>{i.value}</p>
               )}

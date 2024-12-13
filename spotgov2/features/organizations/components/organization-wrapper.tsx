@@ -2,19 +2,15 @@
 
 import { NEW_SEARCH_ROUTE } from "@/routes";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
-import { UserRoles } from "@/types";
 import { redirect } from "next/navigation";
 import { ReactNode, useEffect } from "react";
+import { canViewOrganization } from "../permissions";
 
 const OrganizationWrapper = ({ children }: { children: ReactNode }) => {
   const { currentOrganization } = useCurrentOrganizationStore();
 
   useEffect(() => {
-    if (
-      currentOrganization &&
-      currentOrganization.role !== UserRoles.Admin &&
-      currentOrganization.role !== UserRoles.Owner
-    ) {
+    if (currentOrganization && !canViewOrganization(currentOrganization.role)) {
       redirect(NEW_SEARCH_ROUTE);
     }
   }, [currentOrganization?.role]);

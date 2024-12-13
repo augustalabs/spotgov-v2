@@ -3,7 +3,7 @@
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
-import googleIcon from "@public/assets/google.svg";
+import googleIcon from "@public/assets/icons/google.svg";
 import useSupabase from "@/hooks/use-supabase";
 import { useSearchParams } from "next/navigation";
 

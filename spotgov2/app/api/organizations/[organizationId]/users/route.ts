@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 
 import {
-  getOrganizationUsers,
-  isUserAdminOrOwner,
+  getUserFromOrganization,
+  getUsers,
 } from "@/features/organizations/api";
 import { createClient } from "@/lib/supabase/server";
 import { Response, UserWithOrganizationInfo } from "@/types";
@@ -15,6 +15,7 @@ import {
 } from "@/utils/api/status-messages";
 import { addUserToOrganization } from "@/features/organization-invitation/api";
 import { checkUserAuthentication } from "@/utils/api/helpers";
+import { canViewOrganization } from "@/features/organizations/permissions";
 
 type Params = {
   organizationId: string;
@@ -22,7 +23,7 @@ type Params = {
 
 export async function GET(
   req: Request,
-  { params }: { params: Params }
+  { params }: { params: Params },
 ): Promise<NextResponse<Response<UserWithOrganizationInfo[]>>> {
   try {
     const userOrResponse = await checkUserAuthentication();
@@ -34,13 +35,18 @@ export async function GET(
       });
     }
 
-    if (!isUserAdminOrOwner(userOrResponse.id, params.organizationId)) {
+    const user = await getUserFromOrganization(
+      userOrResponse.id,
+      params.organizationId,
+    );
+
+    if (!user || !canViewOrganization(user.role)) {
       return NextResponse.json(STATUS_FORBIDDEN, {
         status: STATUS_FORBIDDEN.status,
       });
     }
 
-    const users = await getOrganizationUsers(params.organizationId);
+    const users = await getUsers(params.organizationId);
 
     if (!users?.length) {
       return NextResponse.json(STATUS_NOT_FOUND, {
@@ -55,7 +61,7 @@ export async function GET(
       },
       {
         status: STATUS_OK.status,
-      }
+      },
     );
   } catch {
     return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
@@ -66,7 +72,7 @@ export async function GET(
 
 export async function POST(
   req: Request,
-  { params }: { params: Params }
+  { params }: { params: Params },
 ): Promise<NextResponse<Response<UserWithOrganizationInfo[]>>> {
   try {
     const userOrResponse = await checkUserAuthentication();

@@ -6,7 +6,7 @@ import {
 } from "../ui/sidebar";
 import { createClient } from "@/lib/supabase/server";
 import { LogOut, User } from "lucide-react";
-import { signOut } from "@/features/auth/actions";
+import { signOut } from "@/features/auth/api";
 import { Separator } from "../ui/separator";
 import OrganizationSwitcher from "./organization-switcher";
 import SidebarFooterInfo from "./sidebar-footer-info";
@@ -19,9 +19,9 @@ const SidebarFooter = async () => {
   return (
     <Footer>
       <OrganizationSwitcher />
-      <Separator className="mb-4 mx-auto max-w-[calc(100%-1rem)]" />
+      <Separator className="mx-auto mb-4 max-w-[calc(100%-1rem)]" />
       <SidebarMenu>
-        <SidebarMenuItem className="px-2 flex items-center justify-between">
+        <SidebarMenuItem className="flex items-center justify-between px-2">
           <div className="flex items-center gap-2">
             {data?.user?.user_metadata?.avatar_url ? (
               <Image
@@ -34,7 +34,7 @@ const SidebarFooter = async () => {
             ) : (
               <AvatarIcon size={16} />
             )}
-            <p className="text-sm max-w-32 truncate">
+            <p className="max-w-32 truncate text-sm">
               {data?.user?.user_metadata?.full_name}
             </p>
           </div>

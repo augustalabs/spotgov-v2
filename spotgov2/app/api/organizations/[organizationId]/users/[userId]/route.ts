@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 
 import {
   deleteUser,
-  isUserAdminOrOwner,
+  getUserFromOrganization,
   updateUserRole,
 } from "@/features/organizations/api";
-import { Response, UserRoles } from "@/types";
+import { Response } from "@/types";
 import {
   STATUS_BAD_REQUEST,
   STATUS_FORBIDDEN,
@@ -15,6 +15,10 @@ import {
 } from "@/utils/api/status-messages";
 import { UserOrganization } from "@/database/schemas";
 import { checkUserAuthentication } from "@/utils/api/helpers";
+import {
+  canChangeUserRole,
+  canRemoveUser,
+} from "@/features/organizations/permissions";
 
 type Params = {
   organizationId: string;
@@ -23,7 +27,7 @@ type Params = {
 
 export async function PATCH(
   req: Request,
-  { params }: { params: Params }
+  { params }: { params: Params },
 ): Promise<NextResponse<Response<UserOrganization[]>>> {
   try {
     const userOrResponse = await checkUserAuthentication();
@@ -37,13 +41,12 @@ export async function PATCH(
       });
     }
 
-    if (!isUserAdminOrOwner(userOrResponse.id, params.organizationId)) {
-      return NextResponse.json(STATUS_FORBIDDEN, {
-        status: STATUS_FORBIDDEN.status,
-      });
-    }
+    const user = await getUserFromOrganization(
+      userOrResponse.id,
+      params.organizationId,
+    );
 
-    if (role === UserRoles.Owner) {
+    if (!user || !canChangeUserRole(user.role)) {
       return NextResponse.json(STATUS_FORBIDDEN, {
         status: STATUS_FORBIDDEN.status,
       });
@@ -52,7 +55,7 @@ export async function PATCH(
     const userOrganization = await updateUserRole(
       params.userId,
       params.organizationId,
-      role
+      role,
     );
 
     if (!userOrganization?.length) {
@@ -63,7 +66,7 @@ export async function PATCH(
 
     return NextResponse.json(
       { ...STATUS_OK, payload: userOrganization },
-      { status: STATUS_OK.status }
+      { status: STATUS_OK.status },
     );
   } catch {
     return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
@@ -74,7 +77,7 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: Params }
+  { params }: { params: Params },
 ): Promise<NextResponse<Response<void>>> {
   try {
     const userOrResponse = await checkUserAuthentication();
@@ -86,7 +89,12 @@ export async function DELETE(
       });
     }
 
-    if (!isUserAdminOrOwner(userOrResponse.id, params.organizationId)) {
+    const user = await getUserFromOrganization(
+      userOrResponse.id,
+      params.organizationId,
+    );
+
+    if (!user || !canRemoveUser(user.role)) {
       return NextResponse.json(STATUS_FORBIDDEN, {
         status: STATUS_FORBIDDEN.status,
       });
