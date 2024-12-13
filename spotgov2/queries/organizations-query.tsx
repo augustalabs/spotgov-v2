@@ -5,7 +5,7 @@ function organizationsQuery() {
   const queryKey = ["get-organizations"];
 
   const queryFn = async () =>
-    await get<Response<OrganizationWithUserInfo[]>>("organizations");
+    await get<Response<OrganizationWithUserInfo[]>>({ url: "organizations" });
 
   return { queryKey, queryFn };
 }

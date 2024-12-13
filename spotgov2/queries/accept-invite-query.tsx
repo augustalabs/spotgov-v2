@@ -11,7 +11,9 @@ function acceptInviteQuery(token: string) {
   const queryKey = ["accept-invite"];
 
   const queryFn = async () =>
-    await get<Response<TokenAnswer>>(`organizations/accept-invite/${token}`);
+    await get<Response<TokenAnswer>>({
+      url: `organizations/accept-invite/${token}`,
+    });
 
   return { queryKey, queryFn };
 }

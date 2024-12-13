@@ -16,9 +16,12 @@ function updateOrganizationMutation() {
     name: string;
     nif: string;
   }) =>
-    await patch<Response<Organization[]>>(`organizations/${organizationId}`, {
-      name,
-      nif,
+    await patch<Response<Organization[]>>({
+      url: `organizations/${organizationId}`,
+      body: {
+        name,
+        nif,
+      },
     });
 
   const onSuccess = async () =>

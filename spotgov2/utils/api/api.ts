@@ -1,4 +1,9 @@
-export async function get<T>(url: string): Promise<T> {
+type ApiRequestOptions = {
+  url: string;
+  body?: any;
+};
+
+export async function get<T>({ url }: ApiRequestOptions): Promise<T> {
   const res = await fetch(`/api/${url}`, {
     method: "GET",
     headers: {
@@ -13,7 +18,7 @@ export async function get<T>(url: string): Promise<T> {
   return data as T;
 }
 
-export async function post<T>(url: string, body: any): Promise<T> {
+export async function post<T>({ url, body }: ApiRequestOptions): Promise<T> {
   const res = await fetch(`/api/${url}`, {
     method: "POST",
     headers: {
@@ -29,7 +34,7 @@ export async function post<T>(url: string, body: any): Promise<T> {
   return data as T;
 }
 
-export async function patch<T>(url: string, body: any): Promise<T> {
+export async function patch<T>({ url, body }: ApiRequestOptions): Promise<T> {
   const res = await fetch(`/api/${url}`, {
     method: "PATCH",
     headers: {
@@ -45,7 +50,7 @@ export async function patch<T>(url: string, body: any): Promise<T> {
   return data as T;
 }
 
-export async function put<T>(url: string, body: any): Promise<T> {
+export async function put<T>({ url, body }: ApiRequestOptions): Promise<T> {
   const res = await fetch(`/api/${url}`, {
     method: "PUT",
     headers: {
@@ -61,7 +66,7 @@ export async function put<T>(url: string, body: any): Promise<T> {
   return data as T;
 }
 
-export async function del<T>(url: string): Promise<T> {
+export async function del<T>({ url }: ApiRequestOptions): Promise<T> {
   const res = await fetch(`/api/${url}`, {
     method: "DELETE",
     headers: {

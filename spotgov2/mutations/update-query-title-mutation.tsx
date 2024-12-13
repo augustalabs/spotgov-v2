@@ -14,8 +14,11 @@ function updateQueryTitleMutation(organizationId: string) {
     queryId: string;
     title: string;
   }) =>
-    await patch<Response<Query[]>>(`queries/${organizationId}/${queryId}`, {
-      title,
+    await patch<Response<Query[]>>({
+      url: `queries/${organizationId}/${queryId}`,
+      body: {
+        title,
+      },
     });
 
   const onSuccess = async () =>

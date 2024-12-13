@@ -5,9 +5,9 @@ function organizationUsersQuery(organizationId: string) {
   const queryKey = ["get-organization-users", organizationId];
 
   const queryFn = async () =>
-    await get<Response<UserWithOrganizationInfo[]>>(
-      `organizations/${organizationId}/users`
-    );
+    await get<Response<UserWithOrganizationInfo[]>>({
+      url: `organizations/${organizationId}/users`,
+    });
 
   const enabled = !!organizationId;
 

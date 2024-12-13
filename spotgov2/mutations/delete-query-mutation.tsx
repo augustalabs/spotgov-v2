@@ -7,7 +7,7 @@ function deleteQueryMutation(organizationId: string) {
   const mutationKey = ["delete-query"];
 
   const mutationFn = async ({ queryId }: { queryId: string }) =>
-    await del<Response<void>>(`queries/${organizationId}/${queryId}`);
+    await del<Response<void>>({ url: `queries/${organizationId}/${queryId}` });
 
   const onSuccess = async () =>
     await queryClient.invalidateQueries({

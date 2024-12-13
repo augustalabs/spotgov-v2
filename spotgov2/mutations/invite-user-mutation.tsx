@@ -13,10 +13,13 @@ function inviteUserMutation() {
     organizationName: string;
     email: string;
   }) =>
-    await post<Response<string>>(`organizations/invite`, {
-      organizationId,
-      organizationName,
-      email,
+    await post<Response<string>>({
+      url: `organizations/invite`,
+      body: {
+        organizationId,
+        organizationName,
+        email,
+      },
     });
 
   return { mutationKey, mutationFn };

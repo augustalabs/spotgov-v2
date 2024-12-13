@@ -6,7 +6,7 @@ function queriesQuery(organizationId: string) {
   const queryKey = ["get-queries", organizationId];
 
   const queryFn = async () =>
-    await get<Response<Query[]>>(`queries/${organizationId}`);
+    await get<Response<Query[]>>({ url: `queries/${organizationId}` });
 
   const enabled = !!organizationId;
 

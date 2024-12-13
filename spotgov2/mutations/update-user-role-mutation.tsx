@@ -8,12 +8,12 @@ function updateUserRoleMutation(organizationId: string, userId: string) {
   const mutationKey = ["update-user-role", organizationId, userId];
 
   const mutationFn = async ({ role }: { role: UserRoles }) =>
-    await patch<Response<Query[]>>(
-      `organizations/${organizationId}/users/${userId}`,
-      {
+    await patch<Response<Query[]>>({
+      url: `organizations/${organizationId}/users/${userId}`,
+      body: {
         role,
-      }
-    );
+      },
+    });
 
   const onSuccess = async () =>
     await queryClient.invalidateQueries({
