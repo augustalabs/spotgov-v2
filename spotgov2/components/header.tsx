@@ -1,5 +1,14 @@
+import { SidebarTrigger, useSidebar } from "./ui/sidebar";
+
 const Header = ({ title }: { title: string }) => {
-  return <h1 className="font-bold text-foreground text-lg">{title}</h1>;
+  const sidebar = useSidebar();
+
+  return (
+    <div className="flex items-center">
+      {!sidebar.open && <SidebarTrigger />}
+      <h1 className="text-lg font-bold text-foreground">{title}</h1>
+    </div>
+  );
 };
 
 export default Header;

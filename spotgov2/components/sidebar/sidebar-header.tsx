@@ -3,6 +3,7 @@ import {
   SidebarHeader as Header,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarTrigger,
 } from "../ui/sidebar";
 
 import logo from "@/public/assets/images/logo.png";
@@ -15,13 +16,16 @@ const SidebarHeader = () => {
     <Header>
       <SidebarGroup>
         <SidebarGroupContent>
-          <div className="flex items-center gap-4">
-            <Link href={HOME_ROUTE}>
-              <Image alt="SpotGov logo" src={logo} width={110} />
-            </Link>
-            <div className="rounded-lg border border-primary bg-primary/10 px-1.5 py-1 text-xs text-primary">
-              <p>Beta</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link href={HOME_ROUTE}>
+                <Image alt="SpotGov logo" src={logo} width={110} />
+              </Link>
+              <div className="rounded-lg border border-primary bg-primary/10 px-1.5 py-1 text-xs text-primary">
+                <p>Beta</p>
+              </div>
             </div>
+            <SidebarTrigger />
           </div>
           <Separator className="mt-4" />
         </SidebarGroupContent>
