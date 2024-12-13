@@ -1,5 +1,5 @@
 import CustomSidebar from "@/components/sidebar/custom-sidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 export default async function Layout({
@@ -12,8 +12,7 @@ export default async function Layout({
       <SidebarProvider>
         <CustomSidebar />
         <div className="w-full">
-          <SidebarTrigger />
-          <main className="mx-auto max-w-5xl px-2">{children}</main>
+          <main className="mx-auto max-w-5xl px-2 py-3">{children}</main>
         </div>
       </SidebarProvider>
     </TooltipProvider>
