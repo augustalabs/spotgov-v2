@@ -1,3 +1,9 @@
+import Header from "@/components/header";
+
 export default function PipelinePage() {
-  return <div>Pipeline page</div>;
+  return (
+    <div>
+      <Header title="Pipeline" />
+    </div>
+  );
 }

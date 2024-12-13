@@ -1,3 +1,9 @@
+import Header from "@/components/header";
+
 export default function FavoriteSearchesPage() {
-  return <div>Favorite Searches Page</div>;
+  return (
+    <div>
+      <Header title="Pesquisas favoritas" />
+    </div>
+  );
 }
