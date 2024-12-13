@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import AIIcon from "@/public/assets/ai-icon.svg";
+import AIIcon from "@/public/assets/icons/ai-icon.svg";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";

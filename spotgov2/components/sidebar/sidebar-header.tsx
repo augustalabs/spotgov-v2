@@ -5,7 +5,7 @@ import {
   SidebarGroupContent,
 } from "../ui/sidebar";
 
-import logo from "@/public/assets/logo.png";
+import logo from "@/public/assets/images/logo.png";
 import Link from "next/link";
 import { Separator } from "../ui/separator";
 import { HOME_ROUTE } from "@/routes";
@@ -19,7 +19,7 @@ const SidebarHeader = () => {
             <Link href={HOME_ROUTE}>
               <Image alt="SpotGov logo" src={logo} width={110} />
             </Link>
-            <div className="px-1.5 py-1 border border-primary bg-primary/10 text-primary rounded-lg text-xs">
+            <div className="rounded-lg border border-primary bg-primary/10 px-1.5 py-1 text-xs text-primary">
               <p>Beta</p>
             </div>
           </div>

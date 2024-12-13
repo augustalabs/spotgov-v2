@@ -9,7 +9,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
-import logo from "@public/assets/logo.png";
+import logo from "@public/assets/images/logo.png";
 
 type CardFormProps = {
   children: React.ReactNode;
@@ -27,7 +27,7 @@ const CardForm = ({
   footerLinkHref,
 }: CardFormProps) => {
   return (
-    <Card className="max-h-full overflow-auto min-w-[579px]">
+    <Card className="max-h-full min-w-[579px] overflow-auto">
       <CardHeader className="space-y-6">
         <CardTitle className="mx-auto">
           <Image alt="SpotGov Logo" src={logo} width={145} />

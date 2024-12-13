@@ -7,7 +7,7 @@ import {
   acceptInviteQuery,
 } from "@/features/organization-invitation/services";
 import { LOGIN_ROUTE, NEW_SEARCH_ROUTE, SIGN_UP_ROUTE } from "@/routes";
-import logo from "@public/assets/logo.png";
+import logo from "@public/assets/images/logo.png";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
