@@ -16,10 +16,6 @@ export function canEditOrganization(role: UserRoles) {
   return role === UserRoles.Owner || role === UserRoles.Admin;
 }
 
-export function canSaveContract(role: UserRoles) {
-  return role === UserRoles.Owner || role === UserRoles.Admin;
-}
-
 export function canRemoveUser(role: UserRoles) {
   return role === UserRoles.Owner || role === UserRoles.Admin;
 }
@@ -43,5 +39,9 @@ export function canEditQuery(role: UserRoles) {
 }
 
 export function canRemoveQuery(role: UserRoles) {
+  return role !== UserRoles.Viewer;
+}
+
+export function canSaveContract(role: UserRoles) {
   return role !== UserRoles.Viewer;
 }
