@@ -1,3 +1,4 @@
+import { OrderType } from "@/types";
 import { create } from "zustand";
 
 type FavoriteQueriesFiltersStoreProps = {
@@ -17,6 +18,9 @@ type FavoriteQueriesFiltersStoreProps = {
   // Search for contracts by saved status
   savedInput: boolean | null;
   setSavedInput: (value: boolean | null) => void;
+  // Sort contracts by newest, oldest, highest price, lowest price, nearest deadline, farthest deadline
+  selectedSortInput: OrderType;
+  setSelectedSortInput: (value: OrderType) => void;
 };
 
 export const useFavoriteQueriesFiltersStore =
@@ -35,4 +39,6 @@ export const useFavoriteQueriesFiltersStore =
       set({ queryTitlesDefaultValues: value }),
     savedInput: null,
     setSavedInput: (value) => set({ savedInput: value }),
+    selectedSortInput: "publish-date-desc",
+    setSelectedSortInput: (value) => set({ selectedSortInput: value }),
   }));

@@ -22,6 +22,7 @@ const CustomTable = () => {
     queryTitlesDefaultValues,
     setQueryTitlesDefaultValues,
     savedInput,
+    selectedSortInput,
   } = useFavoriteQueriesFiltersStore();
   const { currentOrganization } = useCurrentOrganizationStore();
 
@@ -29,7 +30,13 @@ const CustomTable = () => {
 
   useEffect(() => {
     setPage(1);
-  }, [searchTextInput, adjudicatorsInput]);
+  }, [
+    searchTextInput,
+    adjudicatorsInput,
+    queryTitlesInput,
+    savedInput,
+    selectedSortInput,
+  ]);
 
   const { data, isPending, isFetching } = useQuery(
     favoriteQueriesQuery(
@@ -40,6 +47,7 @@ const CustomTable = () => {
       adjudicatorsInput,
       queryTitlesInput,
       savedInput,
+      selectedSortInput,
     ),
   );
 
@@ -63,8 +71,6 @@ const CustomTable = () => {
       }
     }
   }, [isPending, data?.payload]);
-
-  console.log(data);
 
   return (
     <div className="my-6">

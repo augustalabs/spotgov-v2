@@ -7,8 +7,22 @@ import {
   contractsQueries,
   queries,
 } from "@/database/schemas";
-import { and, eq, ilike, inArray, or, sql } from "drizzle-orm";
+import { and, eq, ilike, inArray, or, SQL, sql } from "drizzle-orm";
 import { FavoriteContractsDataType } from "../types";
+import { OrderType } from "@/types";
+
+function getSortOption(sort: OrderType): SQL {
+  const sortOptions: Record<OrderType, SQL> = {
+    "publish-date-desc": sql`${contracts.publishDate} DESC`,
+    "publish-date-asc": sql`${contracts.publishDate} ASC`,
+    "base-price-desc": sql`${contracts.basePrice} DESC`,
+    "base-price-asc": sql`${contracts.basePrice} ASC`,
+    "deadline-asc": sql`${contracts.submissionDeadlineDate} ASC`,
+    "deadline-desc": sql`${contracts.submissionDeadlineDate} DESC`,
+  };
+
+  return sortOptions[sort];
+}
 
 async function getFavoriteQueriesData(
   organizationId: string,
@@ -17,7 +31,8 @@ async function getFavoriteQueriesData(
   searchTextInput: string = "",
   adjudicatorsInput: string[] = [],
   titlesInput: string[] = [],
-  saved: string | null = null,
+  savedInput: string | null = null,
+  sortInput: OrderType = "base-price-asc",
 ): Promise<FavoriteContractsDataType> {
   const offset = (page - 1) * pageSize;
 
@@ -57,11 +72,12 @@ async function getFavoriteQueriesData(
         titlesInput.length > 0
           ? inArray(sql`LOWER(${queries.title})`, titlesInput)
           : sql`true`,
-        saved !== null
-          ? eq(contractsOrganizations.saved, saved === "true")
+        savedInput !== null
+          ? eq(contractsOrganizations.saved, savedInput === "true")
           : sql`true`,
       ),
     )
+    .orderBy(getSortOption(sortInput))
     .limit(pageSize)
     .offset(offset);
 

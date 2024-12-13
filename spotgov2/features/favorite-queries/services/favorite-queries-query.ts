@@ -1,5 +1,5 @@
 import { FavoriteContractsDataType } from "@/features/favorite-queries/types";
-import { Response } from "@/types";
+import { OrderType, Response } from "@/types";
 import { get } from "@/utils/api/functions";
 import { keepPreviousData } from "@tanstack/react-query";
 
@@ -11,6 +11,7 @@ function favoriteQueriesQuery(
   adjudicatorsInput: string[],
   titlesInput: string[],
   savedInput: boolean | null,
+  selectedSortInput: OrderType,
 ) {
   const queryKey = [
     "get-favorite-queries",
@@ -21,6 +22,7 @@ function favoriteQueriesQuery(
     adjudicatorsInput,
     titlesInput,
     savedInput,
+    selectedSortInput,
   ];
 
   const queryFn = async () => {
@@ -41,6 +43,8 @@ function favoriteQueriesQuery(
     }
 
     if (savedInput !== null) searchParams += `&saved=${savedInput}`;
+
+    if (selectedSortInput) searchParams += `&sort=${selectedSortInput}`;
 
     return await get<Response<FavoriteContractsDataType>>({
       url: `organizations/${organizationId}/favorite-queries${searchParams}`,

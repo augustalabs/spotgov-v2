@@ -1,3 +1,4 @@
+import Sort from "./sort";
 import AdjudicatorsFilter from "./adjudicators-filter";
 import QueryTitlesFilter from "./query-titles-filter";
 import SavedFilter from "./saved-filter";
@@ -10,6 +11,7 @@ const Filters = () => {
       <QueryTitlesFilter />
       <AdjudicatorsFilter />
       <SavedFilter />
+      <Sort />
     </div>
   );
 };

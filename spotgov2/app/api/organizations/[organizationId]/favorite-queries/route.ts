@@ -1,6 +1,6 @@
 import { getFavoriteQueriesData } from "@/features/favorite-queries/api";
 import { FavoriteContractsDataType } from "@/features/favorite-queries/types";
-import { Response } from "@/types";
+import { OrderType, Response } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";
 import {
   STATUS_INTERNAL_SERVER_ERROR,
@@ -28,6 +28,7 @@ export async function GET(
     const adjudicators = searchParams.getAll("adjudicator") ?? [];
     const titles = searchParams.getAll("title") ?? [];
     const saved = searchParams.get("saved") ?? "";
+    const sort = searchParams.get("sort");
 
     const favoriteQueries = await getFavoriteQueriesData(
       params.organizationId,
@@ -37,6 +38,7 @@ export async function GET(
       adjudicators,
       titles,
       saved,
+      sort as OrderType,
     );
 
     if (!favoriteQueries) {
