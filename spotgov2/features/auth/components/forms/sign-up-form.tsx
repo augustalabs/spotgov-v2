@@ -15,13 +15,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { signUpSchema } from "../schemas";
+import { signUpSchema } from "../../schemas";
 import CardForm from "./card-form";
-import { signUpWithPassword } from "../actions";
+import { signUpWithPassword } from "../../actions";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Loader } from "lucide-react";
-import GoogleButton from "./google-button";
-import AuthSeparator from "./separator";
+import GoogleButton from "../google-button";
+import AuthSeparator from "../separator";
 import { toast } from "sonner";
 import { LOGIN_ROUTE } from "@/routes";
 import { useSearchParams } from "next/navigation";
@@ -52,7 +52,7 @@ const SignUpForm = () => {
       toast.success("Conta criada com sucesso!");
     } catch (error: unknown) {
       toast.error(
-        "Não foi possível efetuar o registo. Por favor tente mais tarde."
+        "Não foi possível efetuar o registo. Por favor tente mais tarde.",
       );
     }
   };
@@ -115,7 +115,7 @@ const SignUpForm = () => {
                     />
                     <div
                       onClick={() => setShowPassword((v) => !v)}
-                      className="absolute cursor-pointer text-muted-foreground top-1/2 -translate-y-1/2 right-4"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground"
                     >
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </div>
@@ -143,7 +143,7 @@ const SignUpForm = () => {
                     />
                     <div
                       onClick={() => setShowPasswordConfirmation((v) => !v)}
-                      className="absolute cursor-pointer text-muted-foreground top-1/2 -translate-y-1/2 right-4"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground"
                     >
                       {showPasswordConfirmation ? (
                         <EyeOff size={16} />

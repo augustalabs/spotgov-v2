@@ -12,12 +12,12 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
-const Wrapper = () => {
+const InviteAcceptance = () => {
   const { token } = useParams();
   const router = useRouter();
 
   const { data, error, isPending } = useQuery(
-    acceptInviteQuery(token as string)
+    acceptInviteQuery(token as string),
   );
 
   useEffect(() => {
@@ -71,4 +71,4 @@ const Wrapper = () => {
   );
 };
 
-export default Wrapper;
+export default InviteAcceptance;

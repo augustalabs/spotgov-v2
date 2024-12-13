@@ -19,7 +19,7 @@ type Params = {
 
 export async function GET(
   req: Request,
-  { params }: { params: Params }
+  { params }: { params: Params },
 ): Promise<NextResponse<Response<Query[]>>> {
   try {
     const userOrResponse = await checkUserAuthentication();
@@ -52,7 +52,7 @@ export async function GET(
       },
       {
         status: STATUS_OK.status,
-      }
+      },
     );
   } catch {
     return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR);

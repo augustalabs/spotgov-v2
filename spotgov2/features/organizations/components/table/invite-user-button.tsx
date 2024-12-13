@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { inviteUserSchema } from "../schemas";
+import { inviteUserSchema } from "../../schemas";
 import {
   Form,
   FormControl,

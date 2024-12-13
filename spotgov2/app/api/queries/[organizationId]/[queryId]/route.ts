@@ -20,7 +20,7 @@ type Params = {
 
 export async function PATCH(
   req: Request,
-  { params }: { params: Params }
+  { params }: { params: Params },
 ): Promise<NextResponse<Response<Query[]>>> {
   try {
     const userOrResponse = await checkUserAuthentication();
@@ -52,7 +52,7 @@ export async function PATCH(
       { ...STATUS_OK, payload: query },
       {
         status: STATUS_OK.status,
-      }
+      },
     );
   } catch {
     return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
@@ -63,7 +63,7 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: Params }
+  { params }: { params: Params },
 ): Promise<NextResponse<Response<void>>> {
   try {
     const userOrResponse = await checkUserAuthentication();

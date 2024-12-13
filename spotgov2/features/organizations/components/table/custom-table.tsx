@@ -11,7 +11,7 @@ const CustomTable = () => {
   const { currentOrganization } = useCurrentOrganizationStore();
 
   const { data, isPending } = useQuery(
-    organizationUsersQuery(currentOrganization?.organizationId as string)
+    organizationUsersQuery(currentOrganization?.organizationId as string),
   );
 
   return (

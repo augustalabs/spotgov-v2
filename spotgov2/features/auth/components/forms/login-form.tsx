@@ -16,12 +16,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { signInWithPassword } from "../actions";
+import { signInWithPassword } from "../../actions";
 import CardForm from "./card-form";
 import { Eye, EyeOff, Loader } from "lucide-react";
-import GoogleButton from "./google-button";
-import AuthSeparator from "./separator";
-import { loginSchema } from "../schemas";
+import GoogleButton from "../google-button";
+import AuthSeparator from "../separator";
+import { loginSchema } from "../../schemas";
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
 
@@ -47,7 +47,7 @@ const LoginForm = () => {
       toast.success("Login efetuado com sucesso!");
     } catch {
       toast.error(
-        "Não foi possível efetuar o login. Por favor tente mais tarde."
+        "Não foi possível efetuar o login. Por favor tente mais tarde.",
       );
     }
   };
@@ -91,7 +91,7 @@ const LoginForm = () => {
                     />
                     <div
                       onClick={() => setShowPassword((v) => !v)}
-                      className="absolute cursor-pointer text-muted-foreground top-1/2 -translate-y-1/2 right-4"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground"
                     >
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </div>
