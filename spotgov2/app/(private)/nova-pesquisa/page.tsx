@@ -7,9 +7,9 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import {
-  getKeywords,
   getCpvs,
   getAdjudicatingEntities,
+  getKeywords,
 } from "@/features/new-search/api";
 import PreviousSearches from "@/features/new-search/components/previous-searches";
 

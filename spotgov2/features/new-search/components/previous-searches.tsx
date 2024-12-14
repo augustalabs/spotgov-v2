@@ -1,8 +1,8 @@
 "use client";
 
-import queriesQuery from "@/services/queries-query";
 import { useQuery } from "@tanstack/react-query";
 import SearchCard from "./search-card";
+import queriesQuery from "@/services/queries-query";
 
 function PreviousSearches({ organizationId }) {
   const { data: queries, isPending } = useQuery(
