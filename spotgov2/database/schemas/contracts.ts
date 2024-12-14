@@ -43,6 +43,7 @@ const contracts = pgTable("contracts", {
   maxLots: integer("max_lots"),
   maxLotsPerContestant: integer("max_lots_per_contestant"),
   extraData: json("extra_data"),
+  searchable_text: text("searchable_text"),
 });
 
 export type Contract = InferSelectModel<typeof contracts>;
