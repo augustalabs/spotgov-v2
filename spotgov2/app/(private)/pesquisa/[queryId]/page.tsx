@@ -1,13 +1,19 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getQueryById } from "@/features/queries/api/get-query";
 import { getQueryContracts } from "@/features/queries/api/get-query-contracts";
-import ContractCard from "@/features/queries/components/contract-card";
 import QueryFilters from "@/features/queries/components/query-filters";
-import { OrderType, RelevanceType } from "@/types";
+import QueryListView from "@/features/queries/components/query-views/query-list-view";
+import QueryTableView from "@/features/queries/components/query-views/query-table-view";
+import { OrderType, PriceRange, RelevanceType } from "@/types";
+import { filterAndSortContracts } from "@/utils/utils";
 import { useQuery } from "@tanstack/react-query";
+import { KanbanSquare, Mail, Star, Table } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { DateRange } from "react-day-picker";
 
 export default function QueryPage() {
   let { queryId } = useParams();
@@ -18,6 +24,11 @@ export default function QueryPage() {
   // Filters
   const [relevance, setRelevance] = useState<RelevanceType>("all");
   const [order, setOrder] = useState<OrderType>("publish-date-desc");
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
+  const [priceRange, setPriceRange] = useState<PriceRange>([0, 100000000]);
+  const [selectedAdjudicatingEntities, setSelectedAdjudicatingEntities] =
+    useState<string[]>([]);
+  const [selectedCPVs, setSelectedCPVs] = useState<string[]>([]);
 
   // Fetch query
   const { data: query } = useQuery({
@@ -37,79 +48,74 @@ export default function QueryPage() {
 
   // Filtered (and sorted) contracts
   const filteredContracts = contracts
-    ? [...contracts]
-        // Filter by relevance
-        .filter((contract) => {
-          if (relevance === "all") return true;
-          if (relevance === "very-relevant")
-            return contract.matchTypeFull === true;
-          if (relevance === "relevant") return contract.matchTypeFull === false;
-          return true;
-        })
+    ? filterAndSortContracts(contracts, {
+        relevance,
+        dateRange,
+        priceRange,
+        selectedAdjudicatingEntities,
+        selectedCPVs,
+        order,
+      })
+    : [];
 
-        // Sort by order
-        .sort((a, b) => {
-          const dateA = a.publishDate ? new Date(a.publishDate).getTime() : 0;
-          const dateB = b.publishDate ? new Date(b.publishDate).getTime() : 0;
+  // Extract unique issuer names
+  const uniqueIssuerNames = contracts
+    ? Array.from(
+        new Set(
+          contracts.map((contract) => contract.issuerName).filter(Boolean),
+        ),
+      )
+    : [];
 
-          const priceA = a.basePrice ? parseFloat(a.basePrice) : 0;
-          const priceB = b.basePrice ? parseFloat(b.basePrice) : 0;
-
-          const deadlineA = a.submissionDeadlineDate
-            ? new Date(a.submissionDeadlineDate).getTime()
-            : Infinity;
-          const deadlineB = b.submissionDeadlineDate
-            ? new Date(b.submissionDeadlineDate).getTime()
-            : Infinity;
-
-          if (order === "publish-date-desc") {
-            // Most recent first
-            return dateB - dateA;
-          } else if (order === "publish-date-asc") {
-            // Oldest first
-            return dateA - dateB;
-          } else if (order === "base-price-desc") {
-            // Highest price first
-            return priceB - priceA;
-          } else if (order === "base-price-asc") {
-            // Lowest price first
-            return priceA - priceB;
-          } else if (order === "deadline-asc") {
-            // Soonest deadline first
-            return deadlineA - deadlineB;
-          } else if (order === "deadline-desc") {
-            // Furthest deadline first
-            return deadlineB - deadlineA;
-          }
-
-          return 0;
-        })
+  // Extract unique CPVs
+  const uniqueCPVs = contracts
+    ? Array.from(
+        new Set(contracts.flatMap((contract) => contract.cpvs).filter(Boolean)),
+      )
     : [];
 
   return (
     <div className="m-10">
-      <h1>{query?.title}</h1>
-      <QueryFilters setOrder={setOrder} setRelevance={setRelevance} />
-      <div className="flex flex-col gap-5">
-        {filteredContracts?.map((contract) => {
-          const contractProps = {
-            title: contract.title ?? "",
-            issuerName: contract.issuerName || "",
-            submissionDeadlineDate: contract.submissionDeadlineDate
-              ? new Date(contract.submissionDeadlineDate).toISOString()
-              : "",
-            basePrice: contract.basePrice || "",
-            location: contract.executionLocation || "",
-            publishDate: contract.publishDate
-              ? new Date(contract.publishDate).toISOString()
-              : "",
-            matchTypeFull: contract.matchTypeFull,
-            reason: contract.reason ? JSON.stringify(contract.reason) : "",
-          };
-
-          return <ContractCard key={contract.id} {...contractProps} />;
-        })}
-      </div>
+      <Tabs defaultValue="list-view" className="w-full">
+        <div className="flex items-center justify-between">
+          <TabsList>
+            <TabsTrigger value="list-view" className="gap-1.5">
+              <KanbanSquare className="h-4 w-4 flex-shrink-0 text-secondary" />
+              Feed
+            </TabsTrigger>
+            <TabsTrigger value="table-view" className="gap-1.5">
+              <Table className="h-4 w-4 flex-shrink-0 text-secondary" />
+              Tabela
+            </TabsTrigger>
+          </TabsList>
+          <div className="flex items-center justify-end gap-2">
+            <Button variant="outline">
+              <Mail className="h-4 w-4 flex-shrink-0 text-secondary" />
+              Alertas desativados
+            </Button>
+            <Button variant="outline">
+              <Star className="h-4 w-4 flex-shrink-0 text-secondary" />
+              Adicionar aos favoritos
+            </Button>
+          </div>
+        </div>
+        <QueryFilters
+          setOrder={setOrder}
+          setRelevance={setRelevance}
+          setDateRange={setDateRange}
+          setPriceRange={setPriceRange}
+          adjudicatingEntitiesList={uniqueIssuerNames}
+          setSelectedAdjudicatingEntities={setSelectedAdjudicatingEntities}
+          cpvsList={uniqueCPVs}
+          setSelectedCPVs={setSelectedCPVs}
+        />
+        <TabsContent value="list-view">
+          <QueryListView filteredContracts={filteredContracts} />
+        </TabsContent>
+        <TabsContent value="table-view">
+          <QueryTableView filteredContracts={filteredContracts} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

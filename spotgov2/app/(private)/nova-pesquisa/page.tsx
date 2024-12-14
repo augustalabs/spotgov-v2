@@ -1,5 +1,4 @@
 import NewSearchCard from "@/features/new-search/components/new-search-card";
-import cpvsQuery from "@/queries/cpvs-query";
 import { createClient } from "@/lib/supabase/server";
 import { getFirstName } from "@/utils/utils";
 import {
@@ -27,7 +26,7 @@ export default async function NewSearchPage() {
   });
 
   const organizationId =
-    user.user?.user_metadata.current_organization.organizationId;
+    user.user?.user_metadata?.current_organization?.organizationId;
 
   await queryClient.prefetchQuery({
     queryKey: ["keywords", organizationId],

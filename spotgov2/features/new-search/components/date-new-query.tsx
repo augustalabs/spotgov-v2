@@ -41,8 +41,6 @@ const DateNewQuery = memo(function DateNewQuery({
     onSelect(undefined);
   };
 
-  console.log("rerendering DateNewQuery");
-
   const handleDateSelect = (selectedDate: Date | undefined) => {
     if (!selectedDate) return;
 

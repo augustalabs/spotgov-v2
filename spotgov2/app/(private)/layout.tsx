@@ -9,7 +9,7 @@ export default async function Layout({
   return (
     <SidebarProvider>
       <CustomSidebar />
-      <main className="w-full">
+      <main className="w-full overflow-x-hidden">
         <SidebarTrigger />
         {children}
       </main>

@@ -1,6 +1,6 @@
 "use client";
 
-import { formatDate } from "@/utils/utils";
+import { formatDate } from "@/utils/date";
 import { Clock, Star } from "lucide-react";
 
 function SearchCard({ title = "", starred = false, createdAt = "" }) {

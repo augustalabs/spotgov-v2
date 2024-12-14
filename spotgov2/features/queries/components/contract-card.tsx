@@ -2,13 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Share2 } from "lucide-react";
+import { formatPrice } from "./query-views/query-table-view";
 import {
   formatDate2,
   getRemainingDaysColor,
   getRemainingDaysMessage,
-} from "@/utils/utils";
-import { differenceInDays } from "date-fns";
-import { Share2 } from "lucide-react";
+} from "@/utils/date";
 
 function ContractCard({
   title,
@@ -79,7 +79,7 @@ function ContractCard({
           </div>
         </div>
         <div className="flex items-center justify-between gap-2">
-          <div>{basePrice}</div>
+          <div>{formatPrice(basePrice)}€</div>
           <div>{formatDate2(publishDate)}</div>
           <div>{location}</div>
           <div>{formatDate2(submissionDeadlineDate)}</div>
