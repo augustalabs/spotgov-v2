@@ -5,7 +5,7 @@ import SidebarFooter from "./sidebar-footer";
 import SidebarHeader from "./sidebar-header";
 import SidebarHistory from "./sidebar-history";
 import SidebarItems from "./sidebar-items";
-import organizationsQuery from "@/queries/organizations-query";
+import organizationsQuery from "@/services/organizations-query";
 
 const CustomSidebar = async () => {
   const queryClient = getQueryClient();

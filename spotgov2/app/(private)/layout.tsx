@@ -1,5 +1,6 @@
 import CustomSidebar from "@/components/sidebar/custom-sidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export default async function Layout({
   children,
@@ -7,12 +8,13 @@ export default async function Layout({
   children: React.ReactNode;
 }) {
   return (
-    <SidebarProvider>
-      <CustomSidebar />
-      <main className="w-full overflow-x-hidden">
-        <SidebarTrigger />
-        {children}
-      </main>
-    </SidebarProvider>
+    <TooltipProvider>
+      <SidebarProvider>
+        <CustomSidebar />
+        <div className="w-full">
+          <main className="mx-auto max-w-3xl px-2 py-3 overflow-x-hidden">{children}</main>
+        </div>
+      </SidebarProvider>
+    </TooltipProvider>
   );
 }

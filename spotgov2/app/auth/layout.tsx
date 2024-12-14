@@ -1,5 +1,5 @@
 import Image from "next/image";
-import backgroundImage from "@public/assets/background.jpg";
+import backgroundImage from "@public/assets/images/background.jpg";
 
 export default function AuthLayout({
   children,
@@ -7,13 +7,13 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="h-full flex items-center justify-center">
+    <div className="flex h-full items-center justify-center">
       {children}
       <Image
         alt="background image"
         fill
         src={backgroundImage}
-        className="absolute top-0 left-0 -z-10 object-cover"
+        className="absolute left-0 top-0 -z-10 object-cover"
       />
     </div>
   );

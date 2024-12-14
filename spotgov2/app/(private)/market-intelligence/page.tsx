@@ -1,3 +1,9 @@
+import Header from "@/components/header";
+
 export default function MarketIntelligencePage() {
-  return <div>Market Intelligence Page</div>;
+  return (
+    <div>
+      <Header title="Market Intelligence" />
+    </div>
+  );
 }

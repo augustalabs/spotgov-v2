@@ -26,12 +26,14 @@
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.46.2",
     "@tanstack/react-query": "^5.62.0",
+    "@tanstack/react-table": "^8.20.5",
     "@tanstack/react-virtual": "^3.10.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^0.2.0",
     "date-fns": "^3.6.0",
     "drizzle-orm": "^0.36.4",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.462.0",
     "motion": "^11.13.1",
     "next": "14.2.16",
@@ -40,7 +42,11 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",
     "react-hook-form": "^7.53.2",
+<<<<<<< HEAD
     "react-resizable-panels": "^2.1.7",
+=======
+    "resend": "^4.0.1",
+>>>>>>> 60fdc2a0d04d30d98c3b6fdf6648b10ae26d2249
     "sonner": "^1.7.0",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
@@ -48,6 +54,7 @@
     "zustand": "^5.0.1"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

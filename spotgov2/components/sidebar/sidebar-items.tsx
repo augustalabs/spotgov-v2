@@ -2,6 +2,7 @@
 
 import {
   BarChart,
+  Building,
   KanbanSquare,
   LucideIcon,
   MessageCircleMore,
@@ -20,8 +21,12 @@ import {
   FAVORITE_SEARCH_ROUTE,
   MARKET_INTELLIGENCE_ROUTE,
   NEW_SEARCH_ROUTE,
+  ORGANIZATION_ROUTE,
   PIPELINE_ROUTE,
 } from "@/routes";
+import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
+import { UserRoles } from "@/types";
+import { canViewOrganization } from "@/features/organizations/permissions";
 
 type SidebarItem = {
   icon: LucideIcon;
@@ -60,6 +65,21 @@ const SidebarItems = () => {
     },
   ];
 
+  const adminItem: SidebarItem = {
+    icon: Building,
+    label: "Organização",
+    href: ORGANIZATION_ROUTE,
+    isActive: pathname === ORGANIZATION_ROUTE,
+  };
+
+  const { currentOrganization } = useCurrentOrganizationStore();
+
+  const userRole = currentOrganization?.role;
+
+  if (canViewOrganization(userRole as UserRoles)) {
+    items.push(adminItem);
+  }
+
   return (
     <SidebarGroup>
       <SidebarGroupContent>
@@ -69,8 +89,8 @@ const SidebarItems = () => {
               <Link
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-2 p-2 border border-sidebar rounded-xl hover:text-primary",
-                  item.isActive && "bg-background border border-border"
+                  "flex items-center gap-2 rounded-xl border border-sidebar p-2 hover:text-primary",
+                  item.isActive && "border border-border bg-background",
                 )}
               >
                 <span>

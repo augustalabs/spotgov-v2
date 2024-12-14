@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getUserOrganizations } from "@/features/organizations/api";
+import { getOrganizations } from "@/features/organizations/api";
 import { OrganizationWithUserInfo, Response } from "@/types";
 import {
   STATUS_INTERNAL_SERVER_ERROR,
@@ -16,9 +16,9 @@ export async function GET(): Promise<
     const userOrResponse = await checkUserAuthentication();
     if (userOrResponse instanceof NextResponse) return userOrResponse;
 
-    const organizations = await getUserOrganizations(userOrResponse.id);
+    const organizations = await getOrganizations(userOrResponse.id);
 
-    if (!organizations) {
+    if (!organizations?.length) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
       });
@@ -28,7 +28,7 @@ export async function GET(): Promise<
       { ...STATUS_OK, payload: organizations },
       {
         status: STATUS_OK.status,
-      }
+      },
     );
   } catch {
     return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {

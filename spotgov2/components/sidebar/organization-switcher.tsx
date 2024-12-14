@@ -10,7 +10,7 @@ import { Skeleton } from "../ui/skeleton";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { cn } from "@/utils/utils";
 import { OrganizationWithUserInfo } from "@/types";
-import organizationsQuery from "@/queries/organizations-query";
+import organizationsQuery from "@/services/organizations-query";
 import { createClient } from "@/lib/supabase/client";
 
 const OrganizationSwitcher = () => {
@@ -28,28 +28,58 @@ const OrganizationSwitcher = () => {
         if (authData.user?.user_metadata.current_organization) {
           currentOrganizationStore.setCurrentOrganization(
             authData.user?.user_metadata.current_organization,
-            supabase.auth
+            supabase.auth,
           );
         }
 
         if (data?.payload && data?.payload.length > 0) {
           currentOrganizationStore.setCurrentOrganization(
             data.payload[0],
-            supabase.auth
+            supabase.auth,
           );
         }
       }
     }
 
     initializeCurrentOrganization();
-  }, [data, currentOrganizationStore, supabase]);
+  }, []);
+
+  // TODO: Check if this works properly in edge cases
+  // This is necessary to sync the organization present in the store with the user metadata current organization
+  // because when we update the organization name or nif the user metadata is updated but does not trigger a change
+  // in the store.
+  useEffect(() => {
+    const storeOrganization =
+      currentOrganizationStore.currentOrganization?.organization;
+    const updatedOrganization = data?.payload?.find(
+      (v) => v.organizationId === storeOrganization?.id,
+    );
+
+    if (
+      (updatedOrganization &&
+        storeOrganization?.name !== updatedOrganization?.organization?.name) ||
+      storeOrganization?.nif !== updatedOrganization?.organization?.nif
+    ) {
+      currentOrganizationStore.setCurrentOrganization(
+        updatedOrganization as OrganizationWithUserInfo,
+        supabase.auth,
+      );
+    }
+
+    if (data?.success && data.payload?.length && !updatedOrganization) {
+      currentOrganizationStore.setCurrentOrganization(
+        data.payload[0] as OrganizationWithUserInfo,
+        supabase.auth,
+      );
+    }
+  }, [data]);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleSelection = async (organization: OrganizationWithUserInfo) => {
     currentOrganizationStore.setCurrentOrganization(
       organization,
-      supabase.auth
+      supabase.auth,
     );
 
     setIsOpen(false);
@@ -72,7 +102,7 @@ const OrganizationSwitcher = () => {
           className="flex items-center justify-between"
         >
           {isPending ? (
-            <Skeleton className="w-2/3 h-2" />
+            <Skeleton className="h-2 w-2/3" />
           ) : (
             <p>
               {currentOrganizationStore.currentOrganization?.organization?.name}
@@ -96,9 +126,9 @@ const OrganizationSwitcher = () => {
                   value={v.organizationId as string}
                   onSelect={() => handleSelection(v)}
                   className={cn(
-                    "flex items-center justify-between cursor-pointer data-[selected='true']:bg-background text-foreground hover:text-foreground/70",
+                    "flex cursor-pointer items-center justify-between text-foreground hover:text-foreground/70 data-[selected='true']:bg-background",
                     isCurrentOrganization(v) &&
-                      "text-primary hover:text-primary/70"
+                      "text-primary hover:text-primary/70",
                   )}
                 >
                   <p>{v.organization?.name}</p>
@@ -106,7 +136,7 @@ const OrganizationSwitcher = () => {
                     size={16}
                     className={cn(
                       "opacity-0",
-                      isCurrentOrganization(v) && "opacity-100"
+                      isCurrentOrganization(v) && "opacity-100",
                     )}
                   />
                 </CommandItem>

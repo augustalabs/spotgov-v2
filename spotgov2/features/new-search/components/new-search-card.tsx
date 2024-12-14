@@ -9,12 +9,12 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import AIIcon from "@/public/assets/ai-icon.svg";
+import AIIcon from "@/public/assets/icons/ai-icon.svg";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Option as MultiSelectOption } from "@/components/ui/multi-select";
-import { addKeywords } from "../api/add-keywords";
+import { addKeywords } from "../api";
 import PriceRangeSelector from "./price-range-selector";
 import { DateRange } from "react-day-picker";
 import AdjudicatingEntitySelector from "./adjudicating-entity-selector";
@@ -123,7 +123,7 @@ const NewSearchCard: React.FC<NewSearchCardProps> = ({
   };
 
   return (
-    <Card className="w-full max-w-3xl rounded-2xl border-[#2388FF]/30 bg-gradient-to-t from-[#2388FF]/10 to-white shadow-sm backdrop-blur-lg backdrop-filter">
+    <Card className="card-gradient w-full rounded-2xl shadow-sm backdrop-blur-lg backdrop-filter">
       <CardHeader className="text-center">
         <CardTitle className="text-xl font-semibold">{title}</CardTitle>
         <CardDescription>

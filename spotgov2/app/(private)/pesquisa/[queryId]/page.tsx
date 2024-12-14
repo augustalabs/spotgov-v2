@@ -1,9 +1,14 @@
 "use client";
 
+<<<<<<< HEAD
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getQueryById } from "@/features/queries/api/get-query";
 import { getQueryContracts } from "@/features/queries/api/get-query-contracts";
+=======
+import { getQueryById, getQueryContracts } from "@/features/queries/api";
+import ContractCard from "@/features/queries/components/contract-card";
+>>>>>>> 60fdc2a0d04d30d98c3b6fdf6648b10ae26d2249
 import QueryFilters from "@/features/queries/components/query-filters";
 import QueryListView from "@/features/queries/components/query-views/query-list-view";
 import QueryTableView from "@/features/queries/components/query-views/query-table-view";

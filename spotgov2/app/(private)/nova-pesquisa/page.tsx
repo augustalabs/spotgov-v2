@@ -6,10 +6,12 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { getKeywords } from "@/features/new-search/api/get-keywords";
-import { getCPVs } from "@/features/new-search/api/get-cpvs";
+import {
+  getKeywords,
+  getCpvs,
+  getAdjudicatingEntities,
+} from "@/features/new-search/api";
 import PreviousSearches from "@/features/new-search/components/previous-searches";
-import { getAdjudicatingEntities } from "@/features/new-search/api/get-adjudicating-entities";
 
 export default async function NewSearchPage() {
   const supabase = await createClient();
@@ -21,7 +23,7 @@ export default async function NewSearchPage() {
   await queryClient.prefetchQuery({
     queryKey: ["cpvs"],
     queryFn: async () => {
-      return await getCPVs();
+      return await getCpvs();
     },
   });
 

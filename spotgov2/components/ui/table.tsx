@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 import { cn } from "@/utils/utils";
 import * as React from "react";
 
+=======
+import * as React from "react";
+
+import { cn } from "@/utils/utils";
+
+>>>>>>> 60fdc2a0d04d30d98c3b6fdf6648b10ae26d2249
 const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
@@ -43,7 +50,11 @@ const TableFooter = React.forwardRef<
     ref={ref}
     className={cn(
       "border-t bg-muted/50 font-medium [&>tr]:last:border-b-0",
+<<<<<<< HEAD
       className,
+=======
+      className
+>>>>>>> 60fdc2a0d04d30d98c3b6fdf6648b10ae26d2249
     )}
     {...props}
   />
@@ -58,7 +69,11 @@ const TableRow = React.forwardRef<
     ref={ref}
     className={cn(
       "border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted",
+<<<<<<< HEAD
       className,
+=======
+      className
+>>>>>>> 60fdc2a0d04d30d98c3b6fdf6648b10ae26d2249
     )}
     {...props}
   />
@@ -73,7 +88,11 @@ const TableHead = React.forwardRef<
     ref={ref}
     className={cn(
       "h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
+<<<<<<< HEAD
       className,
+=======
+      className
+>>>>>>> 60fdc2a0d04d30d98c3b6fdf6648b10ae26d2249
     )}
     {...props}
   />

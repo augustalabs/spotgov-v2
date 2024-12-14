@@ -1,6 +1,6 @@
 "use client";
 
-import queriesQuery from "@/queries/queries-query";
+import queriesQuery from "@/services/queries-query";
 import { useQuery } from "@tanstack/react-query";
 import SearchCard from "./search-card";
 
