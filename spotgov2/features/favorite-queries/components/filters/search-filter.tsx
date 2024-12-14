@@ -9,7 +9,7 @@ const SearchFilter = ({ className }: { className?: string }) => {
 
   return (
     <Input
-      placeholder="Procurar pesquisas..."
+      placeholder="Procurar contratos..."
       value={searchTextInput}
       onChange={(event) => setSearchTextInput(event.target.value)}
       className={className}

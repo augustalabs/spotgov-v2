@@ -11,6 +11,7 @@ function favoriteQueriesQuery(
   adjudicatorsInput: string[],
   titlesInput: string[],
   savedInput: boolean | null,
+  cpvsInput: string[],
   selectedSortInput: OrderType,
 ) {
   const queryKey = [
@@ -22,6 +23,7 @@ function favoriteQueriesQuery(
     adjudicatorsInput,
     titlesInput,
     savedInput,
+    cpvsInput,
     selectedSortInput,
   ];
 
@@ -42,7 +44,14 @@ function favoriteQueriesQuery(
       });
     }
 
+    // We can't do !savedInput because savedInput is a boolean
     if (savedInput !== null) searchParams += `&saved=${savedInput}`;
+
+    if (cpvsInput.length) {
+      cpvsInput.forEach((cpv) => {
+        if (cpv) searchParams += `&cpv=${cpv}`;
+      });
+    }
 
     if (selectedSortInput) searchParams += `&sort=${selectedSortInput}`;
 

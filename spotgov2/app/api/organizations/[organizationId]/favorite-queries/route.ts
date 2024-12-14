@@ -28,6 +28,7 @@ export async function GET(
     const adjudicators = searchParams.getAll("adjudicator") ?? [];
     const titles = searchParams.getAll("title") ?? [];
     const saved = searchParams.get("saved") ?? "";
+    const cpvs = searchParams.getAll("cpv") ?? [];
     const sort = searchParams.get("sort");
 
     const favoriteQueries = await getFavoriteQueriesData(
@@ -38,6 +39,7 @@ export async function GET(
       adjudicators,
       titles,
       saved,
+      cpvs,
       sort as OrderType,
     );
 

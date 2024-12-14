@@ -3,12 +3,14 @@ import AdjudicatorsFilter from "./adjudicators-filter";
 import QueryTitlesFilter from "./query-titles-filter";
 import SavedFilter from "./saved-filter";
 import SearchFilter from "./search-filter";
+import CpvsFilter from "./cpvs-filter";
 
 const Filters = () => {
   return (
     <div className="my-5 flex flex-wrap gap-2">
       <SearchFilter className="flex-grow basis-1/6" />
       <QueryTitlesFilter className="flex-grow basis-1/6" />
+      <CpvsFilter className="flex-grow basis-1/6" />
       <AdjudicatorsFilter className="flex-grow basis-1/6" />
       <SavedFilter className="flex-grow basis-1/6" />
       <Sort className="flex-grow basis-1/6" />

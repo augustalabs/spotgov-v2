@@ -32,6 +32,7 @@ async function getFavoriteQueriesData(
   adjudicatorsInput: string[] = [],
   titlesInput: string[] = [],
   savedInput: string | null = null,
+  cpvsInput: string[] = [],
   sortInput: OrderType = "publish-date-desc",
 ): Promise<FavoriteContractsDataType> {
   const offset = (page - 1) * pageSize;
@@ -93,6 +94,7 @@ async function getFavoriteQueriesData(
     totalCount: data[0]?.totalCount ?? 0,
     distinctAdjudicators: data[0]?.distinctAdjudicators ?? [],
     distinctQueryTitles: data[0]?.distinctQueryTitles ?? [],
+    distinctCpvs: [],
   };
 }
 

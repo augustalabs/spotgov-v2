@@ -14,4 +14,5 @@ export type FavoriteContractsDataType = {
   totalCount: number;
   distinctAdjudicators: string[];
   distinctQueryTitles: string[];
+  distinctCpvs: string[];
 };

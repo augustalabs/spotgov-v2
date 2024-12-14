@@ -18,6 +18,11 @@ type FavoriteQueriesFiltersStoreProps = {
   // Search for contracts by saved status
   savedInput: boolean | null;
   setSavedInput: (value: boolean | null) => void;
+  // Search for contracts by cpvs
+  cpvsInput: string[];
+  setCpvsInput: (value: string[]) => void;
+  cpvsDefaultValues: string[];
+  setCpvsDefaultValues: (value: string[]) => void;
   // Sort contracts by newest, oldest, highest price, lowest price, nearest deadline, farthest deadline
   selectedSortInput: OrderType;
   setSelectedSortInput: (value: OrderType) => void;
@@ -39,6 +44,10 @@ export const useFavoriteQueriesFiltersStore =
       set({ queryTitlesDefaultValues: value }),
     savedInput: null,
     setSavedInput: (value) => set({ savedInput: value }),
+    cpvsInput: [],
+    setCpvsInput: (value) => set({ cpvsInput: value }),
+    cpvsDefaultValues: [],
+    setCpvsDefaultValues: (value) => set({ cpvsDefaultValues: value }),
     selectedSortInput: "publish-date-desc",
     setSelectedSortInput: (value) => set({ selectedSortInput: value }),
   }));

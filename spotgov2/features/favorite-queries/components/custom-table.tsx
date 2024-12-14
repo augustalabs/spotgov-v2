@@ -22,6 +22,9 @@ const CustomTable = () => {
     queryTitlesDefaultValues,
     setQueryTitlesDefaultValues,
     savedInput,
+    cpvsInput,
+    cpvsDefaultValues,
+    setCpvsDefaultValues,
     selectedSortInput,
   } = useFavoriteQueriesFiltersStore();
   const { currentOrganization } = useCurrentOrganizationStore();
@@ -35,6 +38,7 @@ const CustomTable = () => {
     adjudicatorsInput,
     queryTitlesInput,
     savedInput,
+    cpvsInput,
     selectedSortInput,
   ]);
 
@@ -47,11 +51,12 @@ const CustomTable = () => {
       adjudicatorsInput,
       queryTitlesInput,
       savedInput,
+      cpvsInput,
       selectedSortInput,
     ),
   );
 
-  // This is necessary to update the default values of the select components
+  // This is necessary to update the default values of the multi select components
   useEffect(() => {
     const payload = data?.payload;
 
@@ -59,15 +64,22 @@ const CustomTable = () => {
       const shouldSetAdjudicators =
         payload.distinctAdjudicators.length > adjudicatorsDefaultValues.length;
 
-      const shouldSetQueryTitles =
-        payload.distinctQueryTitles.length > queryTitlesDefaultValues.length;
-
       if (shouldSetAdjudicators) {
         setAdjudicatorsDefaultValues(payload.distinctAdjudicators);
       }
 
+      const shouldSetQueryTitles =
+        payload.distinctQueryTitles.length > queryTitlesDefaultValues.length;
+
       if (shouldSetQueryTitles) {
         setQueryTitlesDefaultValues(payload.distinctQueryTitles);
+      }
+
+      const shouldSetCpvs =
+        payload.distinctCpvs.length > cpvsDefaultValues.length;
+
+      if (shouldSetCpvs) {
+        setCpvsDefaultValues(payload.distinctCpvs);
       }
     }
   }, [isPending, data?.payload]);
