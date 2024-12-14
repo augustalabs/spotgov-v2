@@ -32,10 +32,6 @@ export const mapUserRolesToPortuguese = {
 
 // Filters
 export type RelevanceType = "all" | "relevant" | "very-relevant";
-<<<<<<< HEAD
-export type OrderType = "publish-date-desc" | "publish-date-asc" | "base-price-desc" | "base-price-asc" | "deadline-asc" | "deadline-desc";
-export type PriceRange = [number, number];
-=======
 export type OrderType =
   | "publish-date-desc"
   | "publish-date-asc"
@@ -43,4 +39,4 @@ export type OrderType =
   | "base-price-asc"
   | "deadline-asc"
   | "deadline-desc";
->>>>>>> 60fdc2a0d04d30d98c3b6fdf6648b10ae26d2249
+export type PriceRange = [number, number];

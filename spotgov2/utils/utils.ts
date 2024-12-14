@@ -3,13 +3,10 @@ import { clsx, type ClassValue } from "clsx";
 import { DateRange } from "react-day-picker";
 import { twMerge } from "tailwind-merge";
 
-<<<<<<< HEAD
-=======
 import { differenceInDays, isToday, format } from "date-fns";
 import { pt } from "date-fns/locale";
 import jwt from "jsonwebtoken";
 
->>>>>>> 60fdc2a0d04d30d98c3b6fdf6648b10ae26d2249
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -19,24 +16,6 @@ export function getFirstName(name: string | undefined): string {
   return name.split(" ")[0];
 }
 
-<<<<<<< HEAD
-export const filterAndSortContracts = (
-  contracts: {
-    issuerName?: string;
-    publishDate?: string;
-    basePrice?: string;
-    cpvs?: string[];
-    submissionDeadlineDate?: string;
-    matchTypeFull?: boolean
-  }[],
-  filters: {
-    relevance: RelevanceType;
-    dateRange?: DateRange;
-    priceRange: PriceRange;
-    selectedAdjudicatingEntities: string[];
-    selectedCPVs: string[];
-    order: OrderType;
-=======
 export function generateInviteToken(organizationId: string, email: string) {
   const payload = {
     organizationId,
@@ -49,14 +28,14 @@ export function generateInviteToken(organizationId: string, email: string) {
   });
 }
 
-export const formatDate = (date) => {
+export const formatDate = (date: string | number | Date) => {
   if (!date) return "Data inválida";
 
   const parsedDate = new Date(date);
-  if (isNaN(parsedDate)) return "Data inválida";
+  if (isNaN(parsedDate.getTime())) return "Data inválida";
 
   const now = new Date();
-  const seconds = Math.floor((now - parsedDate) / 1000);
+  const seconds = Math.floor((now.getTime() - parsedDate.getTime()) / 1000);
 
   const intervals = [
     { label: "ano", seconds: 31536000 },
@@ -73,7 +52,27 @@ export const formatDate = (date) => {
       const pluralizedLabel = count > 1 ? `${interval.label}s` : interval.label;
       return `Há ${count} ${pluralizedLabel}`;
     }
->>>>>>> 60fdc2a0d04d30d98c3b6fdf6648b10ae26d2249
+  }
+
+  return "Agora";
+};
+
+export const filterAndSortContracts = (
+  contracts: {
+    issuerName?: string;
+    publishDate?: string;
+    basePrice?: string;
+    cpvs?: string[];
+    submissionDeadlineDate?: string;
+    matchTypeFull?: boolean;
+  }[],
+  filters: {
+    relevance: RelevanceType;
+    dateRange?: DateRange;
+    priceRange: PriceRange;
+    selectedAdjudicatingEntities: string[];
+    selectedCPVs: string[];
+    order: OrderType;
   }
 ) => {
   const {
@@ -143,15 +142,8 @@ export const formatDate = (date) => {
       if (order === "deadline-asc") return deadlineA - deadlineB;
       if (order === "deadline-desc") return deadlineB - deadlineA;
 
-<<<<<<< HEAD
       return 0;
     });
-};
-=======
-  if (remainingDays === 1) return "Falta 1 dia";
-  if (remainingDays > 1) return `Faltam ${remainingDays} dias`;
-
-  return "Prazo expirado";
 };
 
 export const formatDate2 = (dateString: string): string => {
@@ -168,4 +160,3 @@ export const getRemainingDaysColor = (date: string) => {
   if (remainingDays < 7) return "bg-yellow-500";
   return "bg-green-500";
 };
->>>>>>> 60fdc2a0d04d30d98c3b6fdf6648b10ae26d2249

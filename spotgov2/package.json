@@ -42,11 +42,8 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",
     "react-hook-form": "^7.53.2",
-<<<<<<< HEAD
     "react-resizable-panels": "^2.1.7",
-=======
     "resend": "^4.0.1",
->>>>>>> 60fdc2a0d04d30d98c3b6fdf6648b10ae26d2249
     "sonner": "^1.7.0",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",

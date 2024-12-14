@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+import Header from "@/components/header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { fetchPipelineData } from "@/features/pipeline/api/fetch-pipeline-data";
 import Pipeline from "@/features/pipeline/components/pipeline";
@@ -22,16 +22,8 @@ export default async function PipelinePage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
+       <Header title="Pipeline" />
       <Pipeline organizationId={organizationId} />
     </HydrationBoundary>
-=======
-import Header from "@/components/header";
-
-export default function PipelinePage() {
-  return (
-    <div>
-      <Header title="Pipeline" />
-    </div>
->>>>>>> 60fdc2a0d04d30d98c3b6fdf6648b10ae26d2249
   );
 }
