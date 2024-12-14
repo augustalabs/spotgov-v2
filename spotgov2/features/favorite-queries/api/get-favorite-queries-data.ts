@@ -7,7 +7,7 @@ import {
   contractsQueries,
   queries,
 } from "@/database/schemas";
-import { and, eq, ilike, inArray, or, SQL, sql } from "drizzle-orm";
+import { and, eq, gte, ilike, inArray, lte, or, SQL, sql } from "drizzle-orm";
 import { FavoriteContractsDataType } from "../types";
 import { OrderType } from "@/types";
 
@@ -33,6 +33,8 @@ async function getFavoriteQueriesData(
   titlesInput: string[] = [],
   savedInput: string | null = null,
   cpvsInput: string[] = [],
+  minPriceInput: number | null = null,
+  maxPriceInput: number | null = null,
   sortInput: OrderType = "publish-date-desc",
 ): Promise<FavoriteContractsDataType> {
   const offset = (page - 1) * pageSize;
@@ -48,6 +50,8 @@ async function getFavoriteQueriesData(
       totalCount: sql<number>`COUNT(*) OVER()`,
       adjudicators: sql<string[]>`array_agg(${contracts.issuerName}) OVER()`,
       queryTitles: sql<string[]>`array_agg(${queries.title}) OVER()`,
+      minBasePrice: sql<number>`MIN(${contracts.basePrice}) OVER()`,
+      maxBasePrice: sql<number>`MAX(${contracts.basePrice}) OVER()`,
     })
     .from(contractsQueries)
     .innerJoin(contracts, eq(contracts.id, contractsQueries.contractId))
@@ -76,6 +80,12 @@ async function getFavoriteQueriesData(
         savedInput !== null
           ? eq(contractsOrganizations.saved, savedInput === "true")
           : sql`true`,
+        minPriceInput !== null
+          ? gte(contracts.basePrice, String(minPriceInput))
+          : sql`true`,
+        maxPriceInput !== null
+          ? lte(contracts.basePrice, String(maxPriceInput))
+          : sql`true`,
       ),
     )
     .orderBy(getSortOption(sortInput))
@@ -87,6 +97,8 @@ async function getFavoriteQueriesData(
     totalCount: row.totalCount,
     distinctAdjudicators: Array.from(new Set(row.adjudicators)),
     distinctQueryTitles: Array.from(new Set(row.queryTitles)),
+    minBasePrice: row.minBasePrice,
+    maxBasePrice: row.maxBasePrice,
   }));
 
   return {
@@ -95,6 +107,10 @@ async function getFavoriteQueriesData(
     distinctAdjudicators: data[0]?.distinctAdjudicators ?? [],
     distinctQueryTitles: data[0]?.distinctQueryTitles ?? [],
     distinctCpvs: [],
+    basePriceRange: [
+      data[0]?.minBasePrice ?? null,
+      data[0]?.maxBasePrice ?? null,
+    ],
   };
 }
 

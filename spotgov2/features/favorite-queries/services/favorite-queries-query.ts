@@ -12,6 +12,7 @@ function favoriteQueriesQuery(
   titlesInput: string[],
   savedInput: boolean | null,
   cpvsInput: string[],
+  basePriceInput: number[],
   selectedSortInput: OrderType,
 ) {
   const queryKey = [
@@ -24,6 +25,7 @@ function favoriteQueriesQuery(
     titlesInput,
     savedInput,
     cpvsInput,
+    basePriceInput,
     selectedSortInput,
   ];
 
@@ -54,6 +56,10 @@ function favoriteQueriesQuery(
     }
 
     if (selectedSortInput) searchParams += `&sort=${selectedSortInput}`;
+
+    if (basePriceInput[0]) searchParams += `&minPrice=${basePriceInput[0]}`;
+
+    if (basePriceInput[1]) searchParams += `&maxPrice=${basePriceInput[1]}`;
 
     return await get<Response<FavoriteContractsDataType>>({
       url: `organizations/${organizationId}/favorite-queries${searchParams}`,

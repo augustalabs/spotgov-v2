@@ -23,6 +23,11 @@ type FavoriteQueriesFiltersStoreProps = {
   setCpvsInput: (value: string[]) => void;
   cpvsDefaultValues: string[];
   setCpvsDefaultValues: (value: string[]) => void;
+  // Search for contracts by base price
+  basePriceInput: number[];
+  setBasePriceInput: (value: number[]) => void;
+  basePriceDefaultValues: number[];
+  setBasePriceDefaultValues: (value: number[]) => void;
   // Sort contracts by newest, oldest, highest price, lowest price, nearest deadline, farthest deadline
   selectedSortInput: OrderType;
   setSelectedSortInput: (value: OrderType) => void;
@@ -47,6 +52,11 @@ export const useFavoriteQueriesFiltersStore =
     cpvsInput: [],
     setCpvsInput: (value) => set({ cpvsInput: value }),
     cpvsDefaultValues: [],
+    basePriceInput: [0, 0],
+    setBasePriceInput: (value) => set({ basePriceInput: value }),
+    basePriceDefaultValues: [0, 0],
+    setBasePriceDefaultValues: (value) =>
+      set({ basePriceDefaultValues: value }),
     setCpvsDefaultValues: (value) => set({ cpvsDefaultValues: value }),
     selectedSortInput: "publish-date-desc",
     setSelectedSortInput: (value) => set({ selectedSortInput: value }),

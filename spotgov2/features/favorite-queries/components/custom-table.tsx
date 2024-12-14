@@ -25,6 +25,10 @@ const CustomTable = () => {
     cpvsInput,
     cpvsDefaultValues,
     setCpvsDefaultValues,
+    basePriceInput,
+    setBasePriceInput,
+    basePriceDefaultValues,
+    setBasePriceDefaultValues,
     selectedSortInput,
   } = useFavoriteQueriesFiltersStore();
   const { currentOrganization } = useCurrentOrganizationStore();
@@ -39,6 +43,7 @@ const CustomTable = () => {
     queryTitlesInput,
     savedInput,
     cpvsInput,
+    basePriceInput,
     selectedSortInput,
   ]);
 
@@ -52,6 +57,7 @@ const CustomTable = () => {
       queryTitlesInput,
       savedInput,
       cpvsInput,
+      basePriceInput,
       selectedSortInput,
     ),
   );
@@ -81,6 +87,15 @@ const CustomTable = () => {
       if (shouldSetCpvs) {
         setCpvsDefaultValues(payload.distinctCpvs);
       }
+
+      // const shouldSetBasePrice =
+      //   payload.basePriceRange[0] < (basePriceDefaultValues[0] as number) ||
+      //   payload.basePriceRange[1] > (basePriceDefaultValues?.[1] as number);
+
+      // if (shouldSetBasePrice) {
+      //   setBasePriceDefaultValues(payload.basePriceRange);
+      //   setBasePriceInput(payload.basePriceRange);
+      // }
     }
   }, [isPending, data?.payload]);
 

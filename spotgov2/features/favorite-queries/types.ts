@@ -15,4 +15,5 @@ export type FavoriteContractsDataType = {
   distinctAdjudicators: string[];
   distinctQueryTitles: string[];
   distinctCpvs: string[];
+  basePriceRange: [number, number];
 };
