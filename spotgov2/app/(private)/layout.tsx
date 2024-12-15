@@ -11,8 +11,8 @@ export default async function Layout({
     <TooltipProvider>
       <SidebarProvider>
         <CustomSidebar />
-        <div className="w-full">
-          <main className="mx-auto max-w-3xl px-2 py-3 overflow-x-hidden">{children}</main>
+        <div className="w-full overflow-x-hidden">
+          <main className="mx-auto px-2 py-3">{children}</main>
         </div>
       </SidebarProvider>
     </TooltipProvider>

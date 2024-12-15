@@ -49,7 +49,7 @@ export default async function NewSearchPage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex w-full flex-col items-center p-4">
+      <div className="mx-auto flex w-full max-w-3xl flex-col items-center p-4">
         <NewSearchCard title={title} organizationId={organizationId} />
         <PreviousSearches organizationId={organizationId} />
       </div>
