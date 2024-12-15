@@ -53,3 +53,4 @@ export type {
   DeepdiveLatestTable,
 } from "./deepdive";
 export type { QueryUserEmail } from "./query-user-emails";
+export type { ContractsOrganizations } from "./contracts-organizations";

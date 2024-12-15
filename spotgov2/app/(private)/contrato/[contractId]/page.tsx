@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
-import { getContractById, getContractLots, getContractTables } from "@/features/contracts/api"
+import { contractsQuery, contractLotsQuery, contractTablesQuery } from "@/features/contracts/services"
 import { notFound } from 'next/navigation';
-
+import { useQuery } from "@tanstack/react-query";
 interface ContractPageProps {
   params: {
     contractId: string;
@@ -12,7 +12,7 @@ export default async function ContractPage({ params }: ContractPageProps) {
   const { contractId } = params;
 
   // Fetch contract details
-  const contract = await getContractById({ contractId });
+  const { data: contract, isLoading: isLoadingContract } = useQuery(contractsQuery(contractId));
   
   // If contract not found, render 404 page
   if (!contract) {
@@ -20,8 +20,8 @@ export default async function ContractPage({ params }: ContractPageProps) {
   }
   
   // Proceed to fetch other related data
-  const contractTables = await getContractTables({ contractId });
-  const contractLots = await getContractLots({ contractId });
+  const { data: contractTables, isLoading: isLoadingTables } = useQuery(contractTablesQuery(contractId));
+  const { data: contractLots, isLoading: isLoadingLots } = useQuery(contractLotsQuery(contractId));
 
   return (
     <div>
