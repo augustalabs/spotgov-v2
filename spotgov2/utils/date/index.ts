@@ -1,14 +1,14 @@
 import { differenceInDays, format, isToday } from "date-fns";
 import { pt } from 'date-fns/locale';
 
-export const formatDate = (date) => {
-    if (!date) return "Data inválida";
+export const formatDate = (date: string | number | Date): string => {
+    if (!date) return "";
 
     const parsedDate = new Date(date);
-    if (isNaN(parsedDate)) return "Data inválida";
+    if (isNaN(parsedDate.getTime())) return "";
 
     const now = new Date();
-    const seconds = Math.floor((now - parsedDate) / 1000);
+    const seconds = Math.floor((now.getTime() - parsedDate.getTime()) / 1000);
 
     const intervals = [
         { label: "ano", seconds: 31536000 },

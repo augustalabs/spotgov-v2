@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import SearchCard from "./search-card";
 import queriesQuery from "@/services/queries-query";
 
-function PreviousSearches({ organizationId }) {
+function PreviousSearches({ organizationId }: { organizationId: string }) {
   const { data: queries, isPending } = useQuery(
     queriesQuery(organizationId as string),
   );
@@ -22,7 +22,9 @@ function PreviousSearches({ organizationId }) {
             key={query.id}
             title={query.title ?? ""}
             starred={query.starred ?? false}
-            createdAt={query.createdAt}
+            createdAt={
+              query.createdAt ? new Date(query.createdAt).toISOString() : ""
+            }
           />
         ))}
       </div>

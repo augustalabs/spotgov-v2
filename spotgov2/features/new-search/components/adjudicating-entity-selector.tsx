@@ -19,14 +19,18 @@ const AdjudicatingEntitySelector = memo(function AdjudicatingEntitySelector({
 
   const adjudicatingEntitiesList =
     adjudicatingEntities
-      // Filter to remove duplicates based on the "name" property
       ?.filter(
         (entity, index, self) =>
+          // Ensure name is not null
+          entity.name !== null &&
+          // Ensure name is not undefined
+          entity.name !== undefined &&
+          // Remove duplicates
           self.findIndex((e) => e.name === entity.name) === index,
       )
       .map((entity) => ({
-        value: entity.name,
-        label: entity.name,
+        value: entity.name as string,
+        label: entity.name as string,
       })) || [];
 
   const handleSelectedAdjudicatingEntitiesChange = useCallback(
