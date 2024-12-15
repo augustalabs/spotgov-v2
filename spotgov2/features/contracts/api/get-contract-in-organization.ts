@@ -11,14 +11,16 @@ async function getContractInOrganization({ contractId, organizationId }: { contr
     .from(contracts)
     .leftJoin(
       contractsOrganizations,
-      eq(contracts.id, contractsOrganizations.contractId),
+      and(
+        eq(contracts.id, contractsOrganizations.contractId),
+        eq(contractsOrganizations.organizationId, organizationId)
+      ),
     )
-    .where(and(eq(contracts.id, contractId), eq(contractsOrganizations.organizationId, organizationId)))
+    .where(eq(contracts.id, contractId))
     .then((results) => results[0]);
 
   if (!result) return null;
 
-  // Transform the result to the desired structure
   return {
     ...result.contracts,
     contracts_organizations: result.contracts_organizations ?? null

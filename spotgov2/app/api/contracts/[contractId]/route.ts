@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { JoinedContractInOrganization, Response } from "@/types";
-import { getContractById, getContractInOrganization } from "@/features/contracts/api";
+import { getContractById, getContractInOrganization, createContractInOrganization } from "@/features/contracts/api";
 import { STATUS_INTERNAL_SERVER_ERROR, STATUS_NOT_FOUND, STATUS_OK } from "@/utils/api/status-messages";
 import { Contract } from "@/database/schemas";
 import { checkUserAuthentication } from "@/utils/api/helpers";
@@ -34,7 +34,28 @@ export async function GET(
         });
       }
 
-      // Return the extended contract
+      // If contracts_organizations record doesn't exist, create it asynchronously
+      if (!contractWithOrg.contracts_organizations) {
+        // Fire and forget: create the record without awaiting
+        createContractInOrganization({
+          contractId,
+          organizationId: user.organizationId,
+        }).catch((error) => {
+          // Handle any errors to prevent unhandled promise rejections
+          console.error("Error creating contracts_organizations record:", error);
+        });
+
+        // Include a default contracts_organizations object in the response
+        contractWithOrg.contracts_organizations = {
+          contractId,
+          organizationId: user.organizationId,
+          saved: false,       // default value
+          comments: null,     // default value
+          labels: [],         // default value
+        };
+      }
+
+      // Return the extended contract to the user
       return NextResponse.json(
         {
           ...STATUS_OK,
