@@ -8,7 +8,7 @@ import CpvsFilter from "./cpvs-filter";
 const Filters = () => {
   return (
     <div className="my-5 flex flex-wrap gap-2">
-      <SearchFilter className="flex-grow basis-1/6" />
+      <SearchFilter className="min-w-36 flex-grow basis-1/6" />
       <QueryTitlesFilter className="flex-grow basis-1/6" />
       <CpvsFilter className="flex-grow basis-1/6" />
       <AdjudicatorsFilter className="flex-grow basis-1/6" />
