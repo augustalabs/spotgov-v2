@@ -1,5 +1,6 @@
 import {
-  Contract,
+  FeedCustomField,
+  FeedCustomFieldValue,
   Organization,
   User,
   UserOrganization,
@@ -11,6 +12,11 @@ export type OrganizationWithUserInfo = UserOrganization & {
 
 export type UserWithOrganizationInfo = UserOrganization & {
   user: User | null;
+};
+
+export type FeedCustomFieldWithValues = {
+  feedCustomFields: FeedCustomField;
+  feedCustomFieldsValues: FeedCustomFieldValue | null;
 };
 
 export type Response<T> = {

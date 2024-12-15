@@ -32,7 +32,7 @@ const DestructiveActionDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger>{children}</DialogTrigger>
+      <DialogTrigger className="w-full">{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Tem a certeza absoluta?</DialogTitle>

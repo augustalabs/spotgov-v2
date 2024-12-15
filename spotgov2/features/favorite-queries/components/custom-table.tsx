@@ -9,6 +9,9 @@ import { useQuery } from "@tanstack/react-query";
 import { favoriteQueriesQuery } from "../services";
 import { DataTable } from "./data-table";
 import { columns } from "./columns/columns";
+import useCustomColumns from "../hooks/use-custom-columns";
+import { PaginatedContractsType } from "../types";
+import { ColumnDef } from "@tanstack/react-table";
 
 const PAGE_SIZE = 8;
 
@@ -99,13 +102,25 @@ const CustomTable = () => {
     }
   }, [isPending, data?.payload]);
 
+  const customColumns = useCustomColumns();
+
+  const [allCustomColumns, setAllCustomColumns] = useState<
+    ColumnDef<PaginatedContractsType>[]
+  >([]);
+
+  useEffect(() => {
+    if (!customColumns.isPending) {
+      setAllCustomColumns(customColumns.columns);
+    }
+  }, [customColumns.isPending]);
+
   return (
     <div className="my-6">
       <Filters />
       <DataTable
         data={data?.payload?.paginatedContracts ?? []}
         isPending={isPending || isFetching}
-        columns={columns}
+        columns={[...columns, ...allCustomColumns]}
         page={page}
         setPage={setPage}
         pageSize={PAGE_SIZE}

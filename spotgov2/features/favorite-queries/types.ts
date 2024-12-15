@@ -7,6 +7,7 @@ export type PaginatedContractsType = {
   reason: unknown;
   saved: boolean | null;
   queryTitle: string | null;
+  [key: string]: unknown;
 };
 
 export type FavoriteContractsDataType = {
@@ -17,3 +18,11 @@ export type FavoriteContractsDataType = {
   distinctCpvs: string[];
   basePriceRange: [number, number];
 };
+
+export enum FieldType {
+  Text = "text",
+  Logic = "logic",
+  Date = "date",
+  Label = "label",
+  File = "file",
+}

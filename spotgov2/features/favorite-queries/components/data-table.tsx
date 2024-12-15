@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/table";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Input } from "@/components/ui/input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -85,7 +84,7 @@ export function DataTable<TData, TValue>({
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="hover:bg-background">
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
