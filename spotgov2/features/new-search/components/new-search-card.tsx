@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import AIIcon from "@/public/assets/icons/ai-icon.svg";
+import AIIcon from "/public/assets/icons/ai-icon.svg";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
@@ -21,6 +21,8 @@ import AdjudicatingEntitySelector from "./adjudicating-entity-selector";
 import DateNewQuery from "./date-new-query";
 import CPVSelector from "./cpv-selector";
 import KeywordsSelector from "./keywords-selector";
+import { format } from "date-fns";
+import { buildQueryObject } from "@/utils/query";
 
 interface NewSearchCardProps {
   title: string;
@@ -63,12 +65,60 @@ const NewSearchCard: React.FC<NewSearchCardProps> = ({
   const [selectedCPVs, setSelectedCPVs] = useState<MultiSelectOption[]>([]);
 
   const handleSubmit = () => {
-    // 1. Save the new keywords
-    if (newKeywords.length > 0) {
+    // 1. Save the new keywords only outside development
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        "\x1b[33m%s\x1b[0m",
+        "Skipping keyword mutation in development.",
+      );
+    } else if (newKeywords.length > 0) {
       addKeywordsMutation.mutate(newKeywords);
     }
 
-    // 2. Search
+    // 2. Check if the user has enough credits
+    /*
+    const queryCurrency = userData?.info.queryCurrency ?? 0;
+
+    if (queryCurrency <= 0) {
+      toast.error("Sem créditos", {
+        description:
+          "Oops, parece que você não tem créditos suficientes para realizar mais pesquisas.",
+      });
+      setIsLoading(false);
+      return;
+    }
+    */
+
+    // 3.
+    /* 
+    if (
+      !inputValue.trim() &&
+      (!selectedCPVs || selectedCPVs.length === 0) &&
+      (selectedKeywords.length === 0 || !selectedKeywords)
+    ) {
+      toast.error('Pesquisa vazia', {
+        description:
+          'Por favor, insira um termo de pesquisa ou selecione pelo menos um CPV.',
+      });
+      setIsLoading(false);
+      return;
+    }
+      */
+
+    // 4. Build query object
+    const query = buildQueryObject({
+      aiSearchValue,
+      selectedCPVs,
+      selectedKeywords,
+      selectedAdjudicatingEntities,
+      selectedPriceRange,
+      selectedDateRange,
+    });
+
+    // 5. Add query to the database
+
+    // 6. Submit the query
+
     window.location.href = "/pesquisa/8dcd1455-1951-4cc0-b1a1-5b2385ce120e";
   };
 

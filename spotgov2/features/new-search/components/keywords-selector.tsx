@@ -5,8 +5,8 @@ import MultipleSelector, {
 } from "@/components/ui/multi-select";
 import { useQuery } from "@tanstack/react-query";
 import { WholeWord } from "lucide-react";
-import { getKeywords } from "../api";
 import { memo } from "react";
+import { getKeywords } from "../api";
 
 interface KeywordsSelectorProps {
   selectedKeywords: MultiSelectOption[];

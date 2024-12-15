@@ -7,9 +7,9 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import {
-  getKeywords,
   getCpvs,
   getAdjudicatingEntities,
+  getKeywords,
 } from "@/features/new-search/api";
 import PreviousSearches from "@/features/new-search/components/previous-searches";
 
@@ -28,7 +28,7 @@ export default async function NewSearchPage() {
   });
 
   const organizationId =
-    user.user?.user_metadata.current_organization.organizationId;
+    user.user?.user_metadata?.current_organization?.organizationId;
 
   await queryClient.prefetchQuery({
     queryKey: ["keywords", organizationId],
@@ -49,7 +49,7 @@ export default async function NewSearchPage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex w-full flex-col items-center p-4">
+      <div className="mx-auto flex w-full max-w-3xl flex-col items-center p-4">
         <NewSearchCard title={title} organizationId={organizationId} />
         <PreviousSearches organizationId={organizationId} />
       </div>

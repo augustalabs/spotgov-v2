@@ -4,7 +4,5 @@
     "no-const-assign": "warn",
     "no-unused-vars": "warn"
   },
-  "@typescript-eslint/no-unused-vars": [
-    "warn"
-  ]
+  "@typescript-eslint/no-unused-vars": ["warn"]
 }

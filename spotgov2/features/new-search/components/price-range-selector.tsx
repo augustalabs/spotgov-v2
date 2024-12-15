@@ -20,8 +20,6 @@ const PriceRangeSelector = memo(
     value,
     onValueChange,
   }: PriceRangeSelectorProps) {
-    console.log("rerendering PriceRangeSelector");
-
     const [sliderOpen, setSliderOpen] = useState(false);
     const [priceRange, setPriceRange] = useState<[number, number]>([
       0, 100000000,
