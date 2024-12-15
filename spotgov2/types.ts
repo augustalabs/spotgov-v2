@@ -1,4 +1,4 @@
-import { Organization, User, UserOrganization } from "@/database/schemas";
+import { Contract, Organization, User, UserOrganization, ContractsOrganizations } from "@/database/schemas";
 
 export type OrganizationWithUserInfo = UserOrganization & {
   organization: Organization | null;
@@ -40,3 +40,7 @@ export type OrderType =
   | "deadline-asc"
   | "deadline-desc";
 export type PriceRange = [number, number];
+
+export type JoinedContractInOrganization = Contract & {
+  contracts_organizations: ContractsOrganizations | null
+};

@@ -7,9 +7,9 @@ const tables = pgTable("contract_tables", {
     .primaryKey()
     .default(sql`uuid_generate_v4()`),
   contractId: uuid("contract_id").references(() => contracts.id),
-  name: text("name"),
+  name: text("name").notNull(),
   columnName: text("column_name"),
-  row: integer("row"),
+  row: integer("row").notNull(),
   value: text("value"),
 });
 
