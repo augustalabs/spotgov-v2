@@ -41,10 +41,18 @@ export function formatPrice(price: string | number): string {
 function QueryTableView({
   filteredContracts,
 }: {
-  filteredContracts: (Contract & Partial<ContractQuery>)[];
+  filteredContracts: {
+    id: string | null;
+    title: string | null;
+    issuerName: string | null;
+    submissionDeadlineDate: string | null;
+    basePrice: string | null;
+    publishDate: string | null;
+    matchTypeFull: boolean | null;
+    reason: string | null;
+    executionLocation: string | null;
+  }[];
 }) {
-  console.log(filteredContracts);
-
   return (
     <Table>
       <TableHeader>
@@ -86,16 +94,12 @@ function QueryTableView({
           const contractProps = {
             title: contract.title ?? "",
             issuerName: contract.issuerName || "",
-            submissionDeadlineDate: contract.submissionDeadlineDate
-              ? new Date(contract.submissionDeadlineDate).toISOString()
-              : "",
+            submissionDeadlineDate: contract.submissionDeadlineDate || "",
             basePrice: contract.basePrice || "",
             location: contract.executionLocation || "",
-            publishDate: contract.publishDate
-              ? new Date(contract.publishDate).toISOString()
-              : "",
+            publishDate: contract.publishDate || "",
             matchTypeFull: contract.matchTypeFull || null,
-            reason: contract.reason ? JSON.stringify(contract.reason) : "",
+            reason: contract.reason || "",
           };
 
           return (

@@ -59,12 +59,16 @@ export const formatDate = (date: string | number | Date) => {
 
 export const filterAndSortContracts = (
   contracts: {
-    issuerName?: string;
-    publishDate?: string;
-    basePrice?: string;
-    cpvs?: string[];
-    submissionDeadlineDate?: string;
-    matchTypeFull?: boolean;
+    id: string | null;
+    title: string | null;
+    issuerName: string | null;
+    publishDate: string | null;
+    basePrice: string | null;
+    cpvs: string[] | null;
+    submissionDeadlineDate: string | null;
+    matchTypeFull: boolean | null;
+    reason: string | null;
+    executionLocation: string | null;
   }[],
   filters: {
     relevance: RelevanceType;

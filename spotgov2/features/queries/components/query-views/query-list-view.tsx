@@ -7,7 +7,17 @@ import { ContractQuery } from "@/database/schemas/contracts-queries";
 function QueryListView({
   filteredContracts,
 }: {
-  filteredContracts: (Contract & Partial<ContractQuery>)[];
+  filteredContracts: {
+    id: string | null;
+    title: string | null;
+    issuerName: string | null;
+    submissionDeadlineDate: string | null;
+    basePrice: string | null;
+    publishDate: string | null;
+    matchTypeFull: boolean | null;
+    reason: string | null;
+    executionLocation: string | null;
+  }[];
 }) {
   return (
     <div className="flex flex-col gap-5">
@@ -15,16 +25,12 @@ function QueryListView({
         const contractProps = {
           title: contract.title ?? "",
           issuerName: contract.issuerName || "",
-          submissionDeadlineDate: contract.submissionDeadlineDate
-            ? new Date(contract.submissionDeadlineDate).toISOString()
-            : "",
+          submissionDeadlineDate: contract.submissionDeadlineDate || "",
           basePrice: contract.basePrice || "",
           location: contract.executionLocation || "",
-          publishDate: contract.publishDate
-            ? new Date(contract.publishDate).toISOString()
-            : "",
+          publishDate: contract.publishDate || "",
           matchTypeFull: contract.matchTypeFull || null,
-          reason: contract.reason ? JSON.stringify(contract.reason) : "",
+          reason: contract.reason || "",
         };
 
         return <ContractCard key={contract.id} {...contractProps} />;

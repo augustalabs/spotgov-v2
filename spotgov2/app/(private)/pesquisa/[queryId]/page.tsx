@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getQueryById, getQueryContracts } from "@/features/queries/api";
-import ContractCard from "@/features/queries/components/contract-card";
 import QueryFilters from "@/features/queries/components/query-filters";
 import QueryListView from "@/features/queries/components/query-views/query-list-view";
 import QueryTableView from "@/features/queries/components/query-views/query-table-view";
@@ -46,9 +45,28 @@ export default function QueryPage() {
     enabled: !!queryId,
   });
 
+  const normalizedContracts = contracts
+    ? contracts.map((contract) => ({
+        id: contract.id,
+        title: contract.title,
+        issuerName: contract.issuerName,
+        cpvs: contract.cpvs,
+        basePrice: contract.basePrice,
+        executionLocation: contract.executionLocation,
+        reason: contract.reason ? JSON.stringify(contract.reason) : null,
+        matchTypeFull: contract.matchTypeFull,
+        publishDate: contract.publishDate
+          ? new Date(contract.publishDate).toISOString()
+          : null,
+        submissionDeadlineDate: contract.submissionDeadlineDate
+          ? new Date(contract.submissionDeadlineDate).toISOString()
+          : null,
+      }))
+    : [];
+
   // Filtered (and sorted) contracts
   const filteredContracts = contracts
-    ? filterAndSortContracts(contracts, {
+    ? filterAndSortContracts(normalizedContracts, {
         relevance,
         dateRange,
         priceRange,
@@ -57,6 +75,8 @@ export default function QueryPage() {
         order,
       })
     : [];
+
+  console.log(filteredContracts);
 
   // Extract unique issuer names
   const uniqueIssuerNames = contracts
