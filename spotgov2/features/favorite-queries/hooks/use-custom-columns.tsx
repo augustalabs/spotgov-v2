@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useQuery } from "@tanstack/react-query";
 
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
-import customFieldsWithValuesQuery from "../services/custom-fields-with-values-query";
+import { customFieldsWithValuesQuery } from "../services";
 import { FieldType, PaginatedContractsType } from "../types";
 import TextColumn from "../components/custom-columns/text-column";
 import ColumnActions from "../components/custom-columns/column-actions";
@@ -19,29 +19,33 @@ const useCustomColumns = () => {
   const customColumns: ColumnDef<PaginatedContractsType>[] =
     !data || isPending
       ? []
-      : data.payload?.map((field) => ({
-          accessorKey:
-            field.feedCustomFields.fieldName?.toLowerCase() as string,
+      : Object.values(data.payload || {}).map((field) => ({
+          accessorKey: (
+            field.feedCustomFields.fieldName as string
+          ).toLowerCase(),
           header: () => (
             <ColumnActions
               label={field.feedCustomFields.fieldName as string}
               columnId={field.feedCustomFields.id}
             />
           ),
-          // TODO: Add custom cell renderer
           cell: ({ row }) => {
-            if (field.feedCustomFields.fieldType === FieldType.Text) {
-              const value =
-                field.feedCustomFieldsValues?.contractId ===
-                  row.original.contract.id &&
-                field.feedCustomFieldsValues?.value
-                  ? field.feedCustomFieldsValues.value
-                  : "";
+            const matchedValue = field.feedCustomFieldsValues.find(
+              (value) => value.contractId === row.original.contract.id,
+            );
 
-              return <TextColumn value={value} />;
+            // TODO: Handle other field types
+            if (field.feedCustomFields.fieldType === FieldType.Text) {
+              return (
+                <TextColumn
+                  value={matchedValue?.value || ""}
+                  columnId={field.feedCustomFields.id}
+                  contractId={row.original.contract.id}
+                />
+              );
             }
           },
-        })) || [];
+        }));
 
   return { columns: customColumns, isPending };
 };

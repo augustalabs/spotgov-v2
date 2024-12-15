@@ -5,7 +5,7 @@ function customFieldsWithValuesQuery(organizationId: string) {
   const queryKey = ["get-custom-fields-with-values", organizationId];
 
   const queryFn = async () =>
-    await get<Response<FeedCustomFieldWithValues[]>>({
+    await get<Response<FeedCustomFieldWithValues>>({
       url: `organizations/${organizationId}/custom-columns`,
     });
 

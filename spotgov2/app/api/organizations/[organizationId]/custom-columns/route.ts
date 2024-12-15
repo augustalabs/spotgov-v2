@@ -16,7 +16,7 @@ type Params = {
 export async function GET(
   req: Request,
   { params }: { params: Params },
-): Promise<NextResponse<Response<FeedCustomFieldWithValues[]>>> {
+): Promise<NextResponse<Response<FeedCustomFieldWithValues>>> {
   try {
     const userOrResponse = await checkUserAuthentication();
     if (userOrResponse instanceof NextResponse) return userOrResponse;
@@ -31,7 +31,7 @@ export async function GET(
       organizationId: params.organizationId,
     });
 
-    if (!feedCustomFieldsWithValues?.length) {
+    if (!feedCustomFieldsWithValues) {
       return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
         status: STATUS_INTERNAL_SERVER_ERROR.status,
       });

@@ -1,11 +1,11 @@
 import {
   Contract,
   FeedCustomField,
-  FeedCustomFieldValue,
   Organization,
   User,
   UserOrganization,
   ContractsOrganizations,
+  FeedCustomFieldValue,
 } from "@/database/schemas";
 
 export type OrganizationWithUserInfo = UserOrganization & {
@@ -16,10 +16,13 @@ export type UserWithOrganizationInfo = UserOrganization & {
   user: User | null;
 };
 
-export type FeedCustomFieldWithValues = {
-  feedCustomFields: FeedCustomField;
-  feedCustomFieldsValues: FeedCustomFieldValue | null;
-};
+export type FeedCustomFieldWithValues = Record<
+  string,
+  {
+    feedCustomFields: FeedCustomField;
+    feedCustomFieldsValues: FeedCustomFieldValue[];
+  }
+>;
 
 export type Response<T> = {
   success: boolean;

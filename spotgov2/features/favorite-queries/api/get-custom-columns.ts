@@ -1,5 +1,9 @@
 import { db } from "@/database/db";
-import { feedCustomFields, feedCustomFieldsValues } from "@/database/schemas";
+import {
+  FeedCustomField,
+  feedCustomFields,
+  feedCustomFieldsValues,
+} from "@/database/schemas";
 import { FeedCustomFieldWithValues } from "@/types";
 import { eq } from "drizzle-orm";
 
@@ -7,8 +11,8 @@ async function getCustomColumns({
   organizationId,
 }: {
   organizationId: string;
-}): Promise<FeedCustomFieldWithValues[]> {
-  return await db
+}): Promise<FeedCustomFieldWithValues> {
+  const result = await db
     .select({
       feedCustomFields,
       feedCustomFieldsValues,
@@ -19,6 +23,25 @@ async function getCustomColumns({
       eq(feedCustomFields.id, feedCustomFieldsValues.fieldId),
     )
     .where(eq(feedCustomFields.organizationId, organizationId));
+
+  let customValuesPerField: FeedCustomFieldWithValues = {};
+
+  result.forEach((field) => {
+    if (!customValuesPerField[field.feedCustomFields.id]) {
+      customValuesPerField[field.feedCustomFields.id] = {
+        feedCustomFields: field.feedCustomFields as FeedCustomField,
+        feedCustomFieldsValues: [],
+      };
+    }
+
+    if (field.feedCustomFieldsValues?.fieldId === field.feedCustomFields.id) {
+      customValuesPerField[
+        field.feedCustomFields.id
+      ].feedCustomFieldsValues.push(field.feedCustomFieldsValues);
+    }
+  });
+
+  return customValuesPerField;
 }
 
 export default getCustomColumns;

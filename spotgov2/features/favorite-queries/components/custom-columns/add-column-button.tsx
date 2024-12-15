@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/utils/utils";
 import { useMutation } from "@tanstack/react-query";
-import addColumnMutation from "../../services/add-column-mutation";
+import { addColumnMutation } from "../../services";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { toast } from "sonner";
 import { useState } from "react";

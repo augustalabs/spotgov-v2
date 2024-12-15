@@ -11,9 +11,8 @@ import { useMutation } from "@tanstack/react-query";
 import { Edit, EllipsisVertical, Trash } from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import editColumnMutation from "../../services/edit-column-mutation";
+import { editColumnMutation, deleteColumnMutation } from "../../services";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
-import deleteColumnMutation from "../../services/delete-column-mutation";
 
 type ColumnActionsProps = {
   label: string;
