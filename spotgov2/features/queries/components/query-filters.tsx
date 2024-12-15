@@ -22,28 +22,24 @@ import { addDays, format } from "date-fns";
 import { DateRange } from "react-day-picker";
 import PriceRangeSelector from "@/features/new-search/components/price-range-selector";
 import { VirtualizedCombobox } from "@/components/ui/virtualized-combobox";
+import { FiltersState } from "../hooks/use-filters";
 
-function QueryFilters({
-  setOrder,
-  setRelevance,
-  setDateRange,
-  setPriceRange,
-  adjudicatingEntitiesList,
-  setSelectedAdjudicatingEntities,
-  cpvsList,
-  setSelectedCPVs,
-}: {
-  setOrder: React.Dispatch<React.SetStateAction<OrderType>>;
-  setRelevance: React.Dispatch<React.SetStateAction<RelevanceType>>;
-  setDateRange: React.Dispatch<React.SetStateAction<DateRange | undefined>>;
-  setPriceRange: React.Dispatch<React.SetStateAction<PriceRange>>;
+interface QueryFiltersProps {
+  filters: FiltersState;
+  setFilter: <K extends keyof FiltersState>(
+    key: K,
+    value: FiltersState[K],
+  ) => void;
   adjudicatingEntitiesList: (string | null)[];
-  setSelectedAdjudicatingEntities: React.Dispatch<
-    React.SetStateAction<string[]>
-  >;
   cpvsList: (string | null)[];
-  setSelectedCPVs: React.Dispatch<React.SetStateAction<string[]>>;
-}) {
+}
+
+const QueryFilters: React.FC<QueryFiltersProps> = ({
+  filters,
+  setFilter,
+  adjudicatingEntitiesList,
+  cpvsList,
+}) => {
   const [date, setDate] = React.useState<DateRange | undefined>(undefined);
   const [localPriceRange, setLocalPriceRange] = React.useState<PriceRange>([
     0, 100000000,
@@ -75,7 +71,7 @@ function QueryFilters({
         emptyLabel="Sem resultados."
         popover={{ width: "400px", align: "center" }}
         onSelectedChange={(selectedItems) =>
-          setSelectedAdjudicatingEntities(selectedItems)
+          setFilter("selectedAdjudicatingEntities", selectedItems)
         }
         initiallySelected
       />
@@ -91,7 +87,9 @@ function QueryFilters({
         }
         emptyLabel="Sem resultados."
         popover={{ width: "400px", align: "center" }}
-        onSelectedChange={(selectedItems) => setSelectedCPVs(selectedItems)}
+        onSelectedChange={(selectedItems) =>
+          setFilter("selectedCPVs", selectedItems)
+        }
         initiallySelected
       />
 
@@ -100,7 +98,7 @@ function QueryFilters({
         value={localPriceRange}
         onValueChange={(value) => {
           setLocalPriceRange(value);
-          setPriceRange(value);
+          setFilter("priceRange", value);
         }}
       />
 
@@ -139,7 +137,7 @@ function QueryFilters({
               selected={date}
               onSelect={(selectedDate) => {
                 setDate(selectedDate);
-                setDateRange(selectedDate);
+                setFilter("dateRange", selectedDate);
               }}
               numberOfMonths={2}
             />
@@ -150,7 +148,9 @@ function QueryFilters({
       {/* Relevance filter */}
       <Select
         defaultValue="all"
-        onValueChange={(value) => setRelevance(value as RelevanceType)}
+        onValueChange={(value) =>
+          setFilter("relevance", value as RelevanceType)
+        }
       >
         <SelectTrigger className="w-[180px]">
           <SelectValue />
@@ -165,7 +165,7 @@ function QueryFilters({
       {/* Sort by */}
       <Select
         defaultValue="publish-date-desc"
-        onValueChange={(value) => setOrder(value as OrderType)}
+        onValueChange={(value) => setFilter("order", value as OrderType)}
       >
         <SelectTrigger className="w-[180px]">
           <SelectValue />
@@ -181,6 +181,6 @@ function QueryFilters({
       </Select>
     </div>
   );
-}
+};
 
 export default QueryFilters;
