@@ -4,6 +4,7 @@ import { getContractById, getContractInOrganization, createContractInOrganizatio
 import { STATUS_INTERNAL_SERVER_ERROR, STATUS_NOT_FOUND, STATUS_OK } from "@/utils/api/status-messages";
 import { Contract } from "@/database/schemas";
 import { checkUserAuthentication } from "@/utils/api/helpers";
+import { createClient } from "@/lib/supabase/server";
 
 type Params = {
   contractId: string;
@@ -15,16 +16,24 @@ export async function GET(
 ): Promise<NextResponse<Response<JoinedContractInOrganization | Contract | null>>> {
   try {
     const { contractId } = params;
+    const supabase = await createClient();
 
     // First, check user authentication
-    const user = await checkUserAuthentication();
+    const { data: user, error } = await supabase.auth.getUser();
+    const currentOrganization = user?.user?.user_metadata.current_organization; 
+
+    if (error) {
+      return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
+        status: STATUS_INTERNAL_SERVER_ERROR.status,
+      });
+    }
 
     if (user) {
       // If authenticated, fetch contract along with organization-specific data
       // TODO: get organizationId from user
       const contractWithOrg = await getContractInOrganization({
         contractId,
-        organizationId: user.organizationId,
+        organizationId: currentOrganization,
       });
 
       if (!contractWithOrg) {
@@ -39,7 +48,7 @@ export async function GET(
         // Fire and forget: create the record without awaiting
         createContractInOrganization({
           contractId,
-          organizationId: user.organizationId,
+          organizationId: currentOrganization,
         }).catch((error) => {
           // Handle any errors to prevent unhandled promise rejections
           console.error("Error creating contracts_organizations record:", error);
@@ -48,7 +57,7 @@ export async function GET(
         // Include a default contracts_organizations object in the response
         contractWithOrg.contracts_organizations = {
           contractId,
-          organizationId: user.organizationId,
+          organizationId: currentOrganization,
           saved: false,       // default value
           comments: null,     // default value
           labels: [],         // default value
