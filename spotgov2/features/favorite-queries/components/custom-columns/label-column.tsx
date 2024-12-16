@@ -18,6 +18,7 @@ import { Check, Plus } from "lucide-react";
 import {
   addColumnValueMutation,
   columnLabelsForTypeLabelQuery,
+  deleteColumnValueMutation,
   updateColumnValueMutation,
 } from "../../services";
 import { Input } from "@/components/ui/input";
@@ -101,16 +102,32 @@ const LabelColumn = ({ value, columnId, contractId }: LabelColumnProps) => {
     }
   };
 
-  const onSelectionChange = async (value: string) => {
-    try {
-      // Optimistic update
-      setLocalLabel(value);
+  const deleteMutation = useMutation(
+    deleteColumnValueMutation(currentOrganization?.organizationId as string),
+  );
 
-      const res = await updateMutation.mutateAsync({
-        value,
-        columnId,
-        contractId,
-      });
+  const onSelectionChange = async (v: string) => {
+    try {
+      let res;
+
+      if (v === value) {
+        // Optimistic update
+        setLocalLabel("");
+
+        res = await deleteMutation.mutateAsync({
+          columnId,
+          contractId,
+        });
+      } else {
+        // Optimistic update
+        setLocalLabel(v);
+
+        res = await updateMutation.mutateAsync({
+          value: v,
+          columnId,
+          contractId,
+        });
+      }
 
       if (res.success) {
         toast.success("Etiqueta atualizada com sucesso.");

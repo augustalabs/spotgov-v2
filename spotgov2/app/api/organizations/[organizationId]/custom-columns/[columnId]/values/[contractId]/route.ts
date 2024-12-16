@@ -1,5 +1,5 @@
 import { FeedCustomFieldValue } from "@/database/schemas";
-import { updateColumnValue } from "@/features/favorite-queries/api";
+import { deleteColumnValue } from "@/features/favorite-queries/api";
 import { Response } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";
 import {
@@ -12,9 +12,10 @@ import { NextResponse } from "next/server";
 type Params = {
   organizationId: string;
   columnId: string;
+  contractId: string;
 };
 
-export async function PATCH(
+export async function DELETE(
   req: Request,
   { params }: { params: Params },
 ): Promise<NextResponse<Response<FeedCustomFieldValue[]>>> {
@@ -22,25 +23,16 @@ export async function PATCH(
     const userOrResponse = await checkUserAuthentication();
     if (userOrResponse instanceof NextResponse) return userOrResponse;
 
-    if (!params.organizationId || !params.columnId) {
+    if (!params.organizationId || !params.columnId || !params.contractId) {
       return NextResponse.json(STATUS_BAD_REQUEST, {
         status: STATUS_BAD_REQUEST.status,
       });
     }
 
-    const { value, contractId } = await req.json();
-
-    if (!value || !contractId) {
-      return NextResponse.json(STATUS_BAD_REQUEST, {
-        status: STATUS_BAD_REQUEST.status,
-      });
-    }
-
-    const feedCustomFields = await updateColumnValue(
+    const feedCustomFields = await deleteColumnValue(
       params.organizationId,
       params.columnId,
-      contractId,
-      value,
+      params.contractId,
     );
 
     if (!feedCustomFields?.length) {

@@ -7,3 +7,4 @@ export { default as getCustomColumns } from "./get-custom-columns";
 export { default as updateColumnValue } from "./update-column-value";
 export { default as updateContractSaved } from "./update-contract-saved";
 export { default as getColumnLabelsForTypeLabel } from "./get-column-labels-for-type-label";
+export { default as deleteColumnValue } from "./delete-column-value";
