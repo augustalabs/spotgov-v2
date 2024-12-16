@@ -5,6 +5,9 @@ import SavedFilter from "./saved-filter";
 import SearchFilter from "./search-filter";
 import CpvsFilter from "./cpvs-filter";
 import AddColumnButton from "../custom-columns/add-column-button";
+import BasePriceFilter from "./base-price-filter";
+import DateRangeFilter from "./date-range-filter";
+import ExportButton from "./export-button";
 
 const className = "min-w-36 flex-grow basis-48";
 
@@ -16,9 +19,11 @@ const Filters = () => {
       <CpvsFilter className={className} />
       <AdjudicatorsFilter className={className} />
       <SavedFilter className={className} />
-      {/* TODO: ADD BASEPRICE DUAL RANGE FILTER */}
+      <DateRangeFilter className={className} />
+      <BasePriceFilter className={className} />
       <Sort className={className} />
       <AddColumnButton className={className} />
+      <ExportButton className={className} />
     </div>
   );
 };

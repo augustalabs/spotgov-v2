@@ -29,8 +29,8 @@ export async function GET(
     const titles = searchParams.getAll("title") ?? [];
     const saved = searchParams.get("saved") ?? "";
     const cpvs = searchParams.getAll("cpv") ?? [];
-    const minPrice = searchParams.get("minPrice") ?? null;
-    const maxPrice = searchParams.get("maxPrice") ?? null;
+    const minPrice = searchParams.get("minPrice") ?? "0";
+    const maxPrice = searchParams.get("maxPrice") ?? "100000000";
     const sort = searchParams.get("sort");
 
     const favoriteQueries = await getFavoriteQueriesData(
@@ -42,8 +42,8 @@ export async function GET(
       titles,
       saved,
       cpvs,
-      minPrice ? parseFloat(minPrice) : null,
-      maxPrice ? parseFloat(maxPrice) : null,
+      parseFloat(minPrice),
+      parseFloat(maxPrice),
       sort as OrderType,
     );
 

@@ -91,14 +91,14 @@ const CustomTable = () => {
         setCpvsDefaultValues(payload.distinctCpvs);
       }
 
-      // const shouldSetBasePrice =
-      //   payload.basePriceRange[0] < (basePriceDefaultValues[0] as number) ||
-      //   payload.basePriceRange[1] > (basePriceDefaultValues?.[1] as number);
+      const shouldSetBasePrice =
+        payload.basePriceRange[0] < (basePriceDefaultValues[0] as number) ||
+        payload.basePriceRange[1] > (basePriceDefaultValues[1] as number);
 
-      // if (shouldSetBasePrice) {
-      //   setBasePriceDefaultValues(payload.basePriceRange);
-      //   setBasePriceInput(payload.basePriceRange);
-      // }
+      if (shouldSetBasePrice) {
+        setBasePriceDefaultValues(payload.basePriceRange);
+        setBasePriceInput(payload.basePriceRange);
+      }
     }
   }, [isPending, data?.payload]);
 

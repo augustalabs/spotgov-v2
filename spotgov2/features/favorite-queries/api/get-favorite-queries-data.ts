@@ -108,8 +108,8 @@ async function getFavoriteQueriesData(
     distinctQueryTitles: data[0]?.distinctQueryTitles ?? [],
     distinctCpvs: [],
     basePriceRange: [
-      data[0]?.minBasePrice ?? null,
-      data[0]?.maxBasePrice ?? null,
+      data[0]?.minBasePrice ?? 0,
+      data[0]?.maxBasePrice ?? 100000000,
     ],
   };
 }
