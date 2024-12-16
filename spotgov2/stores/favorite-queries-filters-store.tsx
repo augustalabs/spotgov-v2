@@ -1,3 +1,4 @@
+import { BasePriceRange } from "@/features/favorite-queries/types";
 import { OrderType } from "@/types";
 import { DateRange } from "react-day-picker";
 import { create } from "zustand";
@@ -25,10 +26,10 @@ type FavoriteQueriesFiltersStoreProps = {
   cpvsDefaultValues: string[];
   setCpvsDefaultValues: (value: string[]) => void;
   // Search for contracts by base price
-  basePriceInput: number[];
-  setBasePriceInput: (value: number[]) => void;
-  basePriceDefaultValues: number[];
-  setBasePriceDefaultValues: (value: number[]) => void;
+  basePriceInput: BasePriceRange | null;
+  setBasePriceInput: (value: BasePriceRange) => void;
+  basePriceDefaultValues: BasePriceRange | null;
+  setBasePriceDefaultValues: (value: BasePriceRange) => void;
   // Search for contracts by publish date
   publishDateInput: DateRange | undefined;
   setPublishDateInput: (value: DateRange | undefined) => void;
@@ -57,9 +58,9 @@ export const useFavoriteQueriesFiltersStore =
     setCpvsInput: (value) => set({ cpvsInput: value }),
     cpvsDefaultValues: [],
     setCpvsDefaultValues: (value) => set({ cpvsDefaultValues: value }),
-    basePriceInput: [0, 0],
+    basePriceInput: null,
     setBasePriceInput: (value) => set({ basePriceInput: value }),
-    basePriceDefaultValues: [0, 0],
+    basePriceDefaultValues: null,
     setBasePriceDefaultValues: (value) =>
       set({ basePriceDefaultValues: value }),
     publishDateInput: undefined,

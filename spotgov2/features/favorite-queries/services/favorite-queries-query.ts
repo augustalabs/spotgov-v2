@@ -1,4 +1,7 @@
-import { FavoriteContractsDataType } from "@/features/favorite-queries/types";
+import {
+  BasePriceRange,
+  FavoriteContractsDataType,
+} from "@/features/favorite-queries/types";
 import { OrderType, Response } from "@/types";
 import { get } from "@/utils/api/functions";
 import { keepPreviousData } from "@tanstack/react-query";
@@ -13,7 +16,7 @@ function favoriteQueriesQuery(
   titlesInput: string[],
   savedInput: boolean | null,
   cpvsInput: string[],
-  basePriceInput: number[],
+  basePriceInput: BasePriceRange | null,
   publishDateInput: DateRange | undefined,
   selectedSortInput: OrderType,
 ) {
@@ -60,9 +63,9 @@ function favoriteQueriesQuery(
 
     if (selectedSortInput) searchParams += `&sort=${selectedSortInput}`;
 
-    if (basePriceInput[0]) searchParams += `&minPrice=${basePriceInput[0]}`;
+    if (basePriceInput?.min) searchParams += `&minPrice=${basePriceInput.min}`;
 
-    if (basePriceInput[1]) searchParams += `&maxPrice=${basePriceInput[1]}`;
+    if (basePriceInput?.max) searchParams += `&maxPrice=${basePriceInput.max}`;
 
     if (publishDateInput?.from)
       searchParams += `&minPublishDate=${publishDateInput.from}`;

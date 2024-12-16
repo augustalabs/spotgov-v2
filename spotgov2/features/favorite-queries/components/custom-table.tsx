@@ -12,7 +12,6 @@ import { columns } from "./columns/columns";
 import useCustomColumns from "../hooks/use-custom-columns";
 import { PaginatedContractsType } from "../types";
 import { ColumnDef } from "@tanstack/react-table";
-import { isBefore } from "date-fns";
 
 const PAGE_SIZE = 8;
 
@@ -30,8 +29,8 @@ const CustomTable = () => {
     cpvsDefaultValues,
     setCpvsDefaultValues,
     basePriceInput,
-    setBasePriceInput,
     basePriceDefaultValues,
+    setBasePriceDefaultValues,
     publishDateInput,
     selectedSortInput,
   } = useFavoriteQueriesFiltersStore();
@@ -68,7 +67,8 @@ const CustomTable = () => {
     ),
   );
 
-  // This is necessary to update the default values of the multi select components
+  // This is necessary to update the default values of the multi select components and the dual range
+  // base price slider
   useEffect(() => {
     const payload = data?.payload;
 
@@ -94,14 +94,11 @@ const CustomTable = () => {
         setCpvsDefaultValues(payload.distinctCpvs);
       }
 
-      // const shouldSetBasePrice =
-      //   payload.basePriceRange[0] < (basePriceDefaultValues[0] as number) ||
-      //   payload.basePriceRange[1] > (basePriceDefaultValues[1] as number);
+      const shouldSetBasePrice = !basePriceDefaultValues;
 
-      // if (shouldSetBasePrice) {
-      //   setBasePriceDefaultValues(payload.basePriceRange);
-      //   setBasePriceInput(payload.basePriceRange);
-      // }
+      if (shouldSetBasePrice) {
+        setBasePriceDefaultValues(payload.basePriceRange);
+      }
     }
   }, [isPending, data?.payload]);
 

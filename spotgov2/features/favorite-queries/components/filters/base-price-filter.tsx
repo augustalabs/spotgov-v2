@@ -6,17 +6,35 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filters-store";
+import { debounce } from "@tanstack/react-virtual";
 import { ChevronDown, Euro } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
 const BasePriceFilter = ({ className }: { className: string }) => {
   const { basePriceInput, setBasePriceInput, basePriceDefaultValues } =
     useFavoriteQueriesFiltersStore();
 
+  const debouncedSetBasePriceInput = useMemo(
+    () => debounce(window, setBasePriceInput, 500),
+    [setBasePriceInput],
+  );
+
   const handleChange = (value: number[]) => {
     if (value.length === 2) {
-      setBasePriceInput([value[0], value[1]]);
+      debouncedSetBasePriceInput({
+        min: value[0],
+        max: value[1],
+      });
     }
   };
+
+  const [values, setValues] = useState<number[] | null>(null);
+
+  useEffect(() => {
+    if (basePriceDefaultValues) {
+      setValues([basePriceDefaultValues.min, basePriceDefaultValues.max]);
+    }
+  }, [basePriceDefaultValues]);
 
   return (
     <Popover>
@@ -28,16 +46,20 @@ const BasePriceFilter = ({ className }: { className: string }) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent>
-        {/* TODO: FIX THIS */}
-        {/* <DualRangeSlider
-          title="Filtre por Preço Base"
-          subtitle="Os valores estão em euros"
-          min={basePriceDefaultValues[0]}
-          max={basePriceDefaultValues[1]}
-          value={basePriceInput}
-          onValueChange={handleChange}
-          step={1000}
-        /> */}
+        {values && (
+          <DualRangeSlider
+            title="Filtre por Preço Base"
+            subtitle="Os valores estão em euros"
+            min={values[0]}
+            max={values[1]}
+            value={[
+              basePriceInput?.min ?? values[0],
+              basePriceInput?.max ?? values[1],
+            ]}
+            onValueChange={handleChange}
+            step={1000}
+          />
+        )}
       </PopoverContent>
     </Popover>
   );

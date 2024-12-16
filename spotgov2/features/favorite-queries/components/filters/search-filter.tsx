@@ -3,11 +3,23 @@
 import { Input } from "@/components/ui/input";
 import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filters-store";
 import { cn } from "@/utils/utils";
+import { debounce } from "@tanstack/react-virtual";
 import { Search } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
 const SearchFilter = ({ className }: { className?: string }) => {
-  const { searchTextInput, setSearchTextInput } =
-    useFavoriteQueriesFiltersStore();
+  const { setSearchTextInput } = useFavoriteQueriesFiltersStore();
+
+  const [localSearchTextInput, setLocalSearchTextInput] = useState("");
+
+  const debouncedSetSearchTextInput = useMemo(
+    () => debounce(window, setSearchTextInput, 300),
+    [setSearchTextInput],
+  );
+
+  useEffect(() => {
+    debouncedSetSearchTextInput(localSearchTextInput);
+  }, [localSearchTextInput, debouncedSetSearchTextInput]);
 
   return (
     <div className={cn("relative", className)}>
@@ -17,8 +29,8 @@ const SearchFilter = ({ className }: { className?: string }) => {
       />
       <Input
         placeholder="Procurar contratos..."
-        value={searchTextInput}
-        onChange={(event) => setSearchTextInput(event.target.value)}
+        value={localSearchTextInput}
+        onChange={(event) => setLocalSearchTextInput(event.target.value)}
         className="pl-6"
       />
     </div>

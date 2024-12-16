@@ -11,13 +11,18 @@ export type PaginatedContractsType = {
   [key: string]: unknown;
 };
 
+export type BasePriceRange = {
+  min: number;
+  max: number;
+};
+
 export type FavoriteContractsDataType = {
   paginatedContracts: PaginatedContractsType[];
   totalCount: number;
   distinctAdjudicators: string[];
   distinctQueryTitles: string[];
   distinctCpvs: string[];
-  basePriceRange: number[];
+  basePriceRange: BasePriceRange;
   publishDateRange: DateRange;
 };
 

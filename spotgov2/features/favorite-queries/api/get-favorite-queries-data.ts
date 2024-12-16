@@ -52,8 +52,8 @@ async function getFavoriteQueriesData(
       totalCount: sql<number>`COUNT(*) OVER()`,
       adjudicators: sql<string[]>`array_agg(${contracts.issuerName}) OVER()`,
       queryTitles: sql<string[]>`array_agg(${queries.title}) OVER()`,
-      minBasePrice: sql<number>`MIN(${contracts.basePrice}) OVER()`,
-      maxBasePrice: sql<number>`MAX(${contracts.basePrice}) OVER()`,
+      minBasePrice: sql<string>`MIN(${contracts.basePrice}) OVER()`,
+      maxBasePrice: sql<string>`MAX(${contracts.basePrice}) OVER()`,
       minPublishDate: sql<Date>`MIN(${contracts.publishDate}) OVER()`,
       maxPublishDate: sql<Date>`MAX(${contracts.publishDate}) OVER()`,
     })
@@ -117,10 +117,10 @@ async function getFavoriteQueriesData(
     distinctAdjudicators: data[0]?.distinctAdjudicators ?? [],
     distinctQueryTitles: data[0]?.distinctQueryTitles ?? [],
     distinctCpvs: [],
-    basePriceRange: [
-      data[0]?.minBasePrice ?? 0,
-      data[0]?.maxBasePrice ?? 100000000,
-    ],
+    basePriceRange: {
+      min: parseFloat(data[0]?.minBasePrice) ?? 0,
+      max: parseFloat(data[0]?.maxBasePrice) ?? 100000000,
+    },
     publishDateRange: {
       from: data[0]?.minPublishDate ?? undefined,
       to: data[0]?.maxPublishDate ?? undefined,
