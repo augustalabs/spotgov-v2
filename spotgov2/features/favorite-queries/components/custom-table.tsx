@@ -32,6 +32,7 @@ const CustomTable = () => {
     basePriceDefaultValues,
     setBasePriceDefaultValues,
     publishDateInput,
+    onlyPriceCriteriaInput,
     selectedSortInput,
   } = useFavoriteQueriesFiltersStore();
   const { currentOrganization } = useCurrentOrganizationStore();
@@ -49,6 +50,7 @@ const CustomTable = () => {
     basePriceInput,
     publishDateInput,
     selectedSortInput,
+    onlyPriceCriteriaInput,
   ]);
 
   const { data, isPending, isFetching } = useQuery(
@@ -63,6 +65,7 @@ const CustomTable = () => {
       cpvsInput,
       basePriceInput,
       publishDateInput,
+      onlyPriceCriteriaInput,
       selectedSortInput,
     ),
   );

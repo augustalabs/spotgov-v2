@@ -18,6 +18,7 @@ function favoriteQueriesQuery(
   cpvsInput: string[],
   basePriceInput: BasePriceRange | null,
   publishDateInput: DateRange | undefined,
+  onlyPriceCriteriaInput: boolean | null,
   selectedSortInput: OrderType,
 ) {
   const queryKey = [
@@ -32,6 +33,7 @@ function favoriteQueriesQuery(
     cpvsInput,
     basePriceInput,
     publishDateInput,
+    onlyPriceCriteriaInput,
     selectedSortInput,
   ];
 
@@ -72,6 +74,10 @@ function favoriteQueriesQuery(
 
     if (publishDateInput?.to)
       searchParams += `&maxPublishDate=${publishDateInput.to}`;
+
+    if (onlyPriceCriteriaInput !== null) {
+      searchParams += `&onlyPriceCriteria=${onlyPriceCriteriaInput}`;
+    }
 
     return await get<Response<FavoriteContractsDataType>>({
       url: `organizations/${organizationId}/favorite-queries${searchParams}`,

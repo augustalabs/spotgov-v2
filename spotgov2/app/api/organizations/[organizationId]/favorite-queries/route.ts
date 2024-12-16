@@ -33,6 +33,7 @@ export async function GET(
     const maxPrice = searchParams.get("maxPrice") ?? "100000000";
     const minPublishDate = searchParams.get("minPublishDate") ?? "";
     const maxPublishDate = searchParams.get("maxPublishDate") ?? "";
+    const onlyPriceCriteria = searchParams.get("onlyPriceCriteria") ?? "false";
     const sort = searchParams.get("sort");
 
     const favoriteQueries = await getFavoriteQueriesData(
@@ -48,6 +49,7 @@ export async function GET(
       parseFloat(maxPrice),
       minPublishDate ? new Date(minPublishDate) : null,
       maxPublishDate ? new Date(maxPublishDate) : null,
+      onlyPriceCriteria,
       sort as OrderType,
     );
 

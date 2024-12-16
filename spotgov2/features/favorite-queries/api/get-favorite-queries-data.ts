@@ -37,6 +37,7 @@ async function getFavoriteQueriesData(
   maxPriceInput: number | null = null,
   minPublishDateInput: Date | null = null,
   maxPublishDateInput: Date | null = null,
+  onlyPriceCriteriaInput: string = "false",
   sortInput: OrderType = "publish-date-desc",
 ): Promise<FavoriteContractsDataType> {
   const offset = (page - 1) * pageSize;
@@ -95,6 +96,29 @@ async function getFavoriteQueriesData(
           : sql`true`,
         maxPublishDateInput !== null
           ? lte(contracts.publishDate, maxPublishDateInput)
+          : sql`true`,
+        onlyPriceCriteriaInput === "true"
+          ? and(
+              eq(
+                sql`
+              jsonb_array_length(
+                COALESCE(
+                  CASE 
+                  WHEN jsonb_typeof(${contracts.awardCriteria}::jsonb) = 'array' 
+                  THEN ${contracts.awardCriteria}::jsonb
+                  ELSE '[]'::jsonb 
+                  END, 
+                  '[]'::jsonb
+                  )
+                  )`,
+                1,
+              ),
+              eq(
+                sql`
+                  ${contracts.awardCriteria}::jsonb->0->>'Nome'`,
+                "Preço",
+              ),
+            )
           : sql`true`,
       ),
     )

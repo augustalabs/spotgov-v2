@@ -33,6 +33,9 @@ type FavoriteQueriesFiltersStoreProps = {
   // Search for contracts by publish date
   publishDateInput: DateRange | undefined;
   setPublishDateInput: (value: DateRange | undefined) => void;
+  // Search for contracts by adjudidication price criteria only
+  onlyPriceCriteriaInput: boolean;
+  setOnlyPriceCriteriaInput: (value: boolean) => void;
   // Sort contracts by newest, oldest, highest price, lowest price, nearest deadline, farthest deadline
   selectedSortInput: OrderType;
   setSelectedSortInput: (value: OrderType) => void;
@@ -65,6 +68,9 @@ export const useFavoriteQueriesFiltersStore =
       set({ basePriceDefaultValues: value }),
     publishDateInput: undefined,
     setPublishDateInput: (value) => set({ publishDateInput: value }),
+    onlyPriceCriteriaInput: false,
+    setOnlyPriceCriteriaInput: (value) =>
+      set({ onlyPriceCriteriaInput: value }),
     selectedSortInput: "publish-date-desc",
     setSelectedSortInput: (value) => set({ selectedSortInput: value }),
   }));
