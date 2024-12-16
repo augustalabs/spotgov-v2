@@ -84,7 +84,7 @@ const ColumnActions = ({ label, columnId }: ColumnActionsProps) => {
 
   return (
     <Popover open={popoverIsOpen} onOpenChange={setPopoverIsOpen}>
-      <div className="flex w-full items-center justify-between">
+      <div className="flex w-full min-w-32 items-center justify-between">
         <Input
           type="text"
           ref={inputRef}
@@ -98,6 +98,7 @@ const ColumnActions = ({ label, columnId }: ColumnActionsProps) => {
             }
           }}
           className={cn(
+            "pl-0",
             !isEditable &&
               "border-none disabled:cursor-text disabled:font-medium disabled:text-muted-foreground disabled:opacity-100",
           )}

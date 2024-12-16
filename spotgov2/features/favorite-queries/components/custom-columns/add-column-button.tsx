@@ -36,7 +36,7 @@ import { useCurrentOrganizationStore } from "@/stores/current-organization-store
 import { toast } from "sonner";
 import { useState } from "react";
 
-export const mapDataTypeToPortuguese = {
+const mapDataTypeToPortuguese = {
   text: "Texto",
   logic: "Lógico",
   date: "Data",
@@ -65,7 +65,10 @@ const AddColumnButton = ({ className }: { className: string }) => {
 
   const onSubmit = async (values: z.infer<typeof addColumnSchema>) => {
     try {
-      const res = await mutation.mutateAsync(values);
+      const res = await mutation.mutateAsync({
+        fieldName: values.fieldName,
+        fieldTypeEnum: values.fieldType,
+      });
 
       if (res.success) {
         toast.success("Coluna adicionada com sucesso.");

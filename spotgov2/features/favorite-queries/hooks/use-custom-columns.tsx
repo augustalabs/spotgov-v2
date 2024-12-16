@@ -8,6 +8,7 @@ import { customFieldsWithValuesQuery } from "../services";
 import { FieldType, PaginatedContractsType } from "../types";
 import TextColumn from "../components/custom-columns/text-column";
 import ColumnActions from "../components/custom-columns/column-actions";
+import LogicColumn from "../components/custom-columns/logic-column";
 
 const useCustomColumns = () => {
   const { currentOrganization } = useCurrentOrganizationStore();
@@ -34,11 +35,20 @@ const useCustomColumns = () => {
               (value) => value.contractId === row.original.contract.id,
             );
 
-            // TODO: Handle other field types
-            if (field.feedCustomFields.fieldType === FieldType.Text) {
+            const fieldType = field.feedCustomFields.fieldType;
+
+            if (FieldType.Text === fieldType) {
               return (
                 <TextColumn
-                  value={matchedValue?.value || ""}
+                  value={matchedValue?.value ?? ""}
+                  columnId={field.feedCustomFields.id}
+                  contractId={row.original.contract.id}
+                />
+              );
+            } else if (FieldType.Logic === fieldType) {
+              return (
+                <LogicColumn
+                  value={matchedValue?.value ?? ""}
                   columnId={field.feedCustomFields.id}
                   contractId={row.original.contract.id}
                 />
