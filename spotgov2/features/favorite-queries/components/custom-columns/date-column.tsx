@@ -16,13 +16,13 @@ import {
 } from "../../services";
 import { toast } from "sonner";
 
-type LogicColumnProps = {
+type DateColumnProps = {
   value: string;
   columnId: string;
   contractId: string;
 };
 
-const DateColumn = ({ value, columnId, contractId }: LogicColumnProps) => {
+const DateColumn = ({ value, columnId, contractId }: DateColumnProps) => {
   const [newValue, setNewValue] = useState<string>(value);
 
   const { currentOrganization } = useCurrentOrganizationStore();

@@ -19,7 +19,12 @@ export { default as entities } from "./entities";
 export { default as keywords } from "./keywords";
 export { default as marketintelFavourites } from "./marketintel-favourites";
 export { pipelinePhases, pipelinePhaseContract } from "./pipeline";
-export { feedCustomFields, feedCustomFieldsValues } from "./feed-custom-fields";
+export {
+  feedCustomFields,
+  feedCustomFieldsValues,
+  feedCustomFieldsRelations,
+  feedCustomFieldsValuesRelations,
+} from "./feed-custom-fields";
 export {
   deepdiveTemplates,
   deepdiveVersions,
@@ -54,4 +59,3 @@ export type {
   DeepdiveLatestTable,
 } from "./deepdive";
 export type { QueryUserEmail } from "./query-user-emails";
-export type { ContractsOrganizations } from "./contracts-organizations";

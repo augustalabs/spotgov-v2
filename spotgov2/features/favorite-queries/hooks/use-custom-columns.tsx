@@ -10,6 +10,7 @@ import TextColumn from "../components/custom-columns/text-column";
 import ColumnActions from "../components/custom-columns/column-actions";
 import LogicColumn from "../components/custom-columns/logic-column";
 import DateColumn from "../components/custom-columns/date-column";
+import LabelColumn from "../components/custom-columns/label-column";
 
 const useCustomColumns = () => {
   const { currentOrganization } = useCurrentOrganizationStore();
@@ -57,6 +58,14 @@ const useCustomColumns = () => {
             } else if (FieldType.Date === fieldType) {
               return (
                 <DateColumn
+                  value={matchedValue?.value ?? ""}
+                  columnId={field.feedCustomFields.id}
+                  contractId={row.original.contract.id}
+                />
+              );
+            } else if (FieldType.Label === fieldType) {
+              return (
+                <LabelColumn
                   value={matchedValue?.value ?? ""}
                   columnId={field.feedCustomFields.id}
                   contractId={row.original.contract.id}

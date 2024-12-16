@@ -1,4 +1,5 @@
 /** EXPORT QUERIES */
+export { default as columnLabelsForTypeLabelQuery } from "./column-labels-for-type-label-query";
 export { default as customFieldsWithValuesQuery } from "./custom-fields-with-values-query";
 export { default as favoriteQueriesQuery } from "./favorite-queries-query";
 
