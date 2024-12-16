@@ -35,6 +35,8 @@ import { addColumnMutation } from "../../services";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { toast } from "sonner";
 import { useState } from "react";
+import { canAddFavoriteQueriesColumn } from "@/permissions";
+import { UserRoles } from "@/types";
 
 const mapDataTypeToPortuguese = {
   text: "Texto",
@@ -80,6 +82,9 @@ const AddColumnButton = ({ className }: { className: string }) => {
       toast.error("Erro ao adicionar coluna. Por favor, tente novamente.");
     }
   };
+
+  if (!canAddFavoriteQueriesColumn(currentOrganization?.role as UserRoles))
+    return;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

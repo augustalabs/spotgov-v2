@@ -1,9 +1,11 @@
 import { FeedCustomField } from "@/database/schemas";
 import { addColumn, getCustomColumns } from "@/features/favorite-queries/api";
-import { FeedCustomFieldWithValues, Response } from "@/types";
+import { canAddFavoriteQueriesColumn } from "@/permissions";
+import { FeedCustomFieldWithValues, Response, UserRoles } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";
 import {
   STATUS_BAD_REQUEST,
+  STATUS_FORBIDDEN,
   STATUS_INTERNAL_SERVER_ERROR,
   STATUS_OK,
 } from "@/utils/api/status-messages";
@@ -69,6 +71,12 @@ export async function POST(
     if (!fieldName || !fieldType) {
       return NextResponse.json(STATUS_BAD_REQUEST, {
         status: STATUS_BAD_REQUEST.status,
+      });
+    }
+
+    if (!canAddFavoriteQueriesColumn(userOrResponse.role as UserRoles)) {
+      return NextResponse.json(STATUS_FORBIDDEN, {
+        status: STATUS_FORBIDDEN.status,
       });
     }
 

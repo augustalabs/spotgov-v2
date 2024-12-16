@@ -7,6 +7,8 @@ import {
 } from "../../services";
 import { toast } from "sonner";
 import { useState } from "react";
+import { canChangeFavoriteQueriesColumnValue } from "@/permissions";
+import { UserRoles } from "@/types";
 
 type TextColumnProps = {
   value: string;
@@ -59,13 +61,18 @@ const TextColumn = ({ value, fieldId, contractId }: TextColumnProps) => {
     <Input
       type="text"
       value={newValue}
+      disabled={
+        !canChangeFavoriteQueriesColumnValue(
+          currentOrganization?.role as UserRoles,
+        )
+      }
       onChange={(e) => setNewValue(e.target.value)}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
           handleValueEdit();
         }
       }}
-      className="h-9 min-w-32 rounded-md px-3"
+      className="h-9 min-w-32 rounded-md px-3 disabled:cursor-text disabled:border-none disabled:bg-transparent disabled:opacity-100"
     />
   );
 };

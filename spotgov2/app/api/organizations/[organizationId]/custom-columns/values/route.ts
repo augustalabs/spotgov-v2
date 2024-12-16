@@ -3,10 +3,12 @@ import {
   addColumnValue,
   getColumnLabelsForTypeLabel,
 } from "@/features/favorite-queries/api";
-import { Response } from "@/types";
+import { canChangeFavoriteQueriesColumnValue } from "@/permissions";
+import { Response, UserRoles } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";
 import {
   STATUS_BAD_REQUEST,
+  STATUS_FORBIDDEN,
   STATUS_INTERNAL_SERVER_ERROR,
   STATUS_OK,
 } from "@/utils/api/status-messages";
@@ -70,6 +72,14 @@ export async function POST(
     if (!value || !contractId || !fieldId) {
       return NextResponse.json(STATUS_BAD_REQUEST, {
         status: STATUS_BAD_REQUEST.status,
+      });
+    }
+
+    if (
+      !canChangeFavoriteQueriesColumnValue(userOrResponse.role as UserRoles)
+    ) {
+      return NextResponse.json(STATUS_FORBIDDEN, {
+        status: STATUS_FORBIDDEN.status,
       });
     }
 

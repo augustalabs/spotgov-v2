@@ -38,6 +38,8 @@ import { toast } from "sonner";
 import { cn } from "@/utils/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
+import { canChangeFavoriteQueriesColumnValue } from "@/permissions";
+import { UserRoles } from "@/types";
 
 type LabelColumnProps = {
   value: string;
@@ -150,7 +152,15 @@ const LabelColumn = ({ value, fieldId, contractId }: LabelColumnProps) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="min-w-32">
+        <Button
+          variant="outline"
+          className="min-w-32 disabled:cursor-text disabled:border-none disabled:bg-transparent disabled:opacity-100"
+          disabled={
+            !canChangeFavoriteQueriesColumnValue(
+              currentOrganization?.role as UserRoles,
+            )
+          }
+        >
           {localLabel === "" && <Plus size={16} />}
           {localLabel !== "" ? localLabel : "Adicionar"}
         </Button>

@@ -7,6 +7,8 @@ import {
   addColumnValueMutation,
   updateColumnValueMutation,
 } from "../../services";
+import { canChangeFavoriteQueriesColumnValue } from "@/permissions";
+import { UserRoles } from "@/types";
 
 type LogicColumnProps = {
   value: string;
@@ -60,7 +62,18 @@ const LogicColumn = ({ value, fieldId, contractId }: LogicColumnProps) => {
     }
   };
 
-  return <Switch checked={Boolean(newValue)} onCheckedChange={handleToggle} />;
+  return (
+    <Switch
+      checked={Boolean(newValue)}
+      onCheckedChange={handleToggle}
+      disabled={
+        !canChangeFavoriteQueriesColumnValue(
+          currentOrganization?.role as UserRoles,
+        )
+      }
+      className="disabled:cursor-default disabled:opacity-100"
+    />
+  );
 };
 
 export default LogicColumn;

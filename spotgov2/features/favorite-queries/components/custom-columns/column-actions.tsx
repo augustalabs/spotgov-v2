@@ -13,6 +13,8 @@ import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { editColumnMutation, deleteColumnMutation } from "../../services";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
+import { canEditFavoriteQueriesColumn } from "@/permissions";
+import { UserRoles } from "@/types";
 
 type ColumnActionsProps = {
   label: string;
@@ -103,9 +105,13 @@ const ColumnActions = ({ label, fieldId }: ColumnActionsProps) => {
               "border-none disabled:cursor-text disabled:font-medium disabled:text-muted-foreground disabled:opacity-100",
           )}
         />
-        <PopoverTrigger>
-          <EllipsisVertical size={16} />
-        </PopoverTrigger>
+        {canEditFavoriteQueriesColumn(
+          currentOrganization?.role as UserRoles,
+        ) && (
+          <PopoverTrigger>
+            <EllipsisVertical size={16} />
+          </PopoverTrigger>
+        )}
       </div>
       <PopoverContent className="space-y-2">
         <h1 className="text-sm font-medium">Ações</h1>

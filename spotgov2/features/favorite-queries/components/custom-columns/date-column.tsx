@@ -15,6 +15,8 @@ import {
   updateColumnValueMutation,
 } from "../../services";
 import { toast } from "sonner";
+import { canChangeFavoriteQueriesColumnValue } from "@/permissions";
+import { UserRoles } from "@/types";
 
 type DateColumnProps = {
   value: string;
@@ -74,12 +76,19 @@ const DateColumn = ({ value, fieldId, contractId }: DateColumnProps) => {
         <Button
           variant="outline"
           size="sm"
-          className="flex w-full min-w-32 items-center justify-between"
+          disabled={
+            !canChangeFavoriteQueriesColumnValue(
+              currentOrganization?.role as UserRoles,
+            )
+          }
+          className="flex w-full min-w-32 items-center justify-between disabled:cursor-text disabled:border-none disabled:bg-transparent disabled:opacity-100"
         >
           <p>
             {newValue ? format(newValue, "dd/MM/yyyy") : "Escolha uma data"}
           </p>
-          <CalendarIcon size={14} />
+          {canChangeFavoriteQueriesColumnValue(
+            currentOrganization?.role as UserRoles,
+          ) && <CalendarIcon size={14} />}
         </Button>
       </PopoverTrigger>
       <PopoverContent>

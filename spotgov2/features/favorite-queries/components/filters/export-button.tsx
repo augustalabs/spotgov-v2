@@ -2,11 +2,10 @@ import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { FileSpreadsheet, Loader } from "lucide-react";
 import { exportTableMutation } from "../../services";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ExportTableField } from "../../types";
 import { toast } from "sonner";
-import { User } from "@supabase/supabase-js";
-import { createClient } from "@/lib/supabase/client";
+import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 
 type ExportButtonProps = {
   queryIds: string[];
@@ -49,31 +48,18 @@ const FIELDS: ExportTableField[] = [
 ];
 
 const ExportButton = ({ queryIds, className }: ExportButtonProps) => {
-  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const supabase = createClient();
-
-      const { data, error } = await supabase.auth.getUser();
-
-      if (data && !error) {
-        setUser(data.user);
-      }
-    };
-
-    fetchUser();
-  }, []);
-
   const mutation = useMutation(exportTableMutation());
+
+  const { currentOrganization } = useCurrentOrganizationStore();
 
   const handleExport = async () => {
     try {
       setIsLoading(true);
 
       const res = await mutation.mutateAsync({
-        userId: user?.id as string,
+        userId: currentOrganization?.userId as string,
         queryIds,
         fields: FIELDS,
         specialFormatting: { priceEuros: ["Preço Base"] },

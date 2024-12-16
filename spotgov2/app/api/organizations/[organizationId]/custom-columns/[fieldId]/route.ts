@@ -1,9 +1,14 @@
 import { FeedCustomField } from "@/database/schemas";
 import { deleteColumn, editColumn } from "@/features/favorite-queries/api";
-import { Response } from "@/types";
+import {
+  canEditFavoriteQueriesColumn,
+  canRemoveFavoriteQueriesColumn,
+} from "@/permissions";
+import { Response, UserRoles } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";
 import {
   STATUS_BAD_REQUEST,
+  STATUS_FORBIDDEN,
   STATUS_INTERNAL_SERVER_ERROR,
   STATUS_OK,
 } from "@/utils/api/status-messages";
@@ -33,6 +38,12 @@ export async function PATCH(
     if (!fieldName) {
       return NextResponse.json(STATUS_BAD_REQUEST, {
         status: STATUS_BAD_REQUEST.status,
+      });
+    }
+
+    if (!canEditFavoriteQueriesColumn(userOrResponse.role as UserRoles)) {
+      return NextResponse.json(STATUS_FORBIDDEN, {
+        status: STATUS_FORBIDDEN.status,
       });
     }
 
@@ -72,6 +83,12 @@ export async function DELETE(
     if (!params.organizationId) {
       return NextResponse.json(STATUS_BAD_REQUEST, {
         status: STATUS_BAD_REQUEST.status,
+      });
+    }
+
+    if (!canRemoveFavoriteQueriesColumn(userOrResponse.role as UserRoles)) {
+      return NextResponse.json(STATUS_FORBIDDEN, {
+        status: STATUS_FORBIDDEN.status,
       });
     }
 
