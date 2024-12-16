@@ -53,6 +53,7 @@ async function getFavoriteQueriesData(
       totalCount: sql<number>`COUNT(*) OVER()`,
       adjudicators: sql<string[]>`array_agg(${contracts.issuerName}) OVER()`,
       queryTitles: sql<string[]>`array_agg(${queries.title}) OVER()`,
+      distinctCpvs: sql<string[]>`array_agg(cpv) OVER()`,
       minBasePrice: sql<string>`MIN(${contracts.basePrice}) OVER()`,
       maxBasePrice: sql<string>`MAX(${contracts.basePrice}) OVER()`,
       minPublishDate: sql<Date>`MIN(${contracts.publishDate}) OVER()`,
@@ -67,6 +68,13 @@ async function getFavoriteQueriesData(
         eq(contractsOrganizations.contractId, contractsQueries.contractId),
         eq(contractsOrganizations.organizationId, organizationId),
       ),
+    )
+    .leftJoin(
+      sql`(
+          select distinct unnest(${contracts.cpvs}::text[]) as cpv, ${contracts.id} AS contract_id
+          from ${contracts}
+        ) as distinct_cpvs`,
+      sql`contracts.id = distinct_cpvs.contract_id`,
     )
     .where(
       and(
@@ -84,6 +92,9 @@ async function getFavoriteQueriesData(
           : sql`true`,
         savedInput !== null
           ? eq(contractsOrganizations.saved, savedInput === "true")
+          : sql`true`,
+        cpvsInput.length > 0
+          ? inArray(sql`LOWER(distinct_cpvs.cpv)`, cpvsInput)
           : sql`true`,
         minPriceInput !== null
           ? gte(contracts.basePrice, String(minPriceInput))
@@ -131,6 +142,7 @@ async function getFavoriteQueriesData(
     totalCount: row.totalCount,
     distinctAdjudicators: Array.from(new Set(row.adjudicators)),
     distinctQueryTitles: Array.from(new Set(row.queryTitles)),
+    distinctCpvs: Array.from(new Set(row.distinctCpvs)),
     minBasePrice: row.minBasePrice,
     maxBasePrice: row.maxBasePrice,
   }));
@@ -140,7 +152,7 @@ async function getFavoriteQueriesData(
     totalCount: data[0]?.totalCount ?? 0,
     distinctAdjudicators: data[0]?.distinctAdjudicators ?? [],
     distinctQueryTitles: data[0]?.distinctQueryTitles ?? [],
-    distinctCpvs: [],
+    distinctCpvs: data[0]?.distinctCpvs ?? [],
     basePriceRange: {
       min: parseFloat(data[0]?.minBasePrice) ?? 0,
       max: parseFloat(data[0]?.maxBasePrice) ?? 100000000,
