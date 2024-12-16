@@ -21,6 +21,7 @@ export type FavoriteContractsDataType = {
   totalCount: number;
   distinctAdjudicators: string[];
   distinctQueryTitles: string[];
+  distinctQueryIds: string[];
   distinctCpvs: string[];
   basePriceRange: BasePriceRange;
   publishDateRange: DateRange;
@@ -33,3 +34,8 @@ export enum FieldType {
   Label = "label",
   File = "file",
 }
+
+export type ExportTableField = {
+  colName: string;
+  path: string;
+};

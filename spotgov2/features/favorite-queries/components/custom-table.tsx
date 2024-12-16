@@ -119,7 +119,7 @@ const CustomTable = () => {
 
   return (
     <div className="my-6">
-      <Filters />
+      <Filters queryIds={data?.payload?.distinctQueryIds as string[]} />
       <DataTable
         data={data?.payload?.paginatedContracts ?? []}
         isPending={isPending || isFetching}

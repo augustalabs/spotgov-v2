@@ -12,7 +12,11 @@ import OnlyPriceCriteria from "./only-price-criteria-filter";
 
 const className = "min-w-48 flex-grow basis-56";
 
-const Filters = () => {
+type FiltersProps = {
+  queryIds: string[];
+};
+
+const Filters = ({ queryIds }: FiltersProps) => {
   return (
     <div className="my-5 space-y-4">
       <div className="flex flex-wrap gap-2">
@@ -25,7 +29,7 @@ const Filters = () => {
         <BasePriceFilter className={className} />
         <Sort className={className} />
         <AddColumnButton className={className} />
-        <ExportButton className={className} />
+        <ExportButton className={className} queryIds={queryIds} />
       </div>
       <OnlyPriceCriteria />
     </div>

@@ -53,6 +53,7 @@ async function getFavoriteQueriesData(
       totalCount: sql<number>`COUNT(*) OVER()`,
       adjudicators: sql<string[]>`array_agg(${contracts.issuerName}) OVER()`,
       queryTitles: sql<string[]>`array_agg(${queries.title}) OVER()`,
+      queryIds: sql<string[]>`array_agg(${queries.id}) OVER()`,
       distinctCpvs: sql<string[]>`array_agg(cpv) OVER()`,
       minBasePrice: sql<string>`MIN(${contracts.basePrice}) OVER()`,
       maxBasePrice: sql<string>`MAX(${contracts.basePrice}) OVER()`,
@@ -142,6 +143,7 @@ async function getFavoriteQueriesData(
     totalCount: row.totalCount,
     distinctAdjudicators: Array.from(new Set(row.adjudicators)),
     distinctQueryTitles: Array.from(new Set(row.queryTitles)),
+    distinctQueryIds: Array.from(new Set(row.queryIds)),
     distinctCpvs: Array.from(new Set(row.distinctCpvs)),
     minBasePrice: row.minBasePrice,
     maxBasePrice: row.maxBasePrice,
@@ -152,6 +154,7 @@ async function getFavoriteQueriesData(
     totalCount: data[0]?.totalCount ?? 0,
     distinctAdjudicators: data[0]?.distinctAdjudicators ?? [],
     distinctQueryTitles: data[0]?.distinctQueryTitles ?? [],
+    distinctQueryIds: data[0]?.distinctQueryIds ?? [],
     distinctCpvs: data[0]?.distinctCpvs ?? [],
     basePriceRange: {
       min: parseFloat(data[0]?.minBasePrice) ?? 0,
