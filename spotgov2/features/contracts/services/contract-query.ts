@@ -1,12 +1,12 @@
 import { Contract } from "@/database/schemas";
-import { Response } from "@/types";
+import { JoinedContractInOrganization, Response } from "@/types";
 import { get } from "@/utils/api/functions";
 
 function contractQuery(contractId: string) {
   const queryKey = ["get-contract", contractId];
 
   const queryFn = async () =>
-    await get<Response<Contract[]>>({
+    await get<Response<JoinedContractInOrganization | Contract | null>>({
       url: `contracts/${contractId}`,
     });
 
