@@ -122,11 +122,19 @@ const LabelColumn = ({ value, fieldId, contractId }: LabelColumnProps) => {
         // Optimistic update
         setLocalLabel(v);
 
-        res = await updateMutation.mutateAsync({
-          value: v,
-          fieldId,
-          contractId,
-        });
+        if (value === "") {
+          res = await addMutation.mutateAsync({
+            value: v,
+            fieldId,
+            contractId,
+          });
+        } else {
+          res = await updateMutation.mutateAsync({
+            value: v,
+            fieldId,
+            contractId,
+          });
+        }
       }
 
       if (res.success) {
