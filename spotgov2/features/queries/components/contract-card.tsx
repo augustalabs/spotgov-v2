@@ -36,8 +36,8 @@ function ContractCard({
   basePrice: string;
   location: string;
   publishDate: string;
-  matchTypeFull: boolean | null;
-  reason: string;
+  matchTypeFull?: boolean | null;
+  reason?: string | null;
 }) {
   let parsedReason;
 
