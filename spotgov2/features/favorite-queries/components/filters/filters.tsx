@@ -10,7 +10,7 @@ import DateRangeFilter from "./date-range-filter";
 import ExportButton from "./export-button";
 import OnlyPriceCriteria from "./only-price-criteria-filter";
 
-const className = "min-w-36 flex-grow basis-48";
+const className = "min-w-48 flex-grow basis-56";
 
 const Filters = () => {
   return (

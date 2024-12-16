@@ -36,12 +36,26 @@ const BasePriceFilter = ({ className }: { className: string }) => {
     }
   }, [basePriceDefaultValues]);
 
+  const formattedBasePriceInput = () => {
+    let str = "";
+
+    if (basePriceInput?.min) {
+      str += `${basePriceInput.min.toLocaleString("de-DE")}`;
+    }
+
+    if (basePriceInput?.max) {
+      str += `- ${basePriceInput.max.toLocaleString("de-DE")}`;
+    }
+
+    return str;
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="outline" className={className}>
           <Euro size={16} />
-          <p>Preço base</p>
+          <p>{basePriceInput ? formattedBasePriceInput() : "Preço base"}</p>
           <ChevronDown size={16} />
         </Button>
       </PopoverTrigger>

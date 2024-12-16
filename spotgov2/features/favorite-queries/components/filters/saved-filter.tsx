@@ -57,7 +57,13 @@ const SavedFilter = ({ className }: { className?: string }) => {
       <PopoverTrigger asChild>
         <Button variant="outline" className={className}>
           <Bookmark size={16} />
-          <p>Interesse</p>
+          <p>
+            {savedInput === true
+              ? "Guardados"
+              : savedInput === false
+                ? "Não guardados"
+                : "Interesse"}
+          </p>
           <ChevronDown size={16} />
         </Button>
       </PopoverTrigger>
