@@ -12,6 +12,7 @@ import { columns } from "./columns/columns";
 import useCustomColumns from "../hooks/use-custom-columns";
 import { PaginatedContractsType } from "../types";
 import { ColumnDef } from "@tanstack/react-table";
+import { getQueryClient } from "@/lib/react-query/client";
 
 const PAGE_SIZE = 8;
 
@@ -70,10 +71,24 @@ const CustomTable = () => {
     ),
   );
 
+  const queryClient = getQueryClient();
+
   // This is necessary to update the default values of the multi select components and the dual range
   // base price slider
   useEffect(() => {
     const payload = data?.payload;
+
+    // This is necessary to rerun the query to get the custom fields with values, otherwise the custom
+    // columns values will not be updated in the table, and then it will show old values for different
+    // contracts
+    const invalidateCustomValues = async () => {
+      await queryClient.invalidateQueries({
+        queryKey: [
+          "get-custom-fields-with-values",
+          currentOrganization?.organizationId,
+        ],
+      });
+    };
 
     if (!isPending && payload) {
       const shouldSetAdjudicators =
@@ -102,6 +117,8 @@ const CustomTable = () => {
       if (shouldSetBasePrice) {
         setBasePriceDefaultValues(payload.basePriceRange);
       }
+
+      invalidateCustomValues();
     }
   }, [isPending, data?.payload]);
 

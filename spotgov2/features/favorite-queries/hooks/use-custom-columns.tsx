@@ -15,7 +15,7 @@ import LabelColumn from "../components/custom-columns/label-column";
 const useCustomColumns = () => {
   const { currentOrganization } = useCurrentOrganizationStore();
 
-  const { data, isPending } = useQuery(
+  const { data, isPending, isFetching } = useQuery(
     customFieldsWithValuesQuery(currentOrganization?.organizationId as string),
   );
 
@@ -75,7 +75,7 @@ const useCustomColumns = () => {
           },
         }));
 
-  return { columns: customColumns, isPending };
+  return { columns: customColumns, isPending: isPending || isFetching };
 };
 
 export default useCustomColumns;

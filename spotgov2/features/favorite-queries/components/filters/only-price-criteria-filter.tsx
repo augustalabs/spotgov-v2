@@ -15,6 +15,7 @@ const OnlyPriceCriteria = () => {
         id="only-price-criteria"
         checked={onlyPriceCriteriaInput}
         onClick={handleOnlyPriceCriteriaChange}
+        className="border-input"
       />
       <label
         htmlFor="only-price-criteria"
