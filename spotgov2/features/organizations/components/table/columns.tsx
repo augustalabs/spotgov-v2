@@ -5,7 +5,7 @@ import Image from "next/image";
 import { RoleSelect } from "./role-select";
 import DeleteUserButton from "./delete-user-button";
 import { ArrowDownUp } from "lucide-react";
-import { canBeRemoved, canRoleBeChanged } from "../../permissions";
+import { canBeRemoved, canRoleBeChanged } from "@/permissions";
 
 export const columns: ColumnDef<UserWithOrganizationInfo>[] = [
   {

@@ -3,7 +3,7 @@ import {
   getUserFromOrganization,
   updateOrganization,
 } from "@/features/organizations/api";
-import { canEditOrganization } from "@/features/organizations/permissions";
+import { canEditOrganization } from "@/permissions";
 import { Response } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";
 import {

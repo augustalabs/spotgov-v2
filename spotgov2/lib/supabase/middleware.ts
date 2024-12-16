@@ -1,4 +1,4 @@
-import { canViewOrganization } from "@/features/organizations/permissions";
+import { canViewOrganization } from "@/permissions";
 import {
   HOME_ROUTE,
   LOGIN_ROUTE,

@@ -1,5 +1,5 @@
 import { getUserFromOrganization } from "@/features/organizations/api";
-import { canInviteUser } from "@/features/organizations/permissions";
+import { canInviteUser } from "@/permissions";
 import { resend } from "@/lib/resend/client";
 import { ORGANIZATION_INVITE_ROUTE } from "@/routes";
 import { Response } from "@/types";

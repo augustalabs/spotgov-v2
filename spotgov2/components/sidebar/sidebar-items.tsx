@@ -26,7 +26,7 @@ import {
 } from "@/routes";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { UserRoles } from "@/types";
-import { canViewOrganization } from "@/features/organizations/permissions";
+import { canViewOrganization } from "@/permissions";
 
 type SidebarItem = {
   icon: LucideIcon;

@@ -15,7 +15,7 @@ import {
 } from "@/utils/api/status-messages";
 import { addUserToOrganization } from "@/features/organization-invitation/api";
 import { checkUserAuthentication } from "@/utils/api/helpers";
-import { canViewOrganization } from "@/features/organizations/permissions";
+import { canViewOrganization } from "@/permissions";
 
 type Params = {
   organizationId: string;

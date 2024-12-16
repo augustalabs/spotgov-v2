@@ -1,4 +1,4 @@
-import { UserRoles } from "@/types";
+import { UserRoles } from "./types";
 
 /** Owner permissions */
 
@@ -44,4 +44,29 @@ export function canRemoveQuery(role: UserRoles) {
 
 export function canSaveContract(role: UserRoles) {
   return role !== UserRoles.Viewer;
+}
+
+export function canAddFavoriteQueriesColumn(role: UserRoles) {
+  // TODO
+  return true;
+}
+
+export function canEditFavoriteQueriesColumn(role: UserRoles) {
+  // TODO
+  return true;
+}
+
+export function canRemoveFavoriteQueriesColumn(role: UserRoles) {
+  // TODO
+  return true;
+}
+
+export function canChangeFavoriteQueriesColumnValue(role: UserRoles) {
+  // TODO
+  return true;
+}
+
+export function canExportFavoriteQueriesTable(role: UserRoles) {
+  // TODO
+  return true;
 }

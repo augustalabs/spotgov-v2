@@ -15,10 +15,7 @@ import {
 } from "@/utils/api/status-messages";
 import { UserOrganization } from "@/database/schemas";
 import { checkUserAuthentication } from "@/utils/api/helpers";
-import {
-  canChangeUserRole,
-  canRemoveUser,
-} from "@/features/organizations/permissions";
+import { canChangeUserRole, canRemoveUser } from "@/permissions";
 
 type Params = {
   organizationId: string;

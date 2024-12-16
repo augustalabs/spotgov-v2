@@ -14,7 +14,7 @@ import { cn } from "@/utils/utils";
 import { useMutation } from "@tanstack/react-query";
 import { updateUserRoleMutation } from "@/features/organizations/services";
 import { toast } from "sonner";
-import { canRoleBeChanged } from "../../permissions";
+import { canRoleBeChanged } from "@/permissions";
 
 type UserRoleSelectProps = {
   organizationId: string;

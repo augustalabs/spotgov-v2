@@ -12,10 +12,7 @@ import {
 } from "@/utils/api/status-messages";
 import { Query } from "@/database/schemas";
 import { checkUserAuthentication } from "@/utils/api/helpers";
-import {
-  canEditQuery,
-  canRemoveQuery,
-} from "@/features/organizations/permissions";
+import { canEditQuery, canRemoveQuery } from "@/permissions";
 
 type Params = {
   queryId: string;
