@@ -15,7 +15,10 @@ const BasePriceFilter = ({ className }: { className: string }) => {
     useFavoriteQueriesFiltersStore();
 
   const debouncedSetBasePriceInput = useMemo(
-    () => debounce(window, setBasePriceInput, 500),
+    () =>
+      typeof window !== "undefined"
+        ? debounce(window, setBasePriceInput, 500)
+        : () => {},
     [setBasePriceInput],
   );
 

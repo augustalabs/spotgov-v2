@@ -13,7 +13,10 @@ const SearchFilter = ({ className }: { className?: string }) => {
   const [localSearchTextInput, setLocalSearchTextInput] = useState("");
 
   const debouncedSetSearchTextInput = useMemo(
-    () => debounce(window, setSearchTextInput, 300),
+    () =>
+      typeof window !== "undefined"
+        ? debounce(window, setSearchTextInput, 500)
+        : () => {},
     [setSearchTextInput],
   );
 
