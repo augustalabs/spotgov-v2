@@ -6,7 +6,7 @@ import SearchFilter from "./search-filter";
 import CpvsFilter from "./cpvs-filter";
 import AddColumnButton from "../custom-columns/add-column-button";
 
-const className = "min-w-36 flex-grow basis-1/6";
+const className = "min-w-36 flex-grow basis-48";
 
 const Filters = () => {
   return (
