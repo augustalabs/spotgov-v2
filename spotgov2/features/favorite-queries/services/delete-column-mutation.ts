@@ -7,9 +7,9 @@ function deleteColumnMutation(organizationId: string) {
   const queryClient = getQueryClient();
   const mutationKey = ["delete-column", organizationId];
 
-  const mutationFn = async ({ columnId }: { columnId: string }) =>
+  const mutationFn = async ({ fieldId }: { fieldId: string }) =>
     await del<Response<FeedCustomField[]>>({
-      url: `organizations/${organizationId}/custom-columns/${columnId}`,
+      url: `organizations/${organizationId}/custom-columns/${fieldId}`,
     });
 
   const onSuccess = async () =>

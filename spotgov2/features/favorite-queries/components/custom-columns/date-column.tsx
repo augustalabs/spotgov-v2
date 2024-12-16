@@ -18,11 +18,11 @@ import { toast } from "sonner";
 
 type DateColumnProps = {
   value: string;
-  columnId: string;
+  fieldId: string;
   contractId: string;
 };
 
-const DateColumn = ({ value, columnId, contractId }: DateColumnProps) => {
+const DateColumn = ({ value, fieldId, contractId }: DateColumnProps) => {
   const [newValue, setNewValue] = useState<string>(value);
 
   const { currentOrganization } = useCurrentOrganizationStore();
@@ -47,13 +47,13 @@ const DateColumn = ({ value, columnId, contractId }: DateColumnProps) => {
       if (!value) {
         res = await addValueMutation.mutateAsync({
           value: v.toISOString(),
-          columnId,
+          fieldId,
           contractId,
         });
       } else {
         res = await updateValuemutation.mutateAsync({
           value: v.toISOString(),
-          columnId,
+          fieldId,
           contractId,
         });
       }

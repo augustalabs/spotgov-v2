@@ -9,15 +9,15 @@ function updateColumnValueMutation(organizationId: string) {
 
   const mutationFn = async ({
     value,
-    columnId,
+    fieldId,
     contractId,
   }: {
     value: string;
-    columnId: string;
+    fieldId: string;
     contractId: string;
   }) =>
     await patch<Response<FeedCustomField[]>>({
-      url: `organizations/${organizationId}/custom-columns/${columnId}/values`,
+      url: `organizations/${organizationId}/custom-columns/${fieldId}/values`,
       body: {
         value,
         contractId,

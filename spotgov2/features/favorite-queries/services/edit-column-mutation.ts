@@ -9,13 +9,13 @@ function editColumnMutation(organizationId: string) {
 
   const mutationFn = async ({
     fieldName,
-    columnId,
+    fieldId,
   }: {
     fieldName: string;
-    columnId: string;
+    fieldId: string;
   }) =>
     await patch<Response<FeedCustomField[]>>({
-      url: `organizations/${organizationId}/custom-columns/${columnId}`,
+      url: `organizations/${organizationId}/custom-columns/${fieldId}`,
       body: {
         fieldName,
       },

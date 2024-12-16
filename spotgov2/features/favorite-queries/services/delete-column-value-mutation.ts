@@ -8,14 +8,14 @@ function deleteColumnValueMutation(organizationId: string) {
   const mutationKey = ["delete-column-value", organizationId];
 
   const mutationFn = async ({
-    columnId,
+    fieldId,
     contractId,
   }: {
-    columnId: string;
+    fieldId: string;
     contractId: string;
   }) =>
     await del<Response<FeedCustomField[]>>({
-      url: `organizations/${organizationId}/custom-columns/${columnId}/values/${contractId}`,
+      url: `organizations/${organizationId}/custom-columns/${fieldId}/values/${contractId}`,
     });
 
   const onSuccess = async () =>

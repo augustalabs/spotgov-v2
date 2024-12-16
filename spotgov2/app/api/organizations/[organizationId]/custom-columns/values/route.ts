@@ -65,9 +65,9 @@ export async function POST(
       });
     }
 
-    const { value, contractId, columnId } = await req.json();
+    const { value, contractId, fieldId } = await req.json();
 
-    if (!value || !contractId || !columnId) {
+    if (!value || !contractId || !fieldId) {
       return NextResponse.json(STATUS_BAD_REQUEST, {
         status: STATUS_BAD_REQUEST.status,
       });
@@ -75,7 +75,7 @@ export async function POST(
 
     const feedCustomFieldsValue = await addColumnValue(
       params.organizationId,
-      columnId,
+      fieldId,
       contractId,
       value,
     );

@@ -4,14 +4,14 @@ import { and, eq } from "drizzle-orm";
 
 async function deleteColumn(
   organizationId: string,
-  columnId: string,
+  fieldId: string,
 ): Promise<FeedCustomField[]> {
   return db
     .delete(feedCustomFields)
     .where(
       and(
         eq(feedCustomFields.organizationId, organizationId),
-        eq(feedCustomFields.id, columnId),
+        eq(feedCustomFields.id, fieldId),
       ),
     )
     .returning();

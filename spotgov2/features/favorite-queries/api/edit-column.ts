@@ -4,7 +4,7 @@ import { and, eq } from "drizzle-orm";
 
 async function editColumn(
   organizationId: string,
-  columnId: string,
+  fieldId: string,
   fieldName: string,
 ): Promise<FeedCustomField[]> {
   return db
@@ -13,7 +13,7 @@ async function editColumn(
     .where(
       and(
         eq(feedCustomFields.organizationId, organizationId),
-        eq(feedCustomFields.id, columnId),
+        eq(feedCustomFields.id, fieldId),
       ),
     )
     .returning();

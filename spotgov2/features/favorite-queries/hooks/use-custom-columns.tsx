@@ -11,6 +11,7 @@ import ColumnActions from "../components/custom-columns/column-actions";
 import LogicColumn from "../components/custom-columns/logic-column";
 import DateColumn from "../components/custom-columns/date-column";
 import LabelColumn from "../components/custom-columns/label-column";
+import FileColumn from "../components/custom-columns/file-column";
 
 const useCustomColumns = () => {
   const { currentOrganization } = useCurrentOrganizationStore();
@@ -29,7 +30,7 @@ const useCustomColumns = () => {
           header: () => (
             <ColumnActions
               label={field.feedCustomFields.fieldName as string}
-              columnId={field.feedCustomFields.id}
+              fieldId={field.feedCustomFields.id}
             />
           ),
           cell: ({ row }) => {
@@ -38,39 +39,51 @@ const useCustomColumns = () => {
             );
 
             const fieldType = field.feedCustomFields.fieldType;
+            const value = matchedValue?.value ?? "";
+            const fieldId = field.feedCustomFields.id;
+            const contractId = row.original.contract.id;
 
-            if (FieldType.Text === fieldType) {
-              return (
-                <TextColumn
-                  value={matchedValue?.value ?? ""}
-                  columnId={field.feedCustomFields.id}
-                  contractId={row.original.contract.id}
-                />
-              );
-            } else if (FieldType.Logic === fieldType) {
-              return (
-                <LogicColumn
-                  value={matchedValue?.value ?? ""}
-                  columnId={field.feedCustomFields.id}
-                  contractId={row.original.contract.id}
-                />
-              );
-            } else if (FieldType.Date === fieldType) {
-              return (
-                <DateColumn
-                  value={matchedValue?.value ?? ""}
-                  columnId={field.feedCustomFields.id}
-                  contractId={row.original.contract.id}
-                />
-              );
-            } else if (FieldType.Label === fieldType) {
-              return (
-                <LabelColumn
-                  value={matchedValue?.value ?? ""}
-                  columnId={field.feedCustomFields.id}
-                  contractId={row.original.contract.id}
-                />
-              );
+            switch (fieldType) {
+              case FieldType.Text:
+                return (
+                  <TextColumn
+                    value={value}
+                    fieldId={fieldId}
+                    contractId={contractId}
+                  />
+                );
+              case FieldType.Logic:
+                return (
+                  <LogicColumn
+                    value={value}
+                    fieldId={fieldId}
+                    contractId={contractId}
+                  />
+                );
+              case FieldType.Date:
+                return (
+                  <DateColumn
+                    value={value}
+                    fieldId={fieldId}
+                    contractId={contractId}
+                  />
+                );
+              case FieldType.Label:
+                return (
+                  <LabelColumn
+                    value={value}
+                    fieldId={fieldId}
+                    contractId={contractId}
+                  />
+                );
+              case FieldType.File:
+                return (
+                  <FileColumn
+                    value={value}
+                    fieldId={fieldId}
+                    contractId={contractId}
+                  />
+                );
             }
           },
         }));

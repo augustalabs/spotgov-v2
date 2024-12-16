@@ -10,11 +10,11 @@ import {
 
 type LogicColumnProps = {
   value: string;
-  columnId: string;
+  fieldId: string;
   contractId: string;
 };
 
-const LogicColumn = ({ value, columnId, contractId }: LogicColumnProps) => {
+const LogicColumn = ({ value, fieldId, contractId }: LogicColumnProps) => {
   const [newValue, setNewValue] = useState<string>(value);
 
   const { currentOrganization } = useCurrentOrganizationStore();
@@ -39,13 +39,13 @@ const LogicColumn = ({ value, columnId, contractId }: LogicColumnProps) => {
       if (!value) {
         res = await addValueMutation.mutateAsync({
           value: updatedValue,
-          columnId,
+          fieldId,
           contractId,
         });
       } else {
         res = await updateValueMutation.mutateAsync({
           value: updatedValue,
-          columnId,
+          fieldId,
           contractId,
         });
       }

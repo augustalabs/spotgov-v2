@@ -9,11 +9,11 @@ function addColumnValueMutation(organizationId: string) {
 
   const mutationFn = async ({
     value,
-    columnId,
+    fieldId,
     contractId,
   }: {
     value: string;
-    columnId: string;
+    fieldId: string;
     contractId: string;
   }) =>
     await post<Response<FeedCustomField[]>>({
@@ -21,7 +21,7 @@ function addColumnValueMutation(organizationId: string) {
       body: {
         value,
         contractId,
-        columnId,
+        fieldId,
       },
     });
 

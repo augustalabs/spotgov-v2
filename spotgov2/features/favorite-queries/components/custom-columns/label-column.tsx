@@ -41,11 +41,11 @@ import { useState } from "react";
 
 type LabelColumnProps = {
   value: string;
-  columnId: string;
+  fieldId: string;
   contractId: string;
 };
 
-const LabelColumn = ({ value, columnId, contractId }: LabelColumnProps) => {
+const LabelColumn = ({ value, fieldId, contractId }: LabelColumnProps) => {
   const [localLabel, setLocalLabel] = useState<string>(value);
 
   const { currentOrganization } = useCurrentOrganizationStore();
@@ -81,13 +81,13 @@ const LabelColumn = ({ value, columnId, contractId }: LabelColumnProps) => {
       if (value === "") {
         res = await addMutation.mutateAsync({
           value: values.label,
-          columnId,
+          fieldId,
           contractId,
         });
       } else {
         res = await updateMutation.mutateAsync({
           value: values.label,
-          columnId,
+          fieldId,
           contractId,
         });
       }
@@ -115,7 +115,7 @@ const LabelColumn = ({ value, columnId, contractId }: LabelColumnProps) => {
         setLocalLabel("");
 
         res = await deleteMutation.mutateAsync({
-          columnId,
+          fieldId,
           contractId,
         });
       } else {
@@ -124,7 +124,7 @@ const LabelColumn = ({ value, columnId, contractId }: LabelColumnProps) => {
 
         res = await updateMutation.mutateAsync({
           value: v,
-          columnId,
+          fieldId,
           contractId,
         });
       }

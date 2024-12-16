@@ -11,7 +11,7 @@ import { NextResponse } from "next/server";
 
 type Params = {
   organizationId: string;
-  columnId: string;
+  fieldId: string;
 };
 
 export async function PATCH(
@@ -38,7 +38,7 @@ export async function PATCH(
 
     const feedCustomFields = await editColumn(
       params.organizationId,
-      params.columnId,
+      params.fieldId,
       fieldName,
     );
 
@@ -77,7 +77,7 @@ export async function DELETE(
 
     const feedCustomFields = await deleteColumn(
       params.organizationId,
-      params.columnId,
+      params.fieldId,
     );
 
     if (!feedCustomFields?.length) {

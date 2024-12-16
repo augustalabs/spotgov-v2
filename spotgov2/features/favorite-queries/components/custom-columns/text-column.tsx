@@ -10,11 +10,11 @@ import { useState } from "react";
 
 type TextColumnProps = {
   value: string;
-  columnId: string;
+  fieldId: string;
   contractId: string;
 };
 
-const TextColumn = ({ value, columnId, contractId }: TextColumnProps) => {
+const TextColumn = ({ value, fieldId, contractId }: TextColumnProps) => {
   const [newValue, setNewValue] = useState<string>(value);
 
   const { currentOrganization } = useCurrentOrganizationStore();
@@ -34,13 +34,13 @@ const TextColumn = ({ value, columnId, contractId }: TextColumnProps) => {
       if (!value) {
         res = await addValueMutation.mutateAsync({
           value: newValue,
-          columnId,
+          fieldId,
           contractId,
         });
       } else {
         res = await updateValuemutation.mutateAsync({
           value: newValue,
-          columnId,
+          fieldId,
           contractId,
         });
       }

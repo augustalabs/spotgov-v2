@@ -16,10 +16,10 @@ import { useCurrentOrganizationStore } from "@/stores/current-organization-store
 
 type ColumnActionsProps = {
   label: string;
-  columnId: string;
+  fieldId: string;
 };
 
-const ColumnActions = ({ label, columnId }: ColumnActionsProps) => {
+const ColumnActions = ({ label, fieldId }: ColumnActionsProps) => {
   const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(false);
   const [popoverIsOpen, setPopoverIsOpen] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
@@ -47,7 +47,7 @@ const ColumnActions = ({ label, columnId }: ColumnActionsProps) => {
 
       const res = await editMutation.mutateAsync({
         fieldName: newLabel,
-        columnId,
+        fieldId,
       });
 
       if (res.success) {
@@ -66,7 +66,7 @@ const ColumnActions = ({ label, columnId }: ColumnActionsProps) => {
 
   const handleDelete = async () => {
     try {
-      const res = await deleteMutation.mutateAsync({ columnId });
+      const res = await deleteMutation.mutateAsync({ fieldId });
 
       if (res.success) {
         toast.success("Coluna eliminada com sucesso.");
