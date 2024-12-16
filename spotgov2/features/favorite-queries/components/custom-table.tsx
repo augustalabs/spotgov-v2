@@ -12,6 +12,7 @@ import { columns } from "./columns/columns";
 import useCustomColumns from "../hooks/use-custom-columns";
 import { PaginatedContractsType } from "../types";
 import { ColumnDef } from "@tanstack/react-table";
+import { isBefore } from "date-fns";
 
 const PAGE_SIZE = 8;
 
@@ -31,7 +32,7 @@ const CustomTable = () => {
     basePriceInput,
     setBasePriceInput,
     basePriceDefaultValues,
-    setBasePriceDefaultValues,
+    publishDateInput,
     selectedSortInput,
   } = useFavoriteQueriesFiltersStore();
   const { currentOrganization } = useCurrentOrganizationStore();
@@ -47,6 +48,7 @@ const CustomTable = () => {
     savedInput,
     cpvsInput,
     basePriceInput,
+    publishDateInput,
     selectedSortInput,
   ]);
 
@@ -61,6 +63,7 @@ const CustomTable = () => {
       savedInput,
       cpvsInput,
       basePriceInput,
+      publishDateInput,
       selectedSortInput,
     ),
   );
@@ -91,14 +94,14 @@ const CustomTable = () => {
         setCpvsDefaultValues(payload.distinctCpvs);
       }
 
-      const shouldSetBasePrice =
-        payload.basePriceRange[0] < (basePriceDefaultValues[0] as number) ||
-        payload.basePriceRange[1] > (basePriceDefaultValues[1] as number);
+      // const shouldSetBasePrice =
+      //   payload.basePriceRange[0] < (basePriceDefaultValues[0] as number) ||
+      //   payload.basePriceRange[1] > (basePriceDefaultValues[1] as number);
 
-      if (shouldSetBasePrice) {
-        setBasePriceDefaultValues(payload.basePriceRange);
-        setBasePriceInput(payload.basePriceRange);
-      }
+      // if (shouldSetBasePrice) {
+      //   setBasePriceDefaultValues(payload.basePriceRange);
+      //   setBasePriceInput(payload.basePriceRange);
+      // }
     }
   }, [isPending, data?.payload]);
 

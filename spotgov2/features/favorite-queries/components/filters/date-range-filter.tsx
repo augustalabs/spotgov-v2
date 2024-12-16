@@ -6,8 +6,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ChevronDown } from "lucide-react";
+import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filters-store";
+import { Calendar } from "@/components/ui/calendar";
 
 const DateRangeFilter = ({ className }: { className: string }) => {
+  const { publishDateInput, setPublishDateInput } =
+    useFavoriteQueriesFiltersStore();
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -17,9 +22,14 @@ const DateRangeFilter = ({ className }: { className: string }) => {
           <ChevronDown size={16} />
         </Button>
       </PopoverTrigger>
-      <PopoverContent>
-        {/* TODO: Complete this */}
-        <div>Content</div>
+      <PopoverContent className="w-full">
+        <Calendar
+          mode="range"
+          initialFocus
+          selected={publishDateInput}
+          onSelect={(value) => setPublishDateInput(value)}
+          numberOfMonths={2}
+        />
       </PopoverContent>
     </Popover>
   );

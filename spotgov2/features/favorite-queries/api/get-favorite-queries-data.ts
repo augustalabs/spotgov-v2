@@ -35,6 +35,8 @@ async function getFavoriteQueriesData(
   cpvsInput: string[] = [],
   minPriceInput: number | null = null,
   maxPriceInput: number | null = null,
+  minPublishDateInput: Date | null = null,
+  maxPublishDateInput: Date | null = null,
   sortInput: OrderType = "publish-date-desc",
 ): Promise<FavoriteContractsDataType> {
   const offset = (page - 1) * pageSize;
@@ -52,6 +54,8 @@ async function getFavoriteQueriesData(
       queryTitles: sql<string[]>`array_agg(${queries.title}) OVER()`,
       minBasePrice: sql<number>`MIN(${contracts.basePrice}) OVER()`,
       maxBasePrice: sql<number>`MAX(${contracts.basePrice}) OVER()`,
+      minPublishDate: sql<Date>`MIN(${contracts.publishDate}) OVER()`,
+      maxPublishDate: sql<Date>`MAX(${contracts.publishDate}) OVER()`,
     })
     .from(contractsQueries)
     .innerJoin(contracts, eq(contracts.id, contractsQueries.contractId))
@@ -86,6 +90,12 @@ async function getFavoriteQueriesData(
         maxPriceInput !== null
           ? lte(contracts.basePrice, String(maxPriceInput))
           : sql`true`,
+        minPublishDateInput !== null
+          ? gte(contracts.publishDate, minPublishDateInput)
+          : sql`true`,
+        maxPublishDateInput !== null
+          ? lte(contracts.publishDate, maxPublishDateInput)
+          : sql`true`,
       ),
     )
     .orderBy(getSortOption(sortInput))
@@ -111,6 +121,10 @@ async function getFavoriteQueriesData(
       data[0]?.minBasePrice ?? 0,
       data[0]?.maxBasePrice ?? 100000000,
     ],
+    publishDateRange: {
+      from: data[0]?.minPublishDate ?? undefined,
+      to: data[0]?.maxPublishDate ?? undefined,
+    },
   };
 }
 

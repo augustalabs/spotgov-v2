@@ -2,6 +2,7 @@ import { FavoriteContractsDataType } from "@/features/favorite-queries/types";
 import { OrderType, Response } from "@/types";
 import { get } from "@/utils/api/functions";
 import { keepPreviousData } from "@tanstack/react-query";
+import { DateRange } from "react-day-picker";
 
 function favoriteQueriesQuery(
   organizationId: string,
@@ -13,6 +14,7 @@ function favoriteQueriesQuery(
   savedInput: boolean | null,
   cpvsInput: string[],
   basePriceInput: number[],
+  publishDateInput: DateRange | undefined,
   selectedSortInput: OrderType,
 ) {
   const queryKey = [
@@ -26,6 +28,7 @@ function favoriteQueriesQuery(
     savedInput,
     cpvsInput,
     basePriceInput,
+    publishDateInput,
     selectedSortInput,
   ];
 
@@ -60,6 +63,12 @@ function favoriteQueriesQuery(
     if (basePriceInput[0]) searchParams += `&minPrice=${basePriceInput[0]}`;
 
     if (basePriceInput[1]) searchParams += `&maxPrice=${basePriceInput[1]}`;
+
+    if (publishDateInput?.from)
+      searchParams += `&minPublishDate=${publishDateInput.from}`;
+
+    if (publishDateInput?.to)
+      searchParams += `&maxPublishDate=${publishDateInput.to}`;
 
     return await get<Response<FavoriteContractsDataType>>({
       url: `organizations/${organizationId}/favorite-queries${searchParams}`,

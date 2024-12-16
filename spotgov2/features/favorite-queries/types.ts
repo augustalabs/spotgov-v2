@@ -1,4 +1,5 @@
 import { Contract } from "@/database/schemas";
+import { DateRange } from "react-day-picker";
 
 export type PaginatedContractsType = {
   contract: Contract;
@@ -16,7 +17,8 @@ export type FavoriteContractsDataType = {
   distinctAdjudicators: string[];
   distinctQueryTitles: string[];
   distinctCpvs: string[];
-  basePriceRange: [number, number];
+  basePriceRange: number[];
+  publishDateRange: DateRange;
 };
 
 export enum FieldType {

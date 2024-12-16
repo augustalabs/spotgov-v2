@@ -1,4 +1,5 @@
 import { OrderType } from "@/types";
+import { DateRange } from "react-day-picker";
 import { create } from "zustand";
 
 type FavoriteQueriesFiltersStoreProps = {
@@ -28,6 +29,9 @@ type FavoriteQueriesFiltersStoreProps = {
   setBasePriceInput: (value: number[]) => void;
   basePriceDefaultValues: number[];
   setBasePriceDefaultValues: (value: number[]) => void;
+  // Search for contracts by publish date
+  publishDateInput: DateRange | undefined;
+  setPublishDateInput: (value: DateRange | undefined) => void;
   // Sort contracts by newest, oldest, highest price, lowest price, nearest deadline, farthest deadline
   selectedSortInput: OrderType;
   setSelectedSortInput: (value: OrderType) => void;
@@ -52,12 +56,14 @@ export const useFavoriteQueriesFiltersStore =
     cpvsInput: [],
     setCpvsInput: (value) => set({ cpvsInput: value }),
     cpvsDefaultValues: [],
+    setCpvsDefaultValues: (value) => set({ cpvsDefaultValues: value }),
     basePriceInput: [0, 0],
     setBasePriceInput: (value) => set({ basePriceInput: value }),
     basePriceDefaultValues: [0, 0],
     setBasePriceDefaultValues: (value) =>
       set({ basePriceDefaultValues: value }),
-    setCpvsDefaultValues: (value) => set({ cpvsDefaultValues: value }),
+    publishDateInput: undefined,
+    setPublishDateInput: (value) => set({ publishDateInput: value }),
     selectedSortInput: "publish-date-desc",
     setSelectedSortInput: (value) => set({ selectedSortInput: value }),
   }));
