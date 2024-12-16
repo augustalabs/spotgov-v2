@@ -47,26 +47,21 @@ export function canSaveContract(role: UserRoles) {
 }
 
 export function canAddFavoriteQueriesColumn(role: UserRoles) {
-  // TODO
-  return true;
+  return role !== UserRoles.Viewer;
 }
 
 export function canEditFavoriteQueriesColumn(role: UserRoles) {
-  // TODO
-  return true;
+  return role !== UserRoles.Viewer;
 }
 
 export function canRemoveFavoriteQueriesColumn(role: UserRoles) {
-  // TODO
-  return true;
+  return role !== UserRoles.Viewer;
 }
 
 export function canChangeFavoriteQueriesColumnValue(role: UserRoles) {
-  // TODO
-  return true;
+  return role !== UserRoles.Viewer;
 }
 
 export function canExportFavoriteQueriesTable(role: UserRoles) {
-  // TODO
-  return true;
+  return role !== UserRoles.Viewer;
 }
