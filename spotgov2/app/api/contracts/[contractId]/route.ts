@@ -44,7 +44,7 @@ export async function GET(
       }
 
       // If contracts_organizations record doesn't exist, create it asynchronously
-      if (!contractWithOrg.contracts_organizations) {
+      if (!contractWithOrg.contractsOrganization) {
         // Fire and forget: create the record without awaiting
         createContractInOrganization({
           contractId,
@@ -55,7 +55,7 @@ export async function GET(
         });
 
         // Include a default contracts_organizations object in the response
-        contractWithOrg.contracts_organizations = {
+        contractWithOrg.contractsOrganization = {
           contractId,
           organizationId: currentOrganization,
           saved: false,       // default value

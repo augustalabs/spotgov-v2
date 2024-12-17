@@ -31,7 +31,7 @@ interface ContractPageData {
       }
   
       // If contracts_organizations record doesn't exist, create it asynchronously
-      if (!contractWithOrg.contracts_organizations) {
+      if (!contractWithOrg.contractsOrganization) {
         createContractInOrganization({
           contractId,
           organizationId: currentOrganization,
@@ -39,7 +39,7 @@ interface ContractPageData {
           console.error("Error creating contracts_organizations record:", error);
         });
   
-        contractWithOrg.contracts_organizations = {
+        contractWithOrg.contractsOrganization = {
           contractId,
           organizationId: currentOrganization,
           saved: false,
@@ -49,7 +49,7 @@ interface ContractPageData {
       }
   
       contractData = contractWithOrg;
-      contractInOrganizationData = contractWithOrg.contracts_organizations;
+      contractInOrganizationData = contractWithOrg.contractsOrganization;
     } else {
       // If not authenticated, fetch only the basic contract details
       const contract = await getContractById({ contractId });

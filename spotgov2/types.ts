@@ -4,7 +4,7 @@ import {
   Organization,
   User,
   UserOrganization,
-  ContractsOrganizations,
+  ContractsOrganization,
   FeedCustomFieldValue,
 } from "@/database/schemas";
 
@@ -58,5 +58,5 @@ export type OrderType =
 export type PriceRange = [number, number];
 
 export type JoinedContractInOrganization = Contract & {
-  contracts_organizations: ContractsOrganizations | null;
+  contractsOrganization: ContractsOrganization | null;
 };
