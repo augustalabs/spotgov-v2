@@ -1,13 +1,9 @@
 "use client";
 
-import { Contract } from "@/database/schemas";
-import ContractCard from "../contract-card";
-import { ContractQuery } from "@/database/schemas/contracts-queries";
 import {
   Table,
   TableBody,
   TableCaption,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -21,22 +17,8 @@ import {
   Landmark,
   ScrollText,
 } from "lucide-react";
-import { formatDate2 } from "@/utils/date";
-
-export function formatPrice(price: string | number): string {
-  if (price == null || price === "") return "";
-
-  const numberPrice = typeof price === "string" ? parseFloat(price) : price;
-
-  const hasDecimals = numberPrice % 1 !== 0;
-
-  return numberPrice
-    .toLocaleString("fr-FR", {
-      minimumFractionDigits: hasDecimals ? 2 : 0,
-      maximumFractionDigits: hasDecimals ? 2 : 0,
-    })
-    .replace(/\s/g, " ");
-}
+import { formatFullDate } from "@/utils/date-utils";
+import { formatPrice } from "@/utils/utils";
 
 function QueryTableView({
   filteredContracts,
@@ -117,9 +99,9 @@ function QueryTableView({
                 </div>
               </TableCell>
               <TableCell>{formatPrice(contractProps.basePrice)}€</TableCell>
-              <TableCell>{formatDate2(contractProps.publishDate)}</TableCell>
+              <TableCell>{formatFullDate(contractProps.publishDate)}</TableCell>
               <TableCell>
-                {formatDate2(contractProps.submissionDeadlineDate)}
+                {formatFullDate(contractProps.submissionDeadlineDate)}
               </TableCell>
               <TableCell>
                 {contractProps.matchTypeFull ? "Muito relevante" : "Relevante"}

@@ -1,9 +1,8 @@
-// hooks/useContracts.ts
 import { useQuery } from "@tanstack/react-query";
 import { getQueryContracts } from "@/features/queries/api";
-import { filterAndSortContracts } from "@/utils/utils";
 import { OrderType, PriceRange, RelevanceType } from "@/types";
 import { DateRange } from "react-day-picker";
+import { filterAndSortContracts } from "../utils";
 
 interface UseContractsParams {
   queryId: string;
@@ -27,6 +26,7 @@ export const useContracts = ({ queryId, filters }: UseContractsParams) => {
     enabled: !!queryId,
   });
 
+  // Convert dates to ISO strings and stringify "reason"
   const normalizedContracts = contractsData
     ? contractsData.map((contract) => ({
         id: contract.id,

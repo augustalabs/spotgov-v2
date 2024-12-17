@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -11,14 +9,14 @@ import {
   Share2,
   Sparkles,
 } from "lucide-react";
-import { formatPrice } from "./query-views/query-table-view";
-import {
-  formatDate2,
-  getRemainingDaysColor,
-  getRemainingDaysMessage,
-} from "@/utils/date";
 import { BsStars } from "react-icons/bs";
 import InfoItem from "./info-item";
+import { formatFullDate } from "@/utils/date-utils";
+import {
+  getRemainingDaysColor,
+  getRemainingDaysMessage,
+} from "@/utils/deadline-utils";
+import { formatPrice } from "@/utils/utils";
 
 function ContractCard({
   title,
@@ -91,9 +89,9 @@ function ContractCard({
           {/* Actions and Indicators */}
           <div className="flex flex-col items-start space-y-2 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
             {/* Action Buttons */}
-            <div className="flex w-full flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0 sm:w-fit">
+            <div className="flex w-full flex-col space-y-2 sm:w-fit sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0">
               <Button
-                className="rounded-xl max-h-8 w-full sm:w-auto font-semibold"
+                className="max-h-8 w-full rounded-xl font-semibold sm:w-auto"
                 size="sm"
               >
                 <BsStars className="h-4 w-4" />
@@ -102,7 +100,7 @@ function ContractCard({
               <Button
                 variant="outline"
                 size="sm"
-                className="rounded-xl max-h-8 w-full sm:w-auto"
+                className="max-h-8 w-full rounded-xl sm:w-auto"
               >
                 <Bookmark className="h-4 w-4 flex-shrink-0 text-secondary" />
                 Guardar
@@ -112,7 +110,7 @@ function ContractCard({
                 <div
                   className={`relative flex items-center justify-center rounded-full ${getRemainingDaysColor(
                     submissionDeadlineDate,
-                  )} bg-opacity-20 h-4 w-4`}
+                  )} h-4 w-4 bg-opacity-20`}
                 >
                   <div
                     className={`absolute h-2 w-2 rounded-full ${getRemainingDaysColor(
@@ -147,14 +145,14 @@ function ContractCard({
                 icon={
                   <Calendar className="h-4 w-4 flex-shrink-0 text-secondary" />
                 }
-                content={formatDate2(publishDate)}
+                content={formatFullDate(publishDate)}
               />
               <InfoItem
                 label="Data de Submissão"
                 icon={
                   <ClockArrowUp className="h-4 w-4 flex-shrink-0 text-secondary" />
                 }
-                content={formatDate2(submissionDeadlineDate)}
+                content={formatFullDate(submissionDeadlineDate)}
               />
             </div>
           </div>

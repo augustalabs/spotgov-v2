@@ -22,7 +22,7 @@ import DateNewQuery from "./date-new-query";
 import CPVSelector from "./cpv-selector";
 import KeywordsSelector from "./keywords-selector";
 import { format } from "date-fns";
-import { buildQueryObject } from "@/utils/query";
+import { buildQueryObject } from "../utils";
 
 interface NewSearchCardProps {
   title: string;

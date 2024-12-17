@@ -1,20 +1,25 @@
-import Header from "@/components/header";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { fetchPipelineData } from "@/features/pipeline/api/fetch-pipeline-data";
 import Pipeline from "@/features/pipeline/components/pipeline";
 import { getQueryClient } from "@/lib/react-query/client";
 import { createClient } from "@/lib/supabase/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { redirect } from "next/navigation";
 
 export default async function PipelinePage() {
   const supabase = await createClient();
 
-  const { data: user } = await supabase.auth.getUser();
+  // TODO: create a hook/util for this
+  const { data: user, error: authError } = await supabase.auth.getUser();
+
+  if (authError || !user?.user) {
+    redirect("/login");
+  }
 
   // TODO: const organizationId = user.user?.user_metadata?.current_organization?.organizationId;
-  const organizationId = "4ab0ebdd-dea7-4aad-9760-2a46343bef4c";
+  const organizationId = "fe16bbfb-226e-46a1-8d1d-de1524b2d898";
 
   const queryClient = getQueryClient();
+
   await queryClient.prefetchQuery({
     queryKey: ["pipeline", organizationId],
     queryFn: async () => await fetchPipelineData({ organizationId }),
@@ -22,7 +27,6 @@ export default async function PipelinePage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-       <Header title="Pipeline" />
       <Pipeline organizationId={organizationId} />
     </HydrationBoundary>
   );

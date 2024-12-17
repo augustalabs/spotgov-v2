@@ -18,11 +18,11 @@ import {
 import { cn } from "@/utils/utils";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon, Landmark, ScrollText } from "lucide-react";
-import { addDays, format } from "date-fns";
+import { format } from "date-fns";
 import { DateRange } from "react-day-picker";
 import PriceRangeSelector from "@/features/new-search/components/price-range-selector";
 import { VirtualizedCombobox } from "@/components/ui/virtualized-combobox";
-import { FiltersState } from "../hooks/use-filters";
+import { FiltersState } from "../hooks/use-contract-filters";
 
 interface QueryFiltersProps {
   filters: FiltersState;
