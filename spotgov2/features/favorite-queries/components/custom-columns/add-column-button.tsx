@@ -75,6 +75,7 @@ const AddColumnButton = ({ className }: { className: string }) => {
       if (res.success) {
         toast.success("Coluna adicionada com sucesso.");
         setIsOpen(false);
+        form.reset();
       } else {
         toast.error("Erro ao adicionar coluna. Por favor, tente novamente.");
       }

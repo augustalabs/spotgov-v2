@@ -5,7 +5,7 @@ import {
   feedCustomFieldsValues,
 } from "@/database/schemas";
 import { FeedCustomFieldWithValues } from "@/types";
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 
 async function getCustomColumns({
   organizationId,
@@ -22,7 +22,8 @@ async function getCustomColumns({
       feedCustomFieldsValues,
       eq(feedCustomFields.id, feedCustomFieldsValues.fieldId),
     )
-    .where(eq(feedCustomFields.organizationId, organizationId));
+    .where(eq(feedCustomFields.organizationId, organizationId))
+    .orderBy(asc(feedCustomFields.createdAt));
 
   let customValuesPerField: FeedCustomFieldWithValues = {};
 

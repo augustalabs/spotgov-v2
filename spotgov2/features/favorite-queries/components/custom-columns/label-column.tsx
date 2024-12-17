@@ -173,6 +173,7 @@ const LabelColumn = ({ value, fieldId, contractId }: LabelColumnProps) => {
             {isPending && <Skeleton className="h-2 w-full" />}
             {!isPending && (
               <CommandGroup
+                className="max-h-36 overflow-auto"
                 heading={data?.payload ? "Etiquetas" : ""}
                 value={localLabel}
               >

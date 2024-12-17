@@ -25,10 +25,17 @@ function addColumnValueMutation(organizationId: string) {
       },
     });
 
-  const onSuccess = async () =>
-    await queryClient.invalidateQueries({
+  const onSuccess = async () => {
+    const promise1 = queryClient.invalidateQueries({
+      queryKey: ["get-column-labels-for-type-label", organizationId],
+    });
+
+    const promise2 = queryClient.invalidateQueries({
       queryKey: ["get-custom-fields-with-values", organizationId],
     });
+
+    Promise.all([promise1, promise2]);
+  };
 
   return { mutationKey, mutationFn, onSuccess };
 }
