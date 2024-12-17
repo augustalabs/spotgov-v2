@@ -7,7 +7,6 @@ import CpvsFilter from "./cpvs-filter";
 import AddColumnButton from "../custom-columns/add-column-button";
 import BasePriceFilter from "./base-price-filter";
 import DateRangeFilter from "./date-range-filter";
-import ExportButton from "./export-button";
 import OnlyPriceCriteriaFilter from "./only-price-criteria-filter";
 
 const className = "min-w-48 flex-grow basis-56";
@@ -29,7 +28,8 @@ const Filters = ({ queryIds }: FiltersProps) => {
         <BasePriceFilter className={className} />
         <Sort className={className} />
         <AddColumnButton className={className} />
-        <ExportButton className={className} queryIds={queryIds} />
+        {/* TODO: Implement export button when backend is ready */}
+        {/* <ExportButton className={className} queryIds={queryIds} /> */}
       </div>
       <OnlyPriceCriteriaFilter />
     </div>
