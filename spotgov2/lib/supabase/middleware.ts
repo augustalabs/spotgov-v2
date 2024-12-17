@@ -51,6 +51,7 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Redirect unauthenticated users to the login page
   if (
     !user &&
     !request.nextUrl.pathname.startsWith("/login") &&
@@ -58,9 +59,18 @@ export async function updateSession(request: NextRequest) {
     !request.nextUrl.pathname.startsWith("/aceitar-convite") &&
     !request.nextUrl.pathname.startsWith("/api/organizations/accept-invite")
   ) {
-    // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
     url.pathname = LOGIN_ROUTE;
+    return NextResponse.redirect(url);
+  }
+
+  // Restrict access to '/internal' route to super admin users
+  if (
+    request.nextUrl.pathname.startsWith("/internal") &&
+    !(user?.user_metadata?.is_super_admin === true)
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = NEW_SEARCH_ROUTE;
     return NextResponse.redirect(url);
   }
 
@@ -70,7 +80,6 @@ export async function updateSession(request: NextRequest) {
   ) {
     const url = request.nextUrl.clone();
     url.pathname = NEW_SEARCH_ROUTE;
-
     return NextResponse.redirect(url);
   }
 

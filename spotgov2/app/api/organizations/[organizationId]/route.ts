@@ -1,7 +1,9 @@
-import { Organization } from "@/database/schemas";
+import { Organization, organizations } from "@/database/schemas";
+import { isSuperAdmin } from "@/features/internal-dashboard/utils/api";
 import {
   getUserFromOrganization,
   updateOrganization,
+  deleteOrganization,
 } from "@/features/organizations/api";
 import { canEditOrganization } from "@/permissions";
 import { Response } from "@/types";
@@ -68,3 +70,44 @@ export async function PATCH(
     });
   }
 }
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: Params },
+): Promise<NextResponse<Response<Organization[]>>> {
+  try {
+    // Check user authentication
+    const user = await checkUserAuthentication();
+    if (user instanceof NextResponse) return user;
+
+    // Check if user has permission to delete the organization
+
+    const userIsSuperAdmin = isSuperAdmin(user);
+    if (!user || !userIsSuperAdmin) {
+      return NextResponse.json(STATUS_FORBIDDEN, {
+        status: STATUS_FORBIDDEN.status,
+      });
+    }
+
+    // Delete the organization
+    const organization = await deleteOrganization(params.organizationId);
+
+    if (!organization) {
+      return NextResponse.json(STATUS_NOT_FOUND, {
+        status: STATUS_NOT_FOUND.status,
+      });
+    }
+
+    return NextResponse.json(
+      { ...STATUS_OK, payload: organization },
+      { status: STATUS_OK.status },
+    );
+  } catch {
+    return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
+      status: STATUS_INTERNAL_SERVER_ERROR.status,
+    });
+  }
+}
+
+
+
