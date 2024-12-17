@@ -1,3 +1,10 @@
+import { Separator } from '@/components/ui/separator';
+
+import { Button } from '@/components/ui/button';
+import { Mail, MapPin, MoveUpRight, Phone } from 'lucide-react';
+import Link from 'next/link';
+
+import Image from 'next/image';
 import React from 'react';
 
 interface ReviewBodyInfo {
@@ -38,74 +45,165 @@ export default function ContractIssuerInfo({
   issuerInfo,
 }: ContractIssuerInfoProps) {
   return (
-    <div>
-      <h2>Issuer Information</h2>
-      <p>
-        <strong>Adjudicating Entity Designation:</strong>{' '}
-        {issuerInfo.adjudicatingEntityDesignation}
-      </p>
-      <p>
-        <strong>Contact Organ:</strong> {issuerInfo.contactOrgan}
-      </p>
-      <p>
-        <strong>Address:</strong> {issuerInfo.address}
-      </p>
-      <p>
-        <strong>Locality:</strong> {issuerInfo.locality}
-      </p>
-      <p>
-        <strong>Postal Code:</strong> {issuerInfo.postalCode}
-      </p>
-      <p>
-        <strong>District:</strong> {issuerInfo.district}
-      </p>
-      <p>
-        <strong>Municipality:</strong> {issuerInfo.municipality}
-      </p>
-      <p>
-        <strong>Parish:</strong> {issuerInfo.parish}
-      </p>
-      <p>
-        <strong>Country:</strong> {issuerInfo.country}
-      </p>
-      <p>
-        <strong>NIPC:</strong> {issuerInfo.nipc}
-      </p>
-      <p>
-        <strong>Phone:</strong> {issuerInfo.phone}
-      </p>
-      <p>
-        <strong>Fax:</strong> {issuerInfo.fax}
-      </p>
-      <p>
-        <strong>Email Address:</strong> {issuerInfo.emailAddress}
-      </p>
-      <p>
-        <strong>URL Address:</strong> {issuerInfo.urlAddress}
-      </p>
+    
+      <div className="space-y-4 mt-8">
+        {/* Header Section */}
+        <div className="flex gap-2">
+          <div className="relative w-20 h-20 rounded-lg border-[1.5px] border-[#F0F2F5] shrink-0">
+            <Image
+              src="/assets/images/thumbnail-image.png"
+              alt="thumbnail image"
+              layout="fill"
+              className="rounded-lg object-cover object-center"
+            />
+          </div>
+          <div className="space-y-3">
+            <div>
+              <p className="font-semibold">
+                {issuerInfo?.adjudicatingEntityDesignation}
+              </p>
+              <p className="text-sm text-[#666F8D]">
+                {issuerInfo?.contactOrgan}
+              </p>
+            </div>
+            {/* NIPC and URL Address */}
+            <div className="space-x-2">
+              {issuerInfo?.nipc && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs font-semibold border-[1.5px]"
+                >
+                  <div className="flex items-center space-x-2">
+                    <span className="text-[8px] border-[#666F8D] border-[1.5px] rounded-2xl px-1 text-[#666F8D] font-semibold">
+                      NIPC
+                    </span>
+                    <span>{issuerInfo.nipc}</span>
+                  </div>
+                </Button>
+              )}
 
-      <h2>Review Body Information</h2>
-      <p>
-        <strong>Designation:</strong> {reviewBodyInfo.designation}
-      </p>
-      <p>
-        <strong>Address:</strong> {reviewBodyInfo.address}
-      </p>
-      <p>
-        <strong>Locality:</strong> {reviewBodyInfo.locality}
-      </p>
-      <p>
-        <strong>Postal Code:</strong> {reviewBodyInfo.postalCode}
-      </p>
-      <p>
-        <strong>Phone:</strong> {reviewBodyInfo.phone}
-      </p>
-      <p>
-        <strong>Fax:</strong> {reviewBodyInfo.fax}
-      </p>
-      <p>
-        <strong>Email Address:</strong> {reviewBodyInfo.emailAddress}
-      </p>
-    </div>
+              {issuerInfo?.urlAddress && (
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="text-xs font-semibold border-[1.5px]"
+                >
+                  <a
+                    href={
+                      issuerInfo.urlAddress.startsWith('https://') ||
+                      issuerInfo.urlAddress.startsWith('http://')
+                        ? issuerInfo.urlAddress
+                        : `https://${issuerInfo.urlAddress}`
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-1"
+                  >
+                    <span>{issuerInfo.urlAddress}</span>
+                    <MoveUpRight size={16} />
+                  </a>
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+        <Separator />
+
+        {/* General Information */}
+        <div className="text-[#666F8D] text-sm flex flex-col gap-2">
+          <p className="text-[#B3B7C6]">Informação Geral</p>
+          {/* Address */}
+          {issuerInfo?.address && (
+            <div className="flex items-center gap-1">
+              <MapPin size={16} />
+              <p className="text-wrap">
+                {issuerInfo.address}
+                {issuerInfo.district && `, ${issuerInfo.district}`}
+                {issuerInfo.postalCode && (
+                  <span className="text-[#666F8D]/50 ml-1">
+                    {issuerInfo.postalCode}
+                  </span>
+                )}
+              </p>
+            </div>
+          )}
+          {/* Email */}
+          {issuerInfo?.emailAddress && (
+            <Link
+              href={`mailto:${issuerInfo.emailAddress}`}
+              className="hover:text-[#2388FF]"
+            >
+              <div className="flex items-center gap-1">
+                <Mail size={16} />
+                <p className="text-wrap">{issuerInfo.emailAddress}</p>
+                <MoveUpRight size={16} />
+              </div>
+            </Link>
+          )}
+          {/* Phone */}
+          {issuerInfo?.phone && (
+            <Link
+              href={`tel:${issuerInfo.phone}`}
+              className="hover:text-[#2388FF]"
+            >
+              <div className="flex items-center gap-1">
+                <Phone size={16} />
+                <p className="text-wrap">{issuerInfo.phone}</p>
+                <MoveUpRight size={16} />
+              </div>
+            </Link>
+          )}
+        </div>
+        <Separator />
+
+        {/* Review Body Information */}
+        <div className="text-[#666F8D] text-sm flex flex-col gap-2">
+          <p className="text-[#B3B7C6]">Órgão de Recursos Administrativos</p>
+          {/* Address */}
+          {reviewBodyInfo?.address && (
+            <div className="flex items-center gap-1">
+              <MapPin size={16} />
+              <p className="text-wrap">
+                {reviewBodyInfo.address}
+                {reviewBodyInfo.locality && `, ${reviewBodyInfo.locality}`}
+                {reviewBodyInfo.postalCode && (
+                  <span className="text-[#666F8D]/50 ml-1">
+                    {reviewBodyInfo.postalCode}
+                  </span>
+                )}
+              </p>
+            </div>
+          )}
+          {/* Email */}
+          {reviewBodyInfo?.emailAddress && (
+            <Link
+              href={`mailto:${reviewBodyInfo.emailAddress}`}
+              className="hover:text-[#2388FF]"
+            >
+              <div className="flex items-center gap-1">
+                <Mail size={16} />
+                <p className="text-wrap">{reviewBodyInfo.emailAddress}</p>
+                <MoveUpRight size={16} />
+              </div>
+            </Link>
+          )}
+          {/* Phone */}
+          {reviewBodyInfo?.phone && (
+            <Link
+              href={`tel:${reviewBodyInfo.phone}`}
+              className="hover:text-[#2388FF]"
+            >
+              <div className="flex items-center gap-1">
+                <Phone size={16} />
+                <p className="text-wrap">{reviewBodyInfo.phone}</p>
+                <MoveUpRight size={16} />
+              </div>
+            </Link>
+          )}
+        </div>
+      </div>
+
   );
 }

@@ -7,7 +7,7 @@ interface ContractNotesProps {
 
 export default function ContractNotes({ comments }: ContractNotesProps) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 mt-8">
       <Textarea
         value={comments}
         readOnly

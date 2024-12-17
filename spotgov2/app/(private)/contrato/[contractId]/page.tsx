@@ -29,43 +29,42 @@ export default async function ContractPage({ params }: ContractPageProps) {
       <div>
         <h1>Contract Details for ID: {contractId}</h1>
         {/* Render contract details */}
-        <ContractCard
-          title={contractData.title || ''}
-          issuerName={contractData.issuerName || ''}
-          submissionDeadlineDate={contractData.submissionDeadlineDate?.toString() || ''}
-          basePrice={contractData.basePrice || ''}
-          location={contractData.executionLocation || ''}
-          publishDate={contractData.publishDate?.toString() || ''}
-        />
-        <h2>Details</h2>
-        <ContractDetails 
-          contractId={contractId} 
-          linkDr={contractData.linkDr || ''} 
-          linkDelivery={contractData.linkDelivery || ''} 
-          summary={contractData.summary || ''} 
-          executionDeadlineDays={contractData.executionDeadlineDays || 0} 
-          maxLots={contractData.maxLots || 0} 
-          maxLotsPerContestant={contractData.maxLotsPerContestant || 0} 
-          awardCriteria={contractData.awardCriteria || []} 
-          renews={contractData.renews || false} 
-        />
         
-        
-        <h2>Issuer</h2>
-        <ContractIssuerInfo 
-          reviewBodyInfo={contractData?.reviewBodyInfo || {}} 
-          issuerInfo={contractData?.issuerInfo || {}} 
-        />
-        
-        <h2>Files</h2>
-        <ContractFiles documents={contractData.documents || []} />
+          
+            <ContractCard
+              title={contractData.title || ''}
+              issuerName={contractData.issuerName || ''}
+              submissionDeadlineDate={contractData.submissionDeadlineDate?.toString() || ''}
+              basePrice={contractData.basePrice || ''}
+              location={contractData.executionLocation || ''}
+              publishDate={contractData.publishDate?.toString() || ''}
+            />
+          
 
-        {isAuthenticated && (
-          <>
-            <h2>Notes</h2>
-            <ContractNotes comments={contractInOrganizationData?.comments || ""} />
-          </>
-        )}
+          <div className="grid grid-cols-2 gap-4">
+            <ContractDetails 
+              contractId={contractId} 
+              linkDr={contractData.linkDr || ''} 
+              linkDelivery={contractData.linkDelivery || ''} 
+              summary={contractData.summary || ''} 
+              executionDeadlineDays={contractData.executionDeadlineDays || 0} 
+              maxLots={contractData.maxLots || 0} 
+              maxLotsPerContestant={contractData.maxLotsPerContestant || 0} 
+              awardCriteria={contractData.awardCriteria || []} 
+              renews={contractData.renews || false} 
+            />
+          
+            <ContractIssuerInfo 
+              reviewBodyInfo={contractData?.reviewBodyInfo || {}} 
+              issuerInfo={contractData?.issuerInfo || {}} 
+            />
+         
+            <ContractFiles documents={contractData.documents || []} />
+        
+          {isAuthenticated && (
+              <ContractNotes comments={contractInOrganizationData?.comments || ""} /> 
+          )}
+        </div>
         {/* Render contractLots here */}
       </div>
     );
