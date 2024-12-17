@@ -19,6 +19,7 @@ async function signUpWithPassword(
     options: {
       data: {
         full_name: data.name,
+        is_super_admin: false,
       },
     },
   });
