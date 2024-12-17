@@ -1,7 +1,7 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filters-store";
 
-const OnlyPriceCriteria = () => {
+const OnlyPriceCriteriaFilter = () => {
   const { onlyPriceCriteriaInput, setOnlyPriceCriteriaInput } =
     useFavoriteQueriesFiltersStore();
 
@@ -27,4 +27,4 @@ const OnlyPriceCriteria = () => {
   );
 };
 
-export default OnlyPriceCriteria;
+export default OnlyPriceCriteriaFilter;

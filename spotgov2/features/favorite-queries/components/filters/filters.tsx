@@ -8,7 +8,7 @@ import AddColumnButton from "../custom-columns/add-column-button";
 import BasePriceFilter from "./base-price-filter";
 import DateRangeFilter from "./date-range-filter";
 import ExportButton from "./export-button";
-import OnlyPriceCriteria from "./only-price-criteria-filter";
+import OnlyPriceCriteriaFilter from "./only-price-criteria-filter";
 
 const className = "min-w-48 flex-grow basis-56";
 
@@ -31,7 +31,7 @@ const Filters = ({ queryIds }: FiltersProps) => {
         <AddColumnButton className={className} />
         <ExportButton className={className} queryIds={queryIds} />
       </div>
-      <OnlyPriceCriteria />
+      <OnlyPriceCriteriaFilter />
     </div>
   );
 };
