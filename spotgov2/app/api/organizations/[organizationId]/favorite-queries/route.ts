@@ -27,12 +27,12 @@ export async function GET(
     const search = searchParams.get("search") ?? "";
     const adjudicators = searchParams.getAll("adjudicator") ?? [];
     const titles = searchParams.getAll("title") ?? [];
-    const saved = searchParams.get("saved") ?? "";
+    const saved = searchParams.get("saved");
     const cpvs = searchParams.getAll("cpv") ?? [];
     const minPrice = searchParams.get("minPrice") ?? "0";
     const maxPrice = searchParams.get("maxPrice") ?? "100000000";
-    const minPublishDate = searchParams.get("minPublishDate") ?? "";
-    const maxPublishDate = searchParams.get("maxPublishDate") ?? "";
+    const minPublishDate = searchParams.get("minPublishDate");
+    const maxPublishDate = searchParams.get("maxPublishDate");
     const onlyPriceCriteria = searchParams.get("onlyPriceCriteria") ?? "false";
     const sort = searchParams.get("sort");
 

@@ -75,6 +75,7 @@ function favoriteQueriesQuery(
     if (publishDateInput?.to)
       searchParams += `&maxPublishDate=${publishDateInput.to}`;
 
+    // We can't do !onlyPriceCriteriaInput because onlyPriceCriteriaInput is a boolean
     if (onlyPriceCriteriaInput !== null) {
       searchParams += `&onlyPriceCriteria=${onlyPriceCriteriaInput}`;
     }

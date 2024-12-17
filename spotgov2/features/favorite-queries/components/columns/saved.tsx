@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Bookmark } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filters-store";
 
 type SavedProps = {
   saved: boolean;
@@ -13,6 +14,8 @@ type SavedProps = {
 };
 
 const Saved = ({ saved, contractId }: SavedProps) => {
+  const { savedInput } = useFavoriteQueriesFiltersStore();
+
   const [isSaved, setIsSaved] = useState<boolean>(false);
 
   useEffect(() => {
@@ -29,8 +32,13 @@ const Saved = ({ saved, contractId }: SavedProps) => {
   );
   const handleSaveContract = async () => {
     try {
-      // We do an optimistic update here to avoid waiting for the mutation to finish
-      setIsSaved((prev) => !prev);
+      // We do an optimistic update here to avoid waiting for the mutation to finish.
+      // The if statement is to avoid the case where the savedInput is not 'all' which
+      // means the contract will disappear from the list and we don't want to change the state,
+      // otherwise it will show the update for the wrong contract.
+      if (savedInput === null) {
+        setIsSaved((prev) => !prev);
+      }
 
       const res = await mutation.mutateAsync({
         saved: !saved,
