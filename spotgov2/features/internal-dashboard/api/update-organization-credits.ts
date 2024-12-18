@@ -1,23 +1,22 @@
 import { db } from "@/database/db";
-
-import { Organization } from "@/database/schemas";
-
-import { organizations } from "@/database/schemas";
 import { eq } from "drizzle-orm";
+import { organizations } from "@/database/schemas";
 
-async function updateOrganizationCredits(
-  organizationId: string,
-    credits: {
-        deepDiveCurrency: number;
-        matchmakingCurrency: number;
-  }
-): Promise<Organization[]> {
-  return await db.update(organizations).set({
+const updateOrganizationCredits = async (
+  organizationId: string, 
+  deepDiveCredits: number, 
+  matchmakingCredits: number
+) => {
+  return await db
+    .update(organizations)
+    .set({
+      deepDiveCurrency: deepDiveCredits,
+        matchmakingCurrency: matchmakingCredits,
+      updatedAt: new Date(),
+    })
+    .where(eq(organizations.id, organizationId)).returning()
+  
     
-      deepDiveCurrency: credits.deepDiveCurrency,
-      matchmakingCurrency: credits.matchmakingCurrency,
-    
-  }).where(eq(organizations.id, organizationId)).returning();
 }
 
-export default updateOrganizationCredits;   
+export default updateOrganizationCredits   

@@ -4,7 +4,9 @@ import {
   getUserFromOrganization,
   updateOrganization,
   deleteOrganization,
+  getOrganizationById
 } from "@/features/organizations/api";
+
 import { canEditOrganization } from "@/permissions";
 import { Response } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";
@@ -20,6 +22,32 @@ import { NextResponse } from "next/server";
 type Params = {
   organizationId: string;
 };
+
+
+export async function GET(
+  req: Request,
+  { params }: { params: Params },
+): Promise<NextResponse<Response<Organization | null>>> {
+
+  const user = await checkUserAuthentication();
+  if (user instanceof NextResponse) return user;
+
+  if (!user ) {
+    return NextResponse.json(STATUS_FORBIDDEN, {
+      status: STATUS_FORBIDDEN.status,
+    });
+  }
+
+  const organization = await getOrganizationById(params.organizationId);
+
+  if (!organization) {
+    return NextResponse.json(STATUS_NOT_FOUND, {
+      status: STATUS_NOT_FOUND.status,
+    });
+  }
+
+  return NextResponse.json({ ...STATUS_OK, payload: organization },{ status: STATUS_OK.status });
+}
 
 export async function PATCH(
   req: Request,
