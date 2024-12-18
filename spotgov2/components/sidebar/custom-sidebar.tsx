@@ -11,7 +11,7 @@ import Header from "./header";
 import Main from "./main";
 import OrganizationSwitcher from "./organization-switcher";
 
-const NewSidebar = () => {
+const CustomSidebar = () => {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -34,4 +34,4 @@ const NewSidebar = () => {
   );
 };
 
-export default NewSidebar;
+export default CustomSidebar;

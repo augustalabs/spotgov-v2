@@ -12,7 +12,7 @@ const Header = () => {
     <SidebarMenuButton
       asChild
       size="lg"
-      className="flex items-center gap-2 hover:bg-transparent data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+      className="flex items-center gap-2 hover:bg-transparent active:bg-transparent data-[state=open]:bg-transparent data-[state=open]:text-sidebar-accent-foreground"
     >
       <div className="flex w-full items-center justify-between gap-2 truncate">
         <div className="flex items-center gap-2">
