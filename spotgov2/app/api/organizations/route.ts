@@ -18,7 +18,7 @@ export async function GET(): Promise<
 
     const organizations = await getOrganizations(userOrResponse.id);
 
-    if (!organizations?.length) {
+    if (!organizations) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
       });

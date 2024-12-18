@@ -45,7 +45,7 @@ export async function DELETE(
       params.contractId,
     );
 
-    if (!feedCustomFields?.length) {
+    if (!feedCustomFields) {
       return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
         status: STATUS_INTERNAL_SERVER_ERROR.status,
       });

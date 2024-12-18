@@ -55,7 +55,7 @@ export async function PATCH(
       role,
     );
 
-    if (!userOrganization?.length) {
+    if (!userOrganization) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
       });
@@ -99,7 +99,7 @@ export async function DELETE(
 
     const deletedUser = await deleteUser(params.userId, params.organizationId);
 
-    if (!deletedUser?.length) {
+    if (!deletedUser) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
       });

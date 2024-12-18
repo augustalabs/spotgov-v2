@@ -86,7 +86,7 @@ export async function POST(
       fieldType,
     );
 
-    if (!feedCustomFields?.length) {
+    if (!feedCustomFields) {
       return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
         status: STATUS_INTERNAL_SERVER_ERROR.status,
       });

@@ -51,7 +51,7 @@ export async function PATCH(
       saved,
     );
 
-    if (!contractsOrganization?.length) {
+    if (!contractsOrganization) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
       });

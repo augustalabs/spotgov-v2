@@ -48,7 +48,7 @@ export async function PATCH(
 
     const query = await updateQueryTitle(params.queryId, title);
 
-    if (!query?.length) {
+    if (!query) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
       });
@@ -94,7 +94,7 @@ export async function DELETE(
 
     const queries = await deleteQuery(params.queryId);
 
-    if (!queries?.length) {
+    if (!queries) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
       });

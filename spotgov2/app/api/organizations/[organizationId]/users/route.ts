@@ -48,7 +48,7 @@ export async function GET(
 
     const users = await getUsers(params.organizationId);
 
-    if (!users?.length) {
+    if (!users) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
       });

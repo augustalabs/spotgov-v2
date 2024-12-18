@@ -53,7 +53,7 @@ export async function PATCH(
       fieldName,
     );
 
-    if (!feedCustomFields?.length) {
+    if (!feedCustomFields) {
       return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
         status: STATUS_INTERNAL_SERVER_ERROR.status,
       });
@@ -97,7 +97,7 @@ export async function DELETE(
       params.fieldId,
     );
 
-    if (!feedCustomFields?.length) {
+    if (!feedCustomFields) {
       return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
         status: STATUS_INTERNAL_SERVER_ERROR.status,
       });
