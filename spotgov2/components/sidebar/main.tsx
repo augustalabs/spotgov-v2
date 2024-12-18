@@ -2,6 +2,7 @@
 
 import {
   Bookmark,
+  Building,
   ChartSpline,
   ChevronRight,
   Compass,
@@ -24,6 +25,7 @@ import {
 import {
   CONTESTS_RADAR_ROUTE,
   MARKET_INTELLIGENCE_ROUTE,
+  ORGANIZATION_ROUTE,
   PROPOSAL_REVIEW_ROUTE,
   SAVED_CONTESTS_ROUTE,
   SEARCH_ROUTE,
@@ -33,6 +35,9 @@ import { Separator } from "../ui/separator";
 import { cn } from "@/utils/utils";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
+import { canViewOrganization } from "@/permissions";
+import { UserRoles } from "@/types";
 
 type SidebarItem = {
   title: string;
@@ -102,6 +107,7 @@ const Main = () => {
   const { open } = useSidebar();
 
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
+  const [fullItems, setFullItems] = useState<SidebarItem[]>(items);
 
   useEffect(() => {
     if (!open) {
@@ -136,10 +142,37 @@ const Main = () => {
 
   const isActive = (url: string) => pathname.startsWith(url);
 
+  const { currentOrganization } = useCurrentOrganizationStore();
+
+  const organizationItems = {
+    title: "Organização",
+    isActive: true,
+    items: [
+      {
+        icon: Building,
+        title: ORGANIZATION_ROUTE.label,
+        url: ORGANIZATION_ROUTE.url,
+      },
+    ],
+  };
+
+  useEffect(() => {
+    if (
+      canViewOrganization(currentOrganization?.role as UserRoles) &&
+      !items.some((item) => item.title === organizationItems.title)
+    ) {
+      setFullItems([...items, organizationItems]);
+    } else {
+      setFullItems(
+        items.filter((item) => item.title !== organizationItems.title),
+      );
+    }
+  }, [currentOrganization]);
+
   return (
     <SidebarGroup>
       <SidebarMenu className={cn(open && "space-y-4")}>
-        {items.map((item, index) => (
+        {fullItems.map((item, index) => (
           <Collapsible
             open={openSections[item.title]}
             onOpenChange={() => toggleSection(item.title)}
