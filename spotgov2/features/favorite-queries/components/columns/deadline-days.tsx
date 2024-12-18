@@ -21,7 +21,7 @@ const DeadlineDays = ({ date }: DeadlineDaysProps) => {
         <div className={cn("size-2 rounded-full", getDifferenceInDays()[1])} />
         <div
           className={cn(
-            "absolute left-1/2 top-1/2 -z-10 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-30",
+            "absolute left-1/2 top-1/2 z-10 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-30",
             getDifferenceInDays()[1],
           )}
         />

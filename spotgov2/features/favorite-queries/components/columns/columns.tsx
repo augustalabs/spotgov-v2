@@ -22,8 +22,11 @@ export const columns: ColumnDef<PaginatedContractsType>[] = [
   {
     accessorKey: "basePrice",
     header: "Preço base",
-    cell: ({ row }) =>
-      formatPrice(parseInt(row.original.contract.basePrice as string)),
+    cell: ({ row }) => (
+      <p className="truncate">
+        {formatPrice(parseInt(row.original.contract.basePrice as string))} €
+      </p>
+    ),
   },
   {
     accessorKey: "publishDate",

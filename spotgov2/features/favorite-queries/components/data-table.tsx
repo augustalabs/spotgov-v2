@@ -80,62 +80,60 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="hover:bg-background">
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length
-              ? table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id} className="hover:bg-background">
+              {headerGroup.headers.map((header) => {
+                return (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
                         )}
-                      </TableCell>
-                    ))}
+                  </TableHead>
+                );
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length
+            ? table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            : Array.from({ length: isPending ? pageSize : 1 }).map(
+                (_, index) => (
+                  <TableRow key={index}>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-full text-center"
+                    >
+                      {isPending ? (
+                        <Skeleton className="h-10 w-full" />
+                      ) : (
+                        <p>No results.</p>
+                      )}
+                    </TableCell>
                   </TableRow>
-                ))
-              : Array.from({ length: isPending ? pageSize : 1 }).map(
-                  (_, index) => (
-                    <TableRow key={index}>
-                      <TableCell
-                        colSpan={columns.length}
-                        className="h-full text-center"
-                      >
-                        {isPending ? (
-                          <Skeleton className="h-10 w-full" />
-                        ) : (
-                          <p>No results.</p>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ),
-                )}
-          </TableBody>
-        </Table>
-      </div>
+                ),
+              )}
+        </TableBody>
+      </Table>
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"

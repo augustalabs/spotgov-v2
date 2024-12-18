@@ -100,7 +100,7 @@ const ColumnActions = ({ label, fieldId }: ColumnActionsProps) => {
             }
           }}
           className={cn(
-            "pl-0",
+            "bg-gray-50 pl-0 !text-foreground",
             !isEditable &&
               "border-none disabled:cursor-text disabled:font-medium disabled:text-muted-foreground disabled:opacity-100",
           )}
