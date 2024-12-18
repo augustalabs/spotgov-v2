@@ -177,7 +177,7 @@ const Main = () => {
             open={openSections[item.title]}
             onOpenChange={() => toggleSection(item.title)}
             key={item.title}
-            className={cn("group/collapsible", !open && "space-y-4")}
+            className={cn("group/collapsible")}
           >
             {open ? (
               <CollapsibleTrigger asChild>
