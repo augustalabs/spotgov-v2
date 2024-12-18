@@ -1,5 +1,5 @@
 import Header from "@/components/header";
-import CustomTable from "@/features/favorite-queries/components/custom-table";
+import CustomTable from "@/features/radar/components/custom-table";
 import { SAVED_CONTESTS_ROUTE } from "@/routes";
 
 export default function FavoriteSearchesPage() {
