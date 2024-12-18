@@ -32,6 +32,7 @@ import Link from "next/link";
 import { Separator } from "../ui/separator";
 import { cn } from "@/utils/utils";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 type SidebarItem = {
   title: string;
@@ -96,6 +97,8 @@ const items: SidebarItem[] = [
 ];
 
 const Main = () => {
+  const pathname = usePathname();
+
   const { open } = useSidebar();
 
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
@@ -131,6 +134,8 @@ const Main = () => {
     }));
   };
 
+  const isActive = (url: string) => pathname.startsWith(url);
+
   return (
     <SidebarGroup>
       <SidebarMenu className={cn(open && "space-y-4")}>
@@ -157,7 +162,14 @@ const Main = () => {
             <CollapsibleContent className="mt-1 space-y-1">
               {item.items.map((subItem) => (
                 <SidebarMenuItem key={subItem.title}>
-                  <SidebarMenuButton tooltip={subItem.title} asChild>
+                  <SidebarMenuButton
+                    tooltip={subItem.title}
+                    asChild
+                    className={cn(
+                      isActive(subItem.url) &&
+                        "border border-input bg-background",
+                    )}
+                  >
                     <Link href={subItem.url}>
                       <subItem.icon size={16} />
                       <span>{subItem.title}</span>
