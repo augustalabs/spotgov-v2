@@ -30,7 +30,7 @@ type InfoDetail = {
   details: string;
 };
 
-const SidebarFooterInfo = () => {
+const Contacts = () => {
   const [hoveredAction, setHoveredAction] = useState<string | null>(null);
   const [copiedAction, setCopiedAction] = useState<string | null>(null);
 
@@ -153,4 +153,4 @@ const SidebarFooterInfo = () => {
   );
 };
 
-export default SidebarFooterInfo;
+export default Contacts;

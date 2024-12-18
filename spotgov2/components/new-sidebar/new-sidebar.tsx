@@ -1,3 +1,4 @@
+import { Separator } from "../ui/separator";
 import {
   Sidebar,
   SidebarContent,
@@ -5,16 +6,26 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "../ui/sidebar";
+import Footer from "./footer";
 import Main from "./main";
+import OrganizationSwitcher from "./organization-switcher";
 
 const NewSidebar = () => {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader></SidebarHeader>
+      <Separator />
       <SidebarContent>
         <Main />
       </SidebarContent>
-      <SidebarFooter></SidebarFooter>
+      <Separator />
+      <div className="p-2">
+        <OrganizationSwitcher />
+      </div>
+      <Separator />
+      <SidebarFooter>
+        <Footer />
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

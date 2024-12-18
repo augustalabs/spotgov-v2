@@ -132,12 +132,12 @@ const Main = () => {
   return (
     <SidebarGroup>
       <SidebarMenu className={cn(open && "space-y-4")}>
-        {items.map((item) => (
+        {items.map((item, index) => (
           <Collapsible
             open={openSections[item.title]}
             onOpenChange={() => toggleSection(item.title)}
             key={item.title}
-            className="group/collapsible"
+            className={cn("group/collapsible", !open && "space-y-4")}
           >
             {open ? (
               <CollapsibleTrigger asChild>
@@ -150,7 +150,7 @@ const Main = () => {
                 </SidebarMenuButton>
               </CollapsibleTrigger>
             ) : (
-              <Separator className="my-4" />
+              index != 0 && <Separator />
             )}
             <CollapsibleContent className="mt-1 space-y-1">
               {item.items.map((subItem) => (
