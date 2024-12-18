@@ -21,6 +21,7 @@ import { cn } from "@/utils/utils";
 import { useMutation } from "@tanstack/react-query";
 import { updateOrganizationMutation } from "@/features/organizations/services";
 import { toast } from "sonner";
+import { ORGANIZATION_ROUTE } from "@/routes";
 
 const InformationForm = () => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
@@ -75,7 +76,7 @@ const InformationForm = () => {
   return (
     <>
       <div className="mb-8 flex items-center justify-between">
-        <Header title="Organização" />
+        <Header title={ORGANIZATION_ROUTE.label} />
         <Button
           variant="outline"
           size="sm"

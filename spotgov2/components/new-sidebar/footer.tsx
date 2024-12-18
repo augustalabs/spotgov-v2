@@ -13,7 +13,7 @@ const Footer = async () => {
   const supabase = await createClient();
   const { data: userData, error } = await supabase.auth.getUser();
 
-  if (error || !userData) redirect(LOGIN_ROUTE);
+  if (error || !userData) redirect(LOGIN_ROUTE.url);
 
   const userName = userData?.user.user_metadata.full_name;
   const userEmail = userData?.user.email ?? "";

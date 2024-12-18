@@ -22,9 +22,11 @@ import {
   useSidebar,
 } from "../ui/sidebar";
 import {
-  FAVORITE_SEARCH_ROUTE,
+  CONTESTS_RADAR_ROUTE,
   MARKET_INTELLIGENCE_ROUTE,
-  NEW_SEARCH_ROUTE,
+  PROPOSAL_REVIEW_ROUTE,
+  SAVED_CONTESTS_ROUTE,
+  SEARCH_ROUTE,
 } from "@/routes";
 import Link from "next/link";
 import { Separator } from "../ui/separator";
@@ -48,13 +50,13 @@ const items: SidebarItem[] = [
     items: [
       {
         icon: Compass,
-        title: "Radar de concursos",
-        url: "", // TODO
+        title: CONTESTS_RADAR_ROUTE.label,
+        url: CONTESTS_RADAR_ROUTE.url,
       },
       {
         icon: Search,
-        title: "Motor de pesquisa",
-        url: NEW_SEARCH_ROUTE,
+        title: SEARCH_ROUTE.label,
+        url: SEARCH_ROUTE.url,
       },
     ],
   },
@@ -64,8 +66,8 @@ const items: SidebarItem[] = [
     items: [
       {
         icon: Eye,
-        title: "Revisor de propostas",
-        url: "", // TODO
+        title: PROPOSAL_REVIEW_ROUTE.label,
+        url: PROPOSAL_REVIEW_ROUTE.url,
       },
     ],
   },
@@ -75,8 +77,8 @@ const items: SidebarItem[] = [
     items: [
       {
         icon: Bookmark,
-        title: "Concursos guardados",
-        url: FAVORITE_SEARCH_ROUTE,
+        title: SAVED_CONTESTS_ROUTE.label,
+        url: SAVED_CONTESTS_ROUTE.url,
       },
     ],
   },
@@ -86,8 +88,8 @@ const items: SidebarItem[] = [
     items: [
       {
         icon: ChartSpline,
-        title: "Inteligência de mercado",
-        url: MARKET_INTELLIGENCE_ROUTE,
+        title: MARKET_INTELLIGENCE_ROUTE.label,
+        url: MARKET_INTELLIGENCE_ROUTE.url,
       },
     ],
   },

@@ -1,7 +1,6 @@
 import { getUserFromOrganization } from "@/features/organizations/api";
 import { canInviteUser } from "@/permissions";
 import { resend } from "@/lib/resend/client";
-import { ORGANIZATION_INVITE_ROUTE } from "@/routes";
 import { Response } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";
 import {
@@ -13,6 +12,7 @@ import {
 } from "@/utils/api/status-messages";
 import { generateInviteToken } from "@/utils/utils";
 import { NextResponse } from "next/server";
+import { ORGANIZATION_ACCEPT_INVITE_ROUTE } from "@/routes";
 
 type Params = {
   organizationId: string;
@@ -61,7 +61,7 @@ export async function POST(
 
     const inviteUrl =
       process.env.NEXT_PUBLIC_BASE_URL! +
-      ORGANIZATION_INVITE_ROUTE +
+      ORGANIZATION_ACCEPT_INVITE_ROUTE.url +
       `/${token}`;
 
     // TODO: If we change token validity, we need to update the email template

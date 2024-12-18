@@ -4,6 +4,7 @@ import { fetchPipelineData } from "@/features/pipeline/api/fetch-pipeline-data";
 import Pipeline from "@/features/pipeline/components/pipeline";
 import { getQueryClient } from "@/lib/react-query/client";
 import { createClient } from "@/lib/supabase/server";
+import { SAVED_CONTESTS_ROUTE } from "@/routes";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 export default async function PipelinePage() {
@@ -22,7 +23,7 @@ export default async function PipelinePage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-       <Header title="Pipeline" />
+      <Header title={SAVED_CONTESTS_ROUTE.label} />
       <Pipeline organizationId={organizationId} />
     </HydrationBoundary>
   );

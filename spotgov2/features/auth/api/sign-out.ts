@@ -10,8 +10,8 @@ async function signOut() {
 
   await supabase.auth.signOut();
 
-  revalidatePath(HOME_ROUTE, "layout");
-  redirect(LOGIN_ROUTE);
+  revalidatePath(HOME_ROUTE.url, "layout");
+  redirect(LOGIN_ROUTE.url);
 }
 
 export default signOut;

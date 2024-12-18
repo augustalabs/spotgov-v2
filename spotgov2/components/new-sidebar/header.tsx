@@ -5,7 +5,7 @@ import { SidebarMenuButton, SidebarTrigger } from "../ui/sidebar";
 import LogoIcon from "@/public/assets/images/logo-icon.png";
 import LogoText from "@/public/assets/images/logo-text.png";
 import Link from "next/link";
-import { NEW_SEARCH_ROUTE } from "@/routes";
+import { SEARCH_ROUTE } from "@/routes";
 
 const Header = () => {
   return (
@@ -17,7 +17,7 @@ const Header = () => {
       <div className="flex w-full items-center justify-between gap-2 truncate">
         <div className="flex items-center gap-2">
           <Link
-            href={NEW_SEARCH_ROUTE}
+            href={SEARCH_ROUTE.url}
             className="flex w-full cursor-pointer items-center gap-2"
           >
             <Avatar className="size-8 rounded-lg">
