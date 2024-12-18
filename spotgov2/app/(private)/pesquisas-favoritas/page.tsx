@@ -4,7 +4,7 @@ import CustomTable from "@/features/favorite-queries/components/custom-table";
 export default function FavoriteSearchesPage() {
   return (
     <section>
-      <Header title="Pesquisas favoritas" />
+      <Header title="Concursos guardados" />
       <CustomTable />
     </section>
   );

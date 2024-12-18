@@ -7,13 +7,16 @@ import {
   SidebarRail,
 } from "../ui/sidebar";
 import Footer from "./footer";
+import Header from "./header";
 import Main from "./main";
 import OrganizationSwitcher from "./organization-switcher";
 
 const NewSidebar = () => {
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader></SidebarHeader>
+      <SidebarHeader>
+        <Header />
+      </SidebarHeader>
       <Separator />
       <SidebarContent>
         <Main />
