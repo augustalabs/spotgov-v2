@@ -1,6 +1,8 @@
 import { Contract } from "@/database/schemas";
 import { JoinedContractInOrganization, Response } from "@/types";
-import { get } from "@/utils/api/functions";
+import { get, getServer } from "@/utils/api/functions";
+import { getContractById } from "../api";
+import { getContractInOrganization } from "../api";
 
 function contractQuery(contractId: string) {
   const queryKey = ["get-contract", contractId];
@@ -16,3 +18,11 @@ function contractQuery(contractId: string) {
 }
 
 export default contractQuery;
+
+
+export async function contractsQueryFn(contractId: string): Promise<Response<JoinedContractInOrganization | Contract | null>> {
+  return await getServer<Response<JoinedContractInOrganization | Contract | null>>({
+    url: `contracts/${contractId}`,
+  });
+}
+

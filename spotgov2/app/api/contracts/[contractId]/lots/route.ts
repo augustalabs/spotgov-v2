@@ -16,11 +16,6 @@ export async function GET(
 
   const lots = await getContractLots({ contractId });
 
-  if (!lots) {
-    return NextResponse.json(STATUS_NOT_FOUND, {
-      status: STATUS_NOT_FOUND.status,
-    });
-    }
     
-  return NextResponse.json({ ...STATUS_OK, payload: lots }, {status: STATUS_OK.status});
+  return NextResponse.json({ ...STATUS_OK, payload: lots || [] }, {status: STATUS_OK.status});
 }

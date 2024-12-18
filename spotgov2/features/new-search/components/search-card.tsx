@@ -1,6 +1,6 @@
 "use client";
 
-import { formatDate } from "@/utils/date";
+import { formatTimeAgo } from "@/utils/date-utils";
 import { Clock, Star } from "lucide-react";
 
 function SearchCard({ title = "", starred = false, createdAt = "" }) {
@@ -14,7 +14,7 @@ function SearchCard({ title = "", starred = false, createdAt = "" }) {
       </div>
       <div className="flex items-center justify-between gap-2">
         <Clock className="h-4 w-4" />
-        <span>{formatDate(createdAt)}</span>
+        <span>{formatTimeAgo(createdAt)}</span>
       </div>
     </div>
   );

@@ -1,12 +1,12 @@
 "use client";
 
-import { formatBasePrice } from "@/utils/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { formatDate } from "date-fns";
 import DeadlineDays from "./deadline-days";
 import Saved from "./saved";
 import ContractTitle from "./contract-title";
 import { PaginatedContractsType } from "../../types";
+import { formatPrice } from "@/utils/utils";
 
 export const columns: ColumnDef<PaginatedContractsType>[] = [
   {
@@ -23,7 +23,7 @@ export const columns: ColumnDef<PaginatedContractsType>[] = [
     accessorKey: "basePrice",
     header: "Preço base",
     cell: ({ row }) =>
-      formatBasePrice(parseInt(row.original.contract.basePrice as string)),
+      formatPrice(parseInt(row.original.contract.basePrice as string)),
   },
   {
     accessorKey: "publishDate",

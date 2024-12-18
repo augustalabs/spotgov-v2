@@ -6,7 +6,7 @@ import QueryFilters from "@/features/queries/components/query-filters";
 import QueryListView from "@/features/queries/components/query-views/query-list-view";
 import QueryTableView from "@/features/queries/components/query-views/query-table-view";
 import { useContracts } from "@/features/queries/hooks/use-contracts";
-import { useFilters } from "@/features/queries/hooks/use-filters";
+import { useFilters } from "@/features/queries/hooks/use-contract-filters";
 import { KanbanSquare, Mail, Star, Table } from "lucide-react";
 import { useParams } from "next/navigation";
 
@@ -18,10 +18,11 @@ export default function QueryPage() {
 
   const { filters, setFilter } = useFilters();
 
-  const { filteredContracts, uniqueIssuerNames, uniqueCPVs } = useContracts({
-    queryId,
-    filters,
-  });
+  const { filteredContracts, uniqueIssuerNames, uniqueCPVs, isLoading } =
+    useContracts({
+      queryId,
+      filters,
+    });
 
   return (
     <div className="m-8">
