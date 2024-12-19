@@ -3,7 +3,6 @@
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 
 import Filters from "./filters/filters";
-import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filters-store";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { favoriteQueriesQuery } from "../services";
@@ -13,6 +12,7 @@ import useCustomColumns from "../hooks/use-custom-columns";
 import { PaginatedContractsType } from "../types";
 import { ColumnDef } from "@tanstack/react-table";
 import { getQueryClient } from "@/lib/react-query/client";
+import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filters-store";
 
 const PAGE_SIZE = 8;
 

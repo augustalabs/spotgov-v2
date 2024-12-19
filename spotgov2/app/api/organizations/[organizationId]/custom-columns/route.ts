@@ -1,5 +1,5 @@
 import { FeedCustomField } from "@/database/schemas";
-import { addColumn, getCustomColumns } from "@/features/favorite-queries/api";
+import { addColumn, getCustomColumns } from "@/features/radar/api";
 import { canAddFavoriteQueriesColumn } from "@/permissions";
 import { FeedCustomFieldWithValues, Response, UserRoles } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";

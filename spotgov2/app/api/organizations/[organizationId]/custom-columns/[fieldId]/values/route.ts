@@ -1,5 +1,5 @@
 import { FeedCustomFieldValue } from "@/database/schemas";
-import { updateColumnValue } from "@/features/favorite-queries/api";
+import { updateColumnValue } from "@/features/radar/api";
 import { canChangeFavoriteQueriesColumnValue } from "@/permissions";
 import { Response, UserRoles } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";
