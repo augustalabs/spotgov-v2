@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Avatar, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { SidebarMenuButton, SidebarTrigger } from "../ui/sidebar";
 
 import LogoIcon from "@/public/assets/images/logo-icon.png";
@@ -22,10 +22,18 @@ const Header = () => {
           >
             <Avatar className="size-8 rounded-lg">
               <AvatarImage src={LogoIcon.src} alt="SpotGov logo" />
+              <AvatarFallback className="bg-transparent">
+                <Image
+                  src={LogoIcon.src}
+                  width={32}
+                  height={32}
+                  alt="SpotGov logo"
+                />
+              </AvatarFallback>
             </Avatar>
             <Image src={LogoText} alt="SpotGov" height={18} className="mt-1" />
           </Link>
-          <div className="rounded-lg border border-primary bg-primary/10 px-1 py-0.5 text-xs text-primary">
+          <div className="bg-primary/10 rounded-lg border border-primary px-1 py-0.5 text-xs text-primary">
             <p>Beta</p>
           </div>
         </div>

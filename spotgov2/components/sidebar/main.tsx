@@ -62,14 +62,14 @@ const Main = ({ sidebarItems }: MainProps) => {
       isActive: true,
       items: [
         {
-          icon: Compass,
-          title: sidebarItems.detectionAndAnalysis.items.radar,
-          url: CONTESTS_RADAR_ROUTE.url,
-        },
-        {
           icon: Search,
           title: sidebarItems.detectionAndAnalysis.items.search,
           url: SEARCH_ROUTE.url,
+        },
+        {
+          icon: Compass,
+          title: sidebarItems.detectionAndAnalysis.items.radar,
+          url: CONTESTS_RADAR_ROUTE.url,
         },
       ],
     },
