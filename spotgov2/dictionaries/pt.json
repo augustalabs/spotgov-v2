@@ -1,0 +1,218 @@
+{
+  "sidebar": {
+    "sidebarItems": {
+      "detectionAndAnalysis": {
+        "title": "Detecção e análise",
+        "items": {
+          "radar": "Radar de concursos",
+          "search": "Motor de pesquisa"
+        }
+      },
+      "responseAndReview": {
+        "title": "Resposta e revisão",
+        "items": {
+          "reviewer": "Revisor de propostas"
+        }
+      },
+      "management": {
+        "title": "Gestão",
+        "items": {
+          "savedContests": "Concursos guardados"
+        }
+      },
+      "marketIntelligence": {
+        "title": "Inteligência de mercado",
+        "items": {
+          "marketIntelligence": "Inteligência de mercado"
+        }
+      },
+      "organization": {
+        "title": "Organização",
+        "items": {
+          "organization": "Organização"
+        }
+      }
+    },
+    "organizationSwitcher": {
+      "label": "Organizações"
+    },
+    "userButton": {
+      "contacts": "Contactos",
+      "logout": "Sair"
+    }
+  },
+  "radar": {
+    "header": {
+      "title": "Radar de concursos"
+    },
+    "filters": {
+      "search": "Procurar contratos...",
+      "queryTitle": {
+        "label": "Pesquisas",
+        "searchPlaceholder": "Procurar..."
+      },
+      "cpv": {
+        "label": "CPV",
+        "searchPlaceholder": "Procurar..."
+      },
+      "adjudicators": {
+        "label": "Adjudicantes",
+        "searchPlaceholder": "Procurar..."
+      },
+      "saved": {
+        "options": {
+          "all": "Todos",
+          "saved": "Guardados",
+          "notSaved": "Não guardados"
+        }
+      },
+      "publishDate": {
+        "label": "Data de publicação"
+      },
+      "basePrice": {
+        "label": "Preço base",
+        "popover": {
+          "title": "Filtre por preço base",
+          "subtitle": "Os valores estão em euros"
+        }
+      },
+      "sort": {
+        "options": {
+          "publishDateDesc": "Mais recente",
+          "publishDateAsc": "Mais antigo",
+          "basePriceDesc": "Preço mais alto",
+          "basePriceAsc": "Preço mais baixo",
+          "deadlineDesc": "Prazo mais distante",
+          "deadlineAsc": "Prazo mais próximo"
+        }
+      },
+      "newColumn": {
+        "label": "Adicionar coluna",
+        "dialog": {
+          "title": "Adicionar coluna",
+          "subtitle": "Adicione uma coluna personalizada com informação adicional.",
+          "inputs": {
+            "title": "Título",
+            "type": {
+              "label": "Tipo de dados",
+              "options": {
+                "text": "Texto",
+                "logic": "Lógico",
+                "date": "Data",
+                "label": "Etiqueta",
+                "file": "Ficheiro"
+              },
+              "button": "Adicionar"
+            }
+          }
+        }
+      },
+      "onlyPriceCriteria": "Apenas contratos cujo critério de adjudicação é só o preço."
+    },
+    "table": {
+      "columns": {
+        "title": "Título",
+        "basePrice": "Preço base",
+        "publishDate": "Data de publicação",
+        "deadline": "Prazo de submissão",
+        "timeLeft": "Tempo restante",
+        "query": "Pesquisa",
+        "saved": "Interesse"
+      },
+      "customColumns": {},
+      "noResults": "Não foram encontrados resultados.",
+      "buttons": {
+        "previous": "Anterior",
+        "next": "Seguinte"
+      }
+    },
+    "toasts": {
+      "success": {},
+      "error": {}
+    }
+  },
+  "search": {
+    "header": {
+      "title": "Motor de pesquisa"
+    }
+  },
+  "reviewer": {
+    "header": {
+      "title": "Revisor de propostas"
+    }
+  },
+  "savedContests": {
+    "header": {
+      "title": "Concursos guardados"
+    }
+  },
+  "marketIntelligence": {
+    "header": {
+      "title": "Inteligência de mercado"
+    }
+  },
+  "organization": {
+    "header": {
+      "title": "Organização"
+    },
+    "information": {
+      "name": "Nome",
+      "nif": "NIF"
+    },
+    "cards": {
+      "members": "Membros",
+      "querysLeft": "Pesquisas restantes",
+      "analysis": "Análises com IA restantes"
+    },
+    "table": {
+      "filter": {
+        "options": {
+          "all": "Todos",
+          "owner": "Proprietário",
+          "admin": "Administrador",
+          "editor": "Editor",
+          "viewer": "Visualizador"
+        }
+      },
+      "inviteMember": {
+        "tooltip": "Convidar utilizador",
+        "dialog": {
+          "title": "Convidar utilizador",
+          "subtitle": "Convide um utilizador para a sua organização.",
+          "input": {
+            "email": "Email"
+          },
+          "button": "Enviar convite"
+        }
+      },
+      "columns": {
+        "name": "Nome",
+        "role": "Cargo",
+        "actions": "Ações"
+      },
+      "removeMember": {
+        "tooltip": "Remover membro"
+      }
+    },
+    "toasts": {
+      "success": {
+        "inviteSent": "Convite enviado com sucesso.",
+        "memberRemoved": "Membro removido com sucesso.",
+        "roleChange": "Cargo alterado com sucesso."
+      },
+      "error": {
+        "inviteFailed": "Ocorreu um erro ao enviar o convite. Por favor, tente novamente.",
+        "memberRemoveFailed": "Ocorreu um erro ao remover o membro. Por favor, tente novamente.",
+        "roleChangeFailed": "Ocorreu um erro ao alterar o cargo. Por favor, tente novamente."
+      }
+    }
+  },
+  "destructiveDialog": {
+    "title": "Tem a certeza absoluta?",
+    "subtitle": "Esta ação não pode ser desfeita. Isto irá eliminar permanentemente os seus dados.",
+    "buttons": {
+      "cancel": "Cancelar",
+      "continue": "Continuar"
+    }
+  }
+}
