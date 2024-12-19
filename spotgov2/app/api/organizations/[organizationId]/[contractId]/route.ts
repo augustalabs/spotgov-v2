@@ -1,6 +1,6 @@
 import { ContractsOrganization } from "@/database/schemas";
-import { getUserFromOrganization } from "@/features/organizations/api";
 import { updateContractSaved } from "@/features/radar/api";
+import { getUserFromOrganization } from "@/features/organizations/api";
 import { canSaveContract } from "@/permissions";
 import { Response } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";

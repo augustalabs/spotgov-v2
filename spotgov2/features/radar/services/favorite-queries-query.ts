@@ -1,8 +1,11 @@
+import {
+  BasePriceRange,
+  FavoriteContractsDataType,
+} from "@/features/radar/types";
 import { OrderType, Response } from "@/types";
 import { get } from "@/utils/api/functions";
 import { keepPreviousData } from "@tanstack/react-query";
 import { DateRange } from "react-day-picker";
-import { BasePriceRange, FavoriteContractsDataType } from "../types";
 
 function favoriteQueriesQuery(
   organizationId: string,

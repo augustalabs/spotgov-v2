@@ -3,7 +3,6 @@ import {
   addColumnValue,
   getColumnLabelsForTypeLabel,
 } from "@/features/radar/api";
-
 import { canChangeFavoriteQueriesColumnValue } from "@/permissions";
 import { Response, UserRoles } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";
