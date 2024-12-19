@@ -83,14 +83,12 @@ export function OrganizationsTab({
   const handleDeleteOrg = () => {
     if (currentOrg) {
       deleteMutation.mutate(undefined, {
-        onSuccess: () => {
-          toast.success(`${currentOrg.name} has been successfully deleted.`);
-          setDeleteDialogOpen(false);
-          refetchOrgs();
-        },
         onError: (error) => {
           toast.error("Failed to delete the organization. Please try again.");
           console.error("Delete error:", error);
+        },
+        onSettled: () => {
+          setDeleteDialogOpen(false);
         },
       });
     }

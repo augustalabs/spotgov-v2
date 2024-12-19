@@ -1,6 +1,7 @@
 import { getQueryClient } from "@/lib/react-query/client";
 import { Response } from "@/types";
 import { del } from "@/utils/api/functions";
+import { toast } from "sonner";
 
 function deleteOrganizationMutation(organizationId: string) {
   const queryClient = getQueryClient();
@@ -15,6 +16,7 @@ function deleteOrganizationMutation(organizationId: string) {
     await queryClient.invalidateQueries({
       queryKey: ["get-all-organizations"],
     });
+  toast.success("Organization deleted successfully");
 
   return { mutationKey, mutationFn, onSuccess };
 }
