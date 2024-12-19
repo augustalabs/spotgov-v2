@@ -52,7 +52,7 @@ export async function PATCH(
       nif,
     );
 
-    if (!organizations?.length) {
+    if (!organizations) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
       });

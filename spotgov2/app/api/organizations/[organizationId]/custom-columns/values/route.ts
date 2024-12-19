@@ -34,7 +34,7 @@ export async function GET(
 
     const labels = await getColumnLabelsForTypeLabel(params.organizationId);
 
-    if (!labels?.length) {
+    if (!labels) {
       return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
         status: STATUS_INTERNAL_SERVER_ERROR.status,
       });
@@ -90,7 +90,7 @@ export async function POST(
       value,
     );
 
-    if (!feedCustomFieldsValue?.length) {
+    if (!feedCustomFieldsValue) {
       return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
         status: STATUS_INTERNAL_SERVER_ERROR.status,
       });
