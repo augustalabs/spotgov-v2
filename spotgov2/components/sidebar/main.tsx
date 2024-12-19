@@ -55,14 +55,14 @@ const items: SidebarItem[] = [
     isActive: true,
     items: [
       {
-        icon: Compass,
-        title: CONTESTS_RADAR_ROUTE.label,
-        url: CONTESTS_RADAR_ROUTE.url,
-      },
-      {
         icon: Search,
         title: SEARCH_ROUTE.label,
         url: SEARCH_ROUTE.url,
+      },
+      {
+        icon: Compass,
+        title: CONTESTS_RADAR_ROUTE.label,
+        url: CONTESTS_RADAR_ROUTE.url,
       },
     ],
   },
