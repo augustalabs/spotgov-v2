@@ -15,13 +15,11 @@ const CustomTable = () => {
   );
 
   return (
-    <div>
-      <DataTable
-        columns={columns}
-        data={data?.payload as UserWithOrganizationInfo[]}
-        isPending={isPending}
-      />
-    </div>
+    <DataTable
+      columns={columns}
+      data={data?.payload as UserWithOrganizationInfo[]}
+      isPending={isPending}
+    />
   );
 };
 

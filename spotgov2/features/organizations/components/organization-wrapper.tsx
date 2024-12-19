@@ -15,7 +15,7 @@ const OrganizationWrapper = ({ children }: { children: ReactNode }) => {
     }
   }, [currentOrganization?.role]);
 
-  return <div className="mx-auto w-full max-w-3xl">{children}</div>;
+  return <>{children}</>;
 };
 
 export default OrganizationWrapper;

@@ -76,6 +76,7 @@ export const columns: ColumnDef<UserWithOrganizationInfo>[] = [
   },
   {
     id: "actions",
+    header: "Ações",
     cell: ({ row }) => {
       const { userId, role } = row.original;
 

@@ -56,8 +56,6 @@ const InformationForm = () => {
         nif: values.nif ?? "",
       });
 
-      console.log(res);
-
       if (res.success) {
         toast.success("Organização atualizada com sucesso.");
         setIsEditable(false);
@@ -75,15 +73,20 @@ const InformationForm = () => {
 
   return (
     <>
-      <div className="mb-8 flex items-center justify-between">
-        <Header title={ORGANIZATION_ROUTE.label} />
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setIsEditable((v) => !v)}
-        >
-          {isEditable ? <PencilOff size={16} /> : <Pencil size={16} />}
-        </Button>
+      <div className="flex items-center justify-between">
+        <Header
+          title={ORGANIZATION_ROUTE.label}
+          headerActions={
+            <Button
+              variant="outline"
+              size="sm"
+              className="ml-auto"
+              onClick={() => setIsEditable((v) => !v)}
+            >
+              {isEditable ? <PencilOff size={16} /> : <Pencil size={16} />}
+            </Button>
+          }
+        />
       </div>
       <Form {...form}>
         <form
