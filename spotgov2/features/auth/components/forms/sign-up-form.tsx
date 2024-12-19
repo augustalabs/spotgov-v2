@@ -62,7 +62,7 @@ const SignUpForm = () => {
       description="Junte-se ao futuro da contratação pública."
       footerText="Já tem uma conta?"
       footerLinkLabel="Faça login"
-      footerLinkHref={LOGIN_ROUTE}
+      footerLinkHref={LOGIN_ROUTE.url}
     >
       <GoogleButton label="Criar conta com Google" />
       <AuthSeparator />

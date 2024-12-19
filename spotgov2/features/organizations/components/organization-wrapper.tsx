@@ -1,6 +1,6 @@
 "use client";
 
-import { NEW_SEARCH_ROUTE } from "@/routes";
+import { SEARCH_ROUTE } from "@/routes";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { redirect } from "next/navigation";
 import { ReactNode, useEffect } from "react";
@@ -11,7 +11,7 @@ const OrganizationWrapper = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (currentOrganization && !canViewOrganization(currentOrganization.role)) {
-      redirect(NEW_SEARCH_ROUTE);
+      redirect(SEARCH_ROUTE.url);
     }
   }, [currentOrganization?.role]);
 

@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, GalleryVerticalEnd } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command";
 import { Skeleton } from "../ui/skeleton";
@@ -12,6 +11,7 @@ import { cn } from "@/utils/utils";
 import { OrganizationWithUserInfo } from "@/types";
 import organizationsQuery from "@/services/organizations-query";
 import { createClient } from "@/lib/supabase/client";
+import { SidebarMenuButton } from "../ui/sidebar";
 
 const OrganizationSwitcher = () => {
   const supabase = createClient();
@@ -95,21 +95,29 @@ const OrganizationSwitcher = () => {
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
+        <SidebarMenuButton
           size="sm"
           role="combobox"
-          className="flex items-center justify-between"
+          className="flex items-center"
+          tooltip="Trocar de organização"
         >
-          {isPending ? (
-            <Skeleton className="h-2 w-2/3" />
-          ) : (
-            <p>
-              {currentOrganizationStore.currentOrganization?.organization?.name}
-            </p>
-          )}
-          <ChevronsUpDown size={16} />
-        </Button>
+          <div className="flex w-full items-center justify-between gap-2 truncate">
+            <GalleryVerticalEnd size={16} className="flex-shrink-0" />
+            {isPending ? (
+              <div className="w-full">
+                <Skeleton className="h-2 w-full" />
+              </div>
+            ) : (
+              <p className="truncate text-left text-sm">
+                {
+                  currentOrganizationStore.currentOrganization?.organization
+                    ?.name
+                }
+              </p>
+            )}
+            <ChevronsUpDown size={16} className="ml-auto flex-shrink-0" />
+          </div>
+        </SidebarMenuButton>
       </PopoverTrigger>
       <PopoverContent>
         <Command

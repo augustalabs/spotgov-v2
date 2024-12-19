@@ -2,6 +2,7 @@ import { fetchPipelineData } from "@/features/pipeline/api/fetch-pipeline-data";
 import Pipeline from "@/features/pipeline/components/pipeline";
 import { getQueryClient } from "@/lib/react-query/client";
 import { createClient } from "@/lib/supabase/server";
+import { SAVED_CONTESTS_ROUTE } from "@/routes";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
 

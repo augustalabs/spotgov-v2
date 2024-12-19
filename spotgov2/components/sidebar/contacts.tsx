@@ -30,7 +30,7 @@ type InfoDetail = {
   details: string;
 };
 
-const SidebarFooterInfo = () => {
+const Contacts = () => {
   const [hoveredAction, setHoveredAction] = useState<string | null>(null);
   const [copiedAction, setCopiedAction] = useState<string | null>(null);
 
@@ -84,8 +84,9 @@ const SidebarFooterInfo = () => {
 
   return (
     <Dialog>
-      <DialogTrigger className="hover:text-primary">
+      <DialogTrigger className="flex items-center gap-2 text-sm hover:text-primary">
         <Info size={16} />
+        <span>Contactos</span>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -152,4 +153,4 @@ const SidebarFooterInfo = () => {
   );
 };
 
-export default SidebarFooterInfo;
+export default Contacts;

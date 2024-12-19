@@ -6,7 +6,7 @@ import {
   addUserMutation,
   acceptInviteQuery,
 } from "@/features/organization-invitation/services";
-import { LOGIN_ROUTE, NEW_SEARCH_ROUTE, SIGN_UP_ROUTE } from "@/routes";
+import { LOGIN_ROUTE, SEARCH_ROUTE, SIGN_UP_ROUTE } from "@/routes";
 import logo from "@public/assets/images/logo.png";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
@@ -28,14 +28,14 @@ const InviteAcceptance = () => {
 
       if (!isPending) {
         if (!data.payload?.userExists) {
-          router.push(`${SIGN_UP_ROUTE}?token=${token}`);
+          router.push(`${SIGN_UP_ROUTE.url}?token=${token}`);
         }
 
         const supabase = createClient();
         const { data: authData } = await supabase.auth.getUser();
 
         if (!authData.user) {
-          router.push(`${LOGIN_ROUTE}?token=${token}`);
+          router.push(`${LOGIN_ROUTE.url}?token=${token}`);
         }
       }
     }
@@ -54,7 +54,7 @@ const InviteAcceptance = () => {
 
       if (res.success) {
         toast.success("Convite aceite com sucesso!");
-        router.push(NEW_SEARCH_ROUTE);
+        router.push(SEARCH_ROUTE.url);
       } else {
         toast.error("Erro ao aceitar convite. Por favor, tente novamente.");
       }

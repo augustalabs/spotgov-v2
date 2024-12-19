@@ -20,6 +20,7 @@ import { useState } from "react";
 import Header from "@/components/header";
 import { Button } from "@/components/ui/button";
 import { usePersistentTab } from "@/hooks/use-persitent-tab";
+import { SAVED_CONTESTS_ROUTE } from "@/routes";
 
 function Pipeline({ organizationId }: { organizationId: string }) {
   const { data: pipelineData } = useQuery({
@@ -90,7 +91,7 @@ function Pipeline({ organizationId }: { organizationId: string }) {
   return (
     <div className="m-5">
       <Header
-        title="Pipeline"
+        title={SAVED_CONTESTS_ROUTE.label}
         headerActions={
           <>
             <div className="relative w-full">
