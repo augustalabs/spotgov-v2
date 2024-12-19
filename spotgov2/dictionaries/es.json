@@ -34,11 +34,31 @@
       }
     },
     "organizationSwitcher": {
-      "label": "Organizaciones"
+      "label": "Organizaciones",
+      "tooltip": "Cambiar de organización"
     },
     "userButton": {
-      "contacts": "Contactos",
-      "logout": "Cerrar sesión"
+      "logout": "Salir",
+      "contacts": {
+        "label": "Contactos",
+        "call": {
+          "title": "Teléfono",
+          "subtitle": "Háblanos por llamada."
+        },
+        "email": {
+          "title": "Correo electrónico",
+          "subtitle": "Envíanos un mensaje."
+        },
+        "meeting": {
+          "title": "Reunión",
+          "subtitle": "Agenda una reunión"
+        },
+        "toasts": {
+          "success": {
+            "copied": "Copiado al portapapeles."
+          }
+        }
+      }
     }
   },
   "radar": {

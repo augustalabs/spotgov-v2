@@ -38,6 +38,8 @@ import { usePathname } from "next/navigation";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { canViewOrganization } from "@/permissions";
 import { UserRoles } from "@/types";
+import { SidebarItemsSchema } from "@/lib/i18n/types";
+import * as z from "zod";
 
 type SidebarItem = {
   title: string;
@@ -49,59 +51,63 @@ type SidebarItem = {
   }[];
 };
 
-const items: SidebarItem[] = [
-  {
-    title: "Deteção e análise",
-    isActive: true,
-    items: [
-      {
-        icon: Compass,
-        title: CONTESTS_RADAR_ROUTE.label,
-        url: CONTESTS_RADAR_ROUTE.url,
-      },
-      {
-        icon: Search,
-        title: SEARCH_ROUTE.label,
-        url: SEARCH_ROUTE.url,
-      },
-    ],
-  },
-  {
-    title: "Resposta e revisão",
-    isActive: true,
-    items: [
-      {
-        icon: Eye,
-        title: PROPOSAL_REVIEW_ROUTE.label,
-        url: PROPOSAL_REVIEW_ROUTE.url,
-      },
-    ],
-  },
-  {
-    title: "Gestão",
-    isActive: true,
-    items: [
-      {
-        icon: Bookmark,
-        title: SAVED_CONTESTS_ROUTE.label,
-        url: SAVED_CONTESTS_ROUTE.url,
-      },
-    ],
-  },
-  {
-    title: "Inteligência de mercado",
-    isActive: true,
-    items: [
-      {
-        icon: ChartSpline,
-        title: MARKET_INTELLIGENCE_ROUTE.label,
-        url: MARKET_INTELLIGENCE_ROUTE.url,
-      },
-    ],
-  },
-];
+type MainProps = {
+  sidebarItems: z.infer<typeof SidebarItemsSchema>;
+};
 
-const Main = () => {
+const Main = ({ sidebarItems }: MainProps) => {
+  const items: SidebarItem[] = [
+    {
+      title: sidebarItems.detectionAndAnalysis.title,
+      isActive: true,
+      items: [
+        {
+          icon: Compass,
+          title: sidebarItems.detectionAndAnalysis.items.radar,
+          url: CONTESTS_RADAR_ROUTE.url,
+        },
+        {
+          icon: Search,
+          title: sidebarItems.detectionAndAnalysis.items.search,
+          url: SEARCH_ROUTE.url,
+        },
+      ],
+    },
+    {
+      title: sidebarItems.responseAndReview.title,
+      isActive: true,
+      items: [
+        {
+          icon: Eye,
+          title: sidebarItems.responseAndReview.items.reviewer,
+          url: PROPOSAL_REVIEW_ROUTE.url,
+        },
+      ],
+    },
+    {
+      title: sidebarItems.management.title,
+      isActive: true,
+      items: [
+        {
+          icon: Bookmark,
+          title: sidebarItems.management.items.savedContests,
+          url: SAVED_CONTESTS_ROUTE.url,
+        },
+      ],
+    },
+    {
+      title: sidebarItems.marketIntelligence.title,
+      isActive: true,
+      items: [
+        {
+          icon: ChartSpline,
+          title: sidebarItems.marketIntelligence.items.marketIntelligence,
+          url: MARKET_INTELLIGENCE_ROUTE.url,
+        },
+      ],
+    },
+  ];
+
   const pathname = usePathname();
 
   const { open } = useSidebar();
@@ -145,12 +151,12 @@ const Main = () => {
   const { currentOrganization } = useCurrentOrganizationStore();
 
   const organizationItems = {
-    title: "Organização",
+    title: sidebarItems.organization.title,
     isActive: true,
     items: [
       {
         icon: Building,
-        title: ORGANIZATION_ROUTE.label,
+        title: sidebarItems.organization.items.organization,
         url: ORGANIZATION_ROUTE.url,
       },
     ],

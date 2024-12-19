@@ -21,6 +21,8 @@ import { ScrollArea } from "../ui/scroll-area";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { toast } from "sonner";
+import * as z from "zod";
+import { UserButtonContactsSchema } from "@/lib/i18n/types";
 
 type InfoDetail = {
   key: string;
@@ -30,7 +32,11 @@ type InfoDetail = {
   details: string;
 };
 
-const Contacts = () => {
+type ContactsProps = {
+  contacts: z.infer<typeof UserButtonContactsSchema>["contacts"];
+};
+
+const Contacts = ({ contacts }: ContactsProps) => {
   const [hoveredAction, setHoveredAction] = useState<string | null>(null);
   const [copiedAction, setCopiedAction] = useState<string | null>(null);
 
@@ -38,22 +44,22 @@ const Contacts = () => {
     {
       key: "call",
       icon: Phone,
-      title: "Telefone",
-      description: "Fale connosco por chamada.",
+      title: contacts.call.title,
+      description: contacts.call.subtitle,
       details: "+351 929 052 364",
     },
     {
       key: "email",
       icon: Mail,
-      title: "Email",
-      description: "Envie-nos uma mensagem.",
+      title: contacts.email.title,
+      description: contacts.email.subtitle,
       details: "info@spotgov.com",
     },
     {
       key: "book",
       icon: Calendar,
-      title: "Reunião",
-      description: "Agende uma reunião.",
+      title: contacts.meeting.title,
+      description: contacts.meeting.subtitle,
       details: "cal.com/spotgov",
     },
   ];
@@ -63,7 +69,7 @@ const Contacts = () => {
 
     navigator.clipboard.writeText(content).then(() => {
       setCopiedAction(action);
-      toast.success("Copiado para a área de transferência.");
+      toast.success(contacts.toasts.success.copied);
       setTimeout(() => setCopiedAction(null), 2000);
     });
   };
@@ -106,7 +112,7 @@ const Contacts = () => {
                   onClick={() => handleAction(info.key, info.details)}
                 >
                   <motion.div
-                    className="flex flex-col items-center justify-center space-y-2 rounded-lg border border-primary bg-primary/5 p-4 text-center transition-colors hover:bg-primary/10"
+                    className="bg-primary/5 hover:bg-primary/10 flex flex-col items-center justify-center space-y-2 rounded-lg border border-primary p-4 text-center transition-colors"
                     animate={{
                       height: hoveredAction === info.key ? "150px" : "200px",
                     }}
@@ -131,7 +137,7 @@ const Contacts = () => {
                       >
                         <div
                           onClick={(e) => handleCopy(e, info.key, info.details)}
-                          className="flex h-full w-full items-center justify-between rounded-lg border border-primary bg-primary/5 px-2 text-sm transition-colors hover:bg-primary/10"
+                          className="bg-primary/5 hover:bg-primary/10 flex h-full w-full items-center justify-between rounded-lg border border-primary px-2 text-sm transition-colors"
                         >
                           <span className="text-xs">{info.details}</span>
                           {copiedAction === info.key ? (

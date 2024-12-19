@@ -34,11 +34,31 @@
       }
     },
     "organizationSwitcher": {
-      "label": "Organizações"
+      "label": "Organizações",
+      "tooltip": "Trocar de organização"
     },
     "userButton": {
-      "contacts": "Contactos",
-      "logout": "Sair"
+      "logout": "Sair",
+      "contacts": {
+        "label": "Contactos",
+        "call": {
+          "title": "Telefone",
+          "subtitle": "Fale connosco por chamada."
+        },
+        "email": {
+          "title": "Email",
+          "subtitle": "Envie-nos uma mensagem."
+        },
+        "meeting": {
+          "title": "Reunião",
+          "subtitle": "Agende uma reunião"
+        },
+        "toasts": {
+          "success": {
+            "copied": "Copiado al portapapeles."
+          }
+        }
+      }
     }
   },
   "radar": {

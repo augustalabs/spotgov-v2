@@ -8,8 +8,14 @@ import { Separator } from "../ui/separator";
 import { signOut } from "@/features/auth/api";
 import { LogOut } from "lucide-react";
 import Contacts from "./contacts";
+import * as z from "zod";
+import { SidebarSchema } from "@/lib/i18n/types";
 
-const Footer = async () => {
+type FooterProps = {
+  userButton: z.infer<typeof SidebarSchema>["userButton"];
+};
+
+const Footer = async ({ userButton }: FooterProps) => {
   const supabase = await createClient();
   const { data: userData, error } = await supabase.auth.getUser();
 
@@ -42,7 +48,7 @@ const Footer = async () => {
             userAvatarUrl={userAvatarUrl}
           />
           <Separator />
-          <Contacts />
+          <Contacts contacts={userButton.contacts} />
           <Separator />
           <form>
             <button
@@ -50,7 +56,7 @@ const Footer = async () => {
               className="flex items-center gap-2 text-sm hover:text-primary"
             >
               <LogOut size={16} />
-              <span>Sair</span>
+              <span>{userButton.logout}</span>
             </button>
           </form>
         </div>
