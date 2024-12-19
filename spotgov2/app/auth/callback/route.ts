@@ -13,9 +13,8 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createClient();
-    const {  error } = await supabase.auth.exchangeCodeForSession(code);
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-
       const { data: user, error: userError } = await supabase.auth.updateUser({
         data: {
           is_super_admin: false,
@@ -27,11 +26,9 @@ export async function GET(request: Request) {
       // If token exists, redirect to the organization invite route with the token
       if (token) {
         return NextResponse.redirect(
-          `${origin}${ORGANIZATION_INVITE_ROUTE}/${token}`
+          `${origin}${ORGANIZATION_INVITE_ROUTE}/${token}`,
         );
       }
-
-
 
       const forwardedHost = request.headers.get("x-forwarded-host"); // original origin before load balancer
       const isLocalEnv = process.env.NODE_ENV === "development";

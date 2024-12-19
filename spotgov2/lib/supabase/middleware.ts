@@ -3,8 +3,11 @@ import {
   HOME_ROUTE,
   LOGIN_ROUTE,
   NEW_SEARCH_ROUTE,
+  ORGANIZATION_INVITE_ROUTE,
   ORGANIZATION_ROUTE,
+  SIGN_UP_ROUTE,
 } from "@/routes";
+import { addLocaleToRoute, getLocale } from "@/utils/i18n";
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -44,32 +47,35 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const pathname = request.nextUrl.pathname;
+  const locale = getLocale(request);
+
   // Redirect root '/' to '/nova-pesquisa' if user is logged in
-  if (request.nextUrl.pathname === HOME_ROUTE && user) {
+  if (pathname === addLocaleToRoute(HOME_ROUTE, locale) && user) {
     const url = request.nextUrl.clone();
-    url.pathname = NEW_SEARCH_ROUTE;
+    url.pathname = addLocaleToRoute(NEW_SEARCH_ROUTE, locale);
     return NextResponse.redirect(url);
   }
 
   if (
     !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth") &&
-    !request.nextUrl.pathname.startsWith("/aceitar-convite") &&
-    !request.nextUrl.pathname.startsWith("/api/organizations/accept-invite")
+    !pathname.startsWith(addLocaleToRoute(LOGIN_ROUTE, locale)) &&
+    !pathname.startsWith(addLocaleToRoute(SIGN_UP_ROUTE, locale)) &&
+    !pathname.startsWith(addLocaleToRoute(ORGANIZATION_INVITE_ROUTE, locale)) &&
+    !pathname.startsWith("/api/organizations/accept-invite")
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
-    url.pathname = LOGIN_ROUTE;
+    url.pathname = addLocaleToRoute(LOGIN_ROUTE, locale);
     return NextResponse.redirect(url);
   }
 
   if (
-    request.nextUrl.pathname.startsWith(ORGANIZATION_ROUTE) &&
+    pathname.startsWith(addLocaleToRoute(ORGANIZATION_ROUTE, locale)) &&
     !canViewOrganization(user?.user_metadata.current_organization.role)
   ) {
     const url = request.nextUrl.clone();
-    url.pathname = NEW_SEARCH_ROUTE;
+    url.pathname = addLocaleToRoute(NEW_SEARCH_ROUTE, locale);
 
     return NextResponse.redirect(url);
   }

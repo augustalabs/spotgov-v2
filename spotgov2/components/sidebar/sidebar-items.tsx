@@ -43,25 +43,25 @@ const SidebarItems = () => {
       icon: MessageCircleMore,
       label: "Nova pesquisa",
       href: NEW_SEARCH_ROUTE,
-      isActive: pathname === NEW_SEARCH_ROUTE,
+      isActive: pathname.includes(NEW_SEARCH_ROUTE),
     },
     {
       icon: Star,
       label: "Pesquisas favoritas",
       href: FAVORITE_SEARCH_ROUTE,
-      isActive: pathname === FAVORITE_SEARCH_ROUTE,
+      isActive: pathname.includes(FAVORITE_SEARCH_ROUTE),
     },
     {
       icon: KanbanSquare,
       label: "Pipeline",
       href: PIPELINE_ROUTE,
-      isActive: pathname === PIPELINE_ROUTE,
+      isActive: pathname.includes(PIPELINE_ROUTE),
     },
     {
       icon: BarChart,
       label: "Market Intelligence",
       href: MARKET_INTELLIGENCE_ROUTE,
-      isActive: pathname === MARKET_INTELLIGENCE_ROUTE,
+      isActive: pathname.includes(MARKET_INTELLIGENCE_ROUTE),
     },
   ];
 
@@ -69,7 +69,7 @@ const SidebarItems = () => {
     icon: Building,
     label: "Organização",
     href: ORGANIZATION_ROUTE,
-    isActive: pathname === ORGANIZATION_ROUTE,
+    isActive: pathname.includes(ORGANIZATION_ROUTE),
   };
 
   const { currentOrganization } = useCurrentOrganizationStore();
