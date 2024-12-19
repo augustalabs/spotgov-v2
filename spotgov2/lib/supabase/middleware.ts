@@ -2,9 +2,12 @@ import { canViewOrganization } from "@/permissions";
 import {
   HOME_ROUTE,
   LOGIN_ROUTE,
+  ORGANIZATION_ACCEPT_INVITE_ROUTE,
   ORGANIZATION_ROUTE,
   SEARCH_ROUTE,
+  SIGN_UP_ROUTE,
 } from "@/routes";
+import { addLocaleToRoute, getLocale } from "@/utils/i18n";
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -44,8 +47,11 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const pathname = request.nextUrl.pathname;
+  const locale = getLocale(request);
+
   // Redirect root '/' to '/nova-pesquisa' if user is logged in
-  if (request.nextUrl.pathname === HOME_ROUTE.url && user) {
+  if (pathname === addLocaleToRoute(HOME_ROUTE.url, locale) && user) {
     const url = request.nextUrl.clone();
     url.pathname = SEARCH_ROUTE.url;
     return NextResponse.redirect(url);
@@ -53,10 +59,12 @@ export async function updateSession(request: NextRequest) {
 
   if (
     !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth") &&
-    !request.nextUrl.pathname.startsWith("/aceitar-convite") &&
-    !request.nextUrl.pathname.startsWith("/api/organizations/accept-invite")
+    !pathname.startsWith(addLocaleToRoute(LOGIN_ROUTE.url, locale)) &&
+    !pathname.startsWith(addLocaleToRoute(SIGN_UP_ROUTE.url, locale)) &&
+    !pathname.startsWith(
+      addLocaleToRoute(ORGANIZATION_ACCEPT_INVITE_ROUTE.url, locale),
+    ) &&
+    !pathname.startsWith("/api/organizations/accept-invite")
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
@@ -65,7 +73,7 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (
-    request.nextUrl.pathname.startsWith(ORGANIZATION_ROUTE.url) &&
+    pathname.startsWith(addLocaleToRoute(ORGANIZATION_ROUTE.url, locale)) &&
     !canViewOrganization(user?.user_metadata.current_organization.role)
   ) {
     const url = request.nextUrl.clone();

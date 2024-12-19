@@ -140,7 +140,7 @@ const Main = () => {
     }));
   };
 
-  const isActive = (url: string) => pathname.startsWith(url);
+  const isActive = (url: string) => pathname.includes(url);
 
   const { currentOrganization } = useCurrentOrganizationStore();
 
