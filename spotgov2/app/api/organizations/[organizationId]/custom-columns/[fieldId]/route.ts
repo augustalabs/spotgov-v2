@@ -1,5 +1,5 @@
 import { FeedCustomField } from "@/database/schemas";
-import { deleteColumn, editColumn } from "@/features/favorite-queries/api";
+import { deleteColumn, editColumn } from "@/features/radar/api";
 import {
   canEditFavoriteQueriesColumn,
   canRemoveFavoriteQueriesColumn,

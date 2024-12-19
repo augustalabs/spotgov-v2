@@ -2,7 +2,7 @@ import { FeedCustomFieldValue } from "@/database/schemas";
 import {
   addColumnValue,
   getColumnLabelsForTypeLabel,
-} from "@/features/favorite-queries/api";
+} from "@/features/radar/api";
 import { canChangeFavoriteQueriesColumnValue } from "@/permissions";
 import { Response, UserRoles } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";

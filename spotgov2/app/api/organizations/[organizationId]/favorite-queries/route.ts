@@ -1,5 +1,5 @@
-import { getFavoriteQueriesData } from "@/features/favorite-queries/api";
-import { FavoriteContractsDataType } from "@/features/favorite-queries/types";
+import { getFavoriteQueriesData } from "@/features/radar/api";
+import { FavoriteContractsDataType } from "@/features/radar/types";
 import { OrderType, Response } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";
 import {

@@ -1,4 +1,4 @@
-import { BasePriceRange } from "@/features/favorite-queries/types";
+import { BasePriceRange } from "@/features/radar/types";
 import { OrderType } from "@/types";
 import { DateRange } from "react-day-picker";
 import { create } from "zustand";

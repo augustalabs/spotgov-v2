@@ -1,7 +1,7 @@
 import {
   BasePriceRange,
   FavoriteContractsDataType,
-} from "@/features/favorite-queries/types";
+} from "@/features/radar/types";
 import { OrderType, Response } from "@/types";
 import { get } from "@/utils/api/functions";
 import { keepPreviousData } from "@tanstack/react-query";

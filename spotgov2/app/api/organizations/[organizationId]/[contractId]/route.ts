@@ -1,5 +1,5 @@
 import { ContractsOrganization } from "@/database/schemas";
-import { updateContractSaved } from "@/features/favorite-queries/api";
+import { updateContractSaved } from "@/features/radar/api";
 import { getUserFromOrganization } from "@/features/organizations/api";
 import { canSaveContract } from "@/permissions";
 import { Response } from "@/types";
