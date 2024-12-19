@@ -1,11 +1,18 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, Copy, Edit, Trash2, MoreHorizontal, Mail } from 'lucide-react'
+import { useState } from "react";
+import { ColumnDef } from "@tanstack/react-table";
+import {
+  ArrowUpDown,
+  Copy,
+  Edit,
+  Trash2,
+  MoreHorizontal,
+  Mail,
+} from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +20,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -21,32 +28,54 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 
-import { DataTable } from "./data-table"
-import { User } from "@/database/schemas"
-import AvatarIcon from "@/components/avatar-icon"
+import { DataTable } from "./data-table";
+import { User } from "@/database/schemas";
+import AvatarIcon from "@/components/avatar-icon";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
+import { deleteUserMutation } from "@/features/internal-dashboard/services";
+import { toast } from "sonner";
 
 interface UsersTabProps {
-  usersData: User[] | undefined
-  isLoading: boolean
-  isError: boolean
+  usersData: User[] | undefined;
+  isLoading: boolean;
+  isError: boolean;
+  refetchUsers: () => Promise<any>;
 }
 
-export function UsersTab({ usersData, isLoading, isError }: UsersTabProps) {
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const [passwordRecoveryDialogOpen, setPasswordRecoveryDialogOpen] = useState(false)
-  const [currentUser, setCurrentUser] = useState<User | null>(null)
+export function UsersTab({
+  usersData,
+  isLoading,
+  isError,
+  refetchUsers,
+}: UsersTabProps) {
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [passwordRecoveryDialogOpen, setPasswordRecoveryDialogOpen] =
+    useState(false);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+
+  const deleteMutation: UseMutationResult<any, unknown, undefined, unknown> =
+    useMutation(deleteUserMutation(currentUser?.id || ""));
 
   const handleDeleteUser = () => {
-    console.log("Deleting user:", currentUser?.id)
-    setDeleteDialogOpen(false)
-  }
+    if (currentUser) {
+      deleteMutation.mutate(undefined, {
+        onError: (error) => {
+          toast.error("Failed to delete the user. Please try again.");
+          console.error("Delete error:", error);
+        },
+        onSettled: () => {
+          setDeleteDialogOpen(false);
+        },
+      });
+    }
+  };
 
   const handleSendPasswordRecovery = () => {
-    console.log("Sending password recovery email to:", currentUser?.email)
-    setPasswordRecoveryDialogOpen(false)
-  }
+    console.log("Sending password recovery email to:", currentUser?.email);
+    setPasswordRecoveryDialogOpen(false);
+  };
 
   const columns: ColumnDef<User>[] = [
     {
@@ -85,12 +114,16 @@ export function UsersTab({ usersData, isLoading, isError }: UsersTabProps) {
         </div>
       ),
       cell: ({ row }) => {
-        const avatarUrl = row.getValue("avatarUrl") as string
+        const avatarUrl = row.getValue("avatarUrl") as string;
         return avatarUrl ? (
-          <img src={avatarUrl} alt="User avatar" className="w-8 h-8 rounded-full" />
+          <img
+            src={avatarUrl}
+            alt="User avatar"
+            className="h-8 w-8 rounded-full"
+          />
         ) : (
           <AvatarIcon size={16} />
-        )
+        );
       },
     },
     {
@@ -105,8 +138,8 @@ export function UsersTab({ usersData, isLoading, isError }: UsersTabProps) {
         </div>
       ),
       cell: ({ row }) => {
-        const date = row.getValue("createdAt") as string
-        return <div>{new Date(date).toLocaleString()}</div>
+        const date = row.getValue("createdAt") as string;
+        return <div>{new Date(date).toLocaleString()}</div>;
       },
     },
     {
@@ -121,14 +154,14 @@ export function UsersTab({ usersData, isLoading, isError }: UsersTabProps) {
         </div>
       ),
       cell: ({ row }) => {
-        const date = row.getValue("updatedAt") as string
-        return <div>{new Date(date).toLocaleString()}</div>
+        const date = row.getValue("updatedAt") as string;
+        return <div>{new Date(date).toLocaleString()}</div>;
       },
     },
     {
       id: "actions",
       cell: ({ row }) => {
-        const user = row.original
+        const user = row.original;
 
         return (
           <DropdownMenu>
@@ -151,30 +184,34 @@ export function UsersTab({ usersData, isLoading, isError }: UsersTabProps) {
                 <Edit className="mr-2 h-4 w-4" />
                 Edit user
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {
-                setCurrentUser(user)
-                setDeleteDialogOpen(true)
-              }}>
+              <DropdownMenuItem
+                onClick={() => {
+                  setCurrentUser(user);
+                  setDeleteDialogOpen(true);
+                }}
+              >
                 <Trash2 className="mr-2 h-4 w-4" />
                 Delete user
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {
-                setCurrentUser(user)
-                setPasswordRecoveryDialogOpen(true)
-              }}>
+              <DropdownMenuItem
+                onClick={() => {
+                  setCurrentUser(user);
+                  setPasswordRecoveryDialogOpen(true);
+                }}
+              >
                 <Mail className="mr-2 h-4 w-4" />
                 Password Recovery
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        )
+        );
       },
     },
-  ]
+  ];
 
   const initialColumnVisibility = {
     updatedAt: false,
-  }
+  };
 
   if (isLoading) {
     return (
@@ -182,52 +219,71 @@ export function UsersTab({ usersData, isLoading, isError }: UsersTabProps) {
         <Skeleton className="h-10 w-full" />
         <Skeleton className="h-64 w-full" />
       </div>
-    )
+    );
   }
 
   if (isError) {
-    return <div className="text-center text-red-500 py-8">Failed to load users.</div>
+    return (
+      <div className="py-8 text-center text-red-500">Failed to load users.</div>
+    );
   }
 
   return (
     <>
-      <DataTable 
-        columns={columns} 
-        data={usersData || []} 
+      <DataTable
+        columns={columns}
+        data={usersData || []}
         initialColumnVisibility={initialColumnVisibility}
       />
-      
+
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Are you sure you want to delete this user?</DialogTitle>
+            <DialogTitle>
+              Are you sure you want to delete this user?
+            </DialogTitle>
             <DialogDescription>
-              This action cannot be undone. This will permanently delete the user
-              and remove all associated data.
+              This action cannot be undone. This will permanently delete the
+              user and remove all associated data.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
-            <Button variant="destructive" onClick={handleDeleteUser}>Delete</Button>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDeleteUser}>
+              Delete
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      <Dialog open={passwordRecoveryDialogOpen} onOpenChange={setPasswordRecoveryDialogOpen}>
+      <Dialog
+        open={passwordRecoveryDialogOpen}
+        onOpenChange={setPasswordRecoveryDialogOpen}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Send Password Recovery Email</DialogTitle>
             <DialogDescription>
-              Are you sure you want to send a password recovery email to {currentUser?.email}?
+              Are you sure you want to send a password recovery email to{" "}
+              {currentUser?.email}?
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setPasswordRecoveryDialogOpen(false)}>Cancel</Button>
+            <Button
+              variant="outline"
+              onClick={() => setPasswordRecoveryDialogOpen(false)}
+            >
+              Cancel
+            </Button>
             <Button onClick={handleSendPasswordRecovery}>Send Email</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }
-

@@ -4,7 +4,7 @@ import {
   getUserFromOrganization,
   updateOrganization,
   deleteOrganization,
-  getOrganizationById
+  getOrganizationById,
 } from "@/features/organizations/api";
 
 import { canEditOrganization } from "@/permissions";
@@ -23,16 +23,14 @@ type Params = {
   organizationId: string;
 };
 
-
 export async function GET(
   req: Request,
   { params }: { params: Params },
 ): Promise<NextResponse<Response<Organization | null>>> {
-
   const user = await checkUserAuthentication();
   if (user instanceof NextResponse) return user;
 
-  if (!user ) {
+  if (!user) {
     return NextResponse.json(STATUS_FORBIDDEN, {
       status: STATUS_FORBIDDEN.status,
     });
@@ -46,7 +44,10 @@ export async function GET(
     });
   }
 
-  return NextResponse.json({ ...STATUS_OK, payload: organization },{ status: STATUS_OK.status });
+  return NextResponse.json(
+    { ...STATUS_OK, payload: organization },
+    { status: STATUS_OK.status },
+  );
 }
 
 export async function PATCH(
@@ -105,11 +106,12 @@ export async function DELETE(
 ): Promise<NextResponse<Response<Organization[]>>> {
   try {
     // Check user authentication
+    console.log("DELETE request received");
     const user = await checkUserAuthentication();
     if (user instanceof NextResponse) return user;
-
+    console.log("User authenticated");
     // Check if user has permission to delete the organization
-
+    console.log("Checking if user has permission to delete the organization");
     const userIsSuperAdmin = isSuperAdmin(user);
     if (!user || !userIsSuperAdmin) {
       return NextResponse.json(STATUS_FORBIDDEN, {
@@ -118,8 +120,9 @@ export async function DELETE(
     }
 
     // Delete the organization
+    console.log("Deleting the organization");
     const organization = await deleteOrganization(params.organizationId);
-
+    console.log("Organization deleted");
     if (!organization) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
@@ -130,12 +133,10 @@ export async function DELETE(
       { ...STATUS_OK, payload: organization },
       { status: STATUS_OK.status },
     );
-  } catch {
+  } catch (error) {
+    console.error("Error deleting organization", error);
     return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
       status: STATUS_INTERNAL_SERVER_ERROR.status,
     });
   }
 }
-
-
-

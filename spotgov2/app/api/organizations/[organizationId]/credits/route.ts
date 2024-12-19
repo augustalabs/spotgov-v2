@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { Organization } from "@/database/schemas";
-import { updateOrganizationCredits } from "@/features/internal-dashboard/api";
+import { updateOrganizationInfoAndCredits } from "@/features/internal-dashboard/api";
 import { checkUserAuthentication } from "@/utils/api/helpers";
 import {
   STATUS_BAD_REQUEST,
@@ -21,38 +21,41 @@ export async function PATCH(
   { params }: { params: Params },
 ): Promise<NextResponse<Response<Organization[]>>> {
   try {
-      // Check user authentication
+    // Check user authentication
 
     const user = await checkUserAuthentication();
     if (user instanceof NextResponse) return user;
- 
+
     const userIsSuperAdmin = isSuperAdmin(user);
-   
+
     // Parse and validate the request body
-    const { deepDiveCurrency, matchmakingCurrency } = await req.json();
-   
-      
+    const { deepDiveCurrency, matchmakingCurrency, name, nif } =
+      await req.json();
+
     if (
       typeof deepDiveCurrency !== "number" ||
       typeof matchmakingCurrency !== "number"
     ) {
-
       return NextResponse.json(STATUS_BAD_REQUEST, {
         status: STATUS_BAD_REQUEST.status,
       });
     }
-
-   
 
     if (!user || !userIsSuperAdmin) {
       return NextResponse.json(STATUS_FORBIDDEN, {
         status: STATUS_FORBIDDEN.status,
       });
     }
- 
+
     // Update the organization's credits
-    const organizations = await updateOrganizationCredits(params.organizationId, deepDiveCurrency, matchmakingCurrency);
- 
+    const organizations = await updateOrganizationInfoAndCredits(
+      params.organizationId,
+      deepDiveCurrency,
+      matchmakingCurrency,
+      name,
+      nif,
+    );
+
     if (!organizations) {
       return NextResponse.json(STATUS_NOT_FOUND, {
         status: STATUS_NOT_FOUND.status,
