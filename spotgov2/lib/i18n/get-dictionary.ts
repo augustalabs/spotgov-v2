@@ -17,7 +17,7 @@ export const getDictionary = async (
   try {
     DictionarySchema.parse(dictionary);
     return dictionary;
-  } catch (error) {
+  } catch {
     throw new Error("Invalid dictionary structure.");
   }
 };

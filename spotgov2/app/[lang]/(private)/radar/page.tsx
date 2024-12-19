@@ -1,11 +1,18 @@
 import Header from "@/components/header";
 import CustomTable from "@/features/radar/components/custom-table";
-import { SAVED_CONTESTS_ROUTE } from "@/routes";
+import { Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
-export default function FavoriteSearchesPage() {
+type Props = {
+  params: { lang: Locale };
+};
+
+export default async function FavoriteSearchesPage({ params }: Props) {
+  const { radar } = await getDictionary(params.lang);
+
   return (
     <section>
-      <Header title={SAVED_CONTESTS_ROUTE.label} />
+      <Header title={radar.header.title} />
       <CustomTable />
     </section>
   );

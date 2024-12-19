@@ -13,12 +13,12 @@ export default async function Layout({
 }) {
   const locale = params.lang;
 
-  const dictionary = await getDictionary(locale);
+  const { sidebar } = await getDictionary(locale);
 
   return (
     <TooltipProvider>
       <SidebarProvider>
-        <CustomSidebar sidebar={dictionary.sidebar} />
+        <CustomSidebar sidebar={sidebar} />
         <div className="w-full overflow-x-hidden">
           <main className="mx-auto max-w-5xl px-2 py-3">{children}</main>
         </div>
