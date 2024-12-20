@@ -1,10 +1,12 @@
 import Header from "@/components/header";
-import { MARKET_INTELLIGENCE_ROUTE } from "@/routes";
+import { getTranslations } from "next-intl/server";
 
-export default function MarketIntelligencePage() {
+export default async function MarketIntelligencePage() {
+  const headerTranslation = await getTranslations("marketIntelligence.header");
+
   return (
     <div>
-      <Header title={MARKET_INTELLIGENCE_ROUTE.label} />
+      <Header title={headerTranslation("title")} />
     </div>
   );
 }
