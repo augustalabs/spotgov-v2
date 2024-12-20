@@ -72,9 +72,27 @@ export function UsersTab({
     }
   };
 
-  const handleSendPasswordRecovery = () => {
-    console.log("Sending password recovery email to:", currentUser?.email);
-    setPasswordRecoveryDialogOpen(false);
+  const handleSendPasswordRecovery = async () => {
+    try {
+      const response = await fetch(
+        `/api/users/${currentUser?.id}/reset-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: currentUser?.email }),
+        },
+      );
+
+      if (!response.ok) throw new Error("Failed to send recovery email");
+
+      toast.success("Password recovery email sent successfully");
+      setPasswordRecoveryDialogOpen(false);
+    } catch (error) {
+      toast.error("Failed to send recovery email");
+      console.error(error);
+    }
   };
 
   const columns: ColumnDef<User>[] = [
