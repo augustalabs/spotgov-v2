@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/table";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTranslations } from "next-intl";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -44,6 +45,8 @@ export function DataTable<TData, TValue>({
   pageSize,
   totalItems,
 }: DataTableProps<TData, TValue>) {
+  const tableTranslation = useTranslations("radar.table");
+
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -126,7 +129,7 @@ export function DataTable<TData, TValue>({
                       {isPending ? (
                         <Skeleton className="h-10 w-full" />
                       ) : (
-                        <p>No results.</p>
+                        <p>{tableTranslation("noResults")}</p>
                       )}
                     </TableCell>
                   </TableRow>
@@ -141,7 +144,7 @@ export function DataTable<TData, TValue>({
           onClick={handlePagePrevious}
           disabled={page === 1}
         >
-          Previous
+          {tableTranslation("buttons.previous")}
         </Button>
         <Button
           variant="outline"
@@ -149,7 +152,7 @@ export function DataTable<TData, TValue>({
           onClick={handlePageNext}
           disabled={(page - 1) * pageSize + data.length >= totalItems}
         >
-          Next
+          {tableTranslation("buttons.next")}
         </Button>
       </div>
     </>
