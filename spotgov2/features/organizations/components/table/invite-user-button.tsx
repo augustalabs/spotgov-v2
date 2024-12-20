@@ -31,8 +31,11 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useTranslations } from "next-intl";
 
 const AddUserButton = () => {
+  const organizationTranslation = useTranslations("organization");
+
   const form = useForm<z.infer<typeof inviteUserSchema>>({
     resolver: zodResolver(inviteUserSchema),
     defaultValues: {
@@ -55,13 +58,13 @@ const AddUserButton = () => {
       });
 
       if (res.success) {
-        toast.success("Convite enviado com sucesso!");
+        toast.success(organizationTranslation("toasts.success.inviteSent"));
         setIsOpen(false);
       } else {
-        toast.error("Erro ao enviar convite. Por favor tente novamente.");
+        toast.error(organizationTranslation("toasts.error.inviteFailed"));
       }
     } catch {
-      toast.error("Erro ao enviar convite. Por favor tente novamente.");
+      toast.error(organizationTranslation("toasts.error.inviteFailed"));
     }
   };
 
@@ -77,13 +80,17 @@ const AddUserButton = () => {
             </Button>
           </DialogTrigger>
         </TooltipTrigger>
-        <TooltipContent>Convidar utilizador</TooltipContent>
+        <TooltipContent>
+          {organizationTranslation("table.inviteMember.tooltip")}
+        </TooltipContent>
       </Tooltip>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Convidar membro</DialogTitle>
+          <DialogTitle>
+            {organizationTranslation("table.inviteMember.dialog.title")}
+          </DialogTitle>
           <DialogDescription>
-            Convide um novo membro para a sua organização.
+            {organizationTranslation("table.inviteMember.dialog.subtitle")}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -93,7 +100,11 @@ const AddUserButton = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>
+                    {organizationTranslation(
+                      "table.inviteMember.dialog.input.email",
+                    )}
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} type="text" />
                   </FormControl>
@@ -102,7 +113,7 @@ const AddUserButton = () => {
               )}
             />
             <Button type="submit" disabled={isLoading}>
-              Enviar convite
+              {organizationTranslation("table.inviteMember.dialog.button")}
             </Button>
           </form>
         </Form>

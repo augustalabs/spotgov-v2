@@ -246,7 +246,8 @@
     },
     "information": {
       "name": "Nome",
-      "nif": "NIF"
+      "nif": "NIF",
+      "button": "Guardar"
     },
     "cards": {
       "members": "Membros",
@@ -281,15 +282,22 @@
       },
       "removeMember": {
         "tooltip": "Remover membro"
+      },
+      "noResults": "Não foram encontrados resultados.",
+      "buttons": {
+        "previous": "Anterior",
+        "next": "Seguinte"
       }
     },
     "toasts": {
       "success": {
+        "organizationUpdate": "Organização atualizada com sucesso.",
         "inviteSent": "Convite enviado com sucesso.",
         "memberRemoved": "Membro removido com sucesso.",
         "roleChange": "Cargo alterado com sucesso."
       },
       "error": {
+        "organizationUpdateFailed": "Ocorreu um erro ao atualizar a organização. Por favor, tente novamente.",
         "inviteFailed": "Ocorreu um erro ao enviar o convite. Por favor, tente novamente.",
         "memberRemoveFailed": "Ocorreu um erro ao remover o membro. Por favor, tente novamente.",
         "roleChangeFailed": "Ocorreu um erro ao alterar o cargo. Por favor, tente novamente."

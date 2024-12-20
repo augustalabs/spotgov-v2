@@ -22,8 +22,11 @@ import { useMutation } from "@tanstack/react-query";
 import { updateOrganizationMutation } from "@/features/organizations/services";
 import { toast } from "sonner";
 import { ORGANIZATION_ROUTE } from "@/routes";
+import { useTranslations } from "next-intl";
 
 const InformationForm = () => {
+  const organizationTranslation = useTranslations("organization");
+
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
   const { currentOrganization } = useCurrentOrganizationStore();
@@ -56,19 +59,19 @@ const InformationForm = () => {
         nif: values.nif ?? "",
       });
 
-      console.log(res);
-
       if (res.success) {
-        toast.success("Organização atualizada com sucesso.");
+        toast.success(
+          organizationTranslation("toasts.success.organizationUpdate"),
+        );
         setIsEditable(false);
       } else {
         toast.error(
-          "Ocorreu um erro ao atualizar a organização. Por favor, tente novamente.",
+          organizationTranslation("toasts.error.organizationUpdateFailed"),
         );
       }
     } catch {
       toast.error(
-        "Ocorreu um erro ao atualizar a organização. Por favor, tente novamente.",
+        organizationTranslation("toasts.error.organizationUpdateFailed"),
       );
     }
   };
@@ -76,14 +79,19 @@ const InformationForm = () => {
   return (
     <>
       <div className="mb-8 flex items-center justify-between">
-        <Header title={ORGANIZATION_ROUTE.label} />
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setIsEditable((v) => !v)}
-        >
-          {isEditable ? <PencilOff size={16} /> : <Pencil size={16} />}
-        </Button>
+        <Header
+          title={organizationTranslation("header.title")}
+          headerActions={
+            <Button
+              className="ml-auto"
+              variant="outline"
+              size="sm"
+              onClick={() => setIsEditable((v) => !v)}
+            >
+              {isEditable ? <PencilOff size={16} /> : <Pencil size={16} />}
+            </Button>
+          }
+        />
       </div>
       <Form {...form}>
         <form
@@ -96,7 +104,9 @@ const InformationForm = () => {
               name="name"
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
-                  <FormLabel>Nome</FormLabel>
+                  <FormLabel>
+                    {organizationTranslation("information.name")}
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -119,7 +129,9 @@ const InformationForm = () => {
               name="nif"
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
-                  <FormLabel>NIF</FormLabel>
+                  <FormLabel>
+                    {organizationTranslation("information.nif")}
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -139,7 +151,11 @@ const InformationForm = () => {
               )}
             />
           </div>
-          {isEditable && <Button type="submit">Guardar</Button>}
+          {isEditable && (
+            <Button type="submit">
+              {organizationTranslation("information.button")}
+            </Button>
+          )}
         </form>
       </Form>
     </>

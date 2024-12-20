@@ -38,14 +38,6 @@ export enum UserRoles {
   Viewer = "viewer",
 }
 
-export const mapUserRolesToPortuguese = {
-  todos: "Todos",
-  owner: "Proprietário",
-  admin: "Administrador",
-  editor: "Editor",
-  viewer: "Visualizador",
-};
-
 // Filters
 export type RelevanceType = "all" | "relevant" | "very-relevant";
 export type OrderType =

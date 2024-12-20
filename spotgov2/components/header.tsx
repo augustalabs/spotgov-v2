@@ -12,7 +12,7 @@ const Header = ({ title, headerActions }: HeaderProps) => {
   const sidebar = useSidebar();
 
   return (
-    <div className="mb-10 flex items-center justify-between">
+    <div className="mb-10 flex w-full items-center justify-between">
       {/* Left Section: Sidebar trigger (if sidebar is closed) and title */}
       <div className="flex items-center gap-2">
         {!sidebar.open && <SidebarTrigger />}

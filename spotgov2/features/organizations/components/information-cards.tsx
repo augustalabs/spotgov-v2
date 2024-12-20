@@ -11,6 +11,7 @@ import { organizationUsersQuery } from "@/features/organizations/services";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { useQuery } from "@tanstack/react-query";
 import { LucideIcon, Search, Sparkles, Users } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type CardsInfoType = {
   icon: LucideIcon;
@@ -19,6 +20,8 @@ type CardsInfoType = {
 };
 
 const InformationCards = () => {
+  const cardsTranslation = useTranslations("organization.cards");
+
   const { currentOrganization } = useCurrentOrganizationStore();
 
   const { data, isPending } = useQuery(
@@ -33,17 +36,17 @@ const InformationCards = () => {
   const cardsInfo: CardsInfoType[] = [
     {
       icon: Users,
-      label: "Membros",
+      label: cardsTranslation("members"),
       value: numberOfUsers as number,
     },
     {
       icon: Search,
-      label: "Pesquisas restantes",
+      label: cardsTranslation("querysLeft"),
       value: matchmakingCurrency as number,
     },
     {
       icon: Sparkles,
-      label: "Análises com AI restantes",
+      label: cardsTranslation("analysis"),
       value: deepDiveCurrency as number,
     },
   ];

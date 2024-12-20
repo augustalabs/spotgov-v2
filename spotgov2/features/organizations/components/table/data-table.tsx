@@ -24,9 +24,10 @@ import {
 } from "@/components/ui/table";
 import { Loader } from "lucide-react";
 import { useState } from "react";
-import { mapUserRolesToPortuguese, UserRoles } from "@/types";
+import { UserRoles } from "@/types";
 import { cn } from "@/utils/utils";
 import InviteUserButton from "./invite-user-button";
+import { useTranslations } from "next-intl";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -39,6 +40,8 @@ export function DataTable<TData, TValue>({
   data,
   isPending,
 }: DataTableProps<TData, TValue>) {
+  const tableTranslation = useTranslations("organization.table");
+
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [selectedRole, setSelectedRole] = useState<string>("todos");
@@ -75,6 +78,14 @@ export function DataTable<TData, TValue>({
 
   const userRolesWithTodos = ["todos", ...Object.values(UserRoles)];
 
+  const mapUserRolesLocale = {
+    todos: tableTranslation("filter.options.all"),
+    owner: tableTranslation("filter.options.owner"),
+    admin: tableTranslation("filter.options.admin"),
+    editor: tableTranslation("filter.options.editor"),
+    viewer: tableTranslation("filter.options.viewer"),
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between py-4">
@@ -89,11 +100,7 @@ export function DataTable<TData, TValue>({
               onClick={() => handleSelectedRole(role)}
             >
               <p className="text-sm">
-                {
-                  mapUserRolesToPortuguese[
-                    role as keyof typeof mapUserRolesToPortuguese
-                  ]
-                }
+                {mapUserRolesLocale[role as keyof typeof mapUserRolesLocale]}
               </p>
             </div>
           ))}
@@ -143,7 +150,7 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                Sem resultados.
+                {tableTranslation("noResults")}
               </TableCell>
             </TableRow>
           )}
@@ -156,7 +163,7 @@ export function DataTable<TData, TValue>({
           onClick={() => table.previousPage()}
           disabled={isPending || !table.getCanPreviousPage()}
         >
-          Previous
+          {tableTranslation("buttons.previous")}
         </Button>
         <Button
           variant="outline"
@@ -164,7 +171,7 @@ export function DataTable<TData, TValue>({
           onClick={() => table.nextPage()}
           disabled={isPending || !table.getCanNextPage()}
         >
-          Next
+          {tableTranslation("buttons.next")}
         </Button>
       </div>
     </div>

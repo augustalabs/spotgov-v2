@@ -9,10 +9,13 @@ import { deleteUserMutation } from "@/features/organizations/services";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { useMutation } from "@tanstack/react-query";
 import { Trash } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
 const DeleteUserButton = ({ userId }: { userId: string }) => {
+  const organizationTranslation = useTranslations("organization");
+
   const { currentOrganization } = useCurrentOrganizationStore();
 
   const mutation = useMutation(
@@ -23,18 +26,14 @@ const DeleteUserButton = ({ userId }: { userId: string }) => {
     try {
       const res = await mutation.mutateAsync({ userId });
       if (res.success) {
-        toast.success("Utilizador removido com sucesso.");
+        toast.success(organizationTranslation("toasts.success.memberRemoved"));
       } else {
-        toast.error(
-          "Ocorreu um erro ao remover o utilizador. Por favor, tente novamente.",
-        );
+        toast.error(organizationTranslation("toasts.error.memberRemoveFailed"));
       }
 
       return res.success;
     } catch {
-      toast.error(
-        "Ocorreu um erro ao remover o utilizador. Por favor, tente novamente.",
-      );
+      toast.error(organizationTranslation("toasts.error.memberRemoveFailed"));
       return false;
     }
   };
@@ -53,7 +52,7 @@ const DeleteUserButton = ({ userId }: { userId: string }) => {
             <Trash size={16} />
           </Button>
         </TooltipTrigger>
-        <TooltipContent>Remover utilizador</TooltipContent>
+        <TooltipContent>{organizationTranslation('table.removeMember.tooltip')}</TooltipContent>
       </Tooltip>
     </DestructiveActionDialog>
   );
