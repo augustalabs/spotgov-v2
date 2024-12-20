@@ -65,6 +65,8 @@ const LabelColumn = ({ value, fieldId, contractId }: LabelColumnProps) => {
     },
   });
 
+  const isLoading = form.formState.isSubmitting;
+
   const addMutation = useMutation(
     addColumnValueMutation(currentOrganization?.organizationId as string),
   );
@@ -166,46 +168,48 @@ const LabelColumn = ({ value, fieldId, contractId }: LabelColumnProps) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="space-y-1">
-        <Command>
-          <CommandInput placeholder="Procurar etiqueta..." />
-          <CommandList>
-            <CommandEmpty>Não foram encontrados resultados.</CommandEmpty>
-            {isPending && <Skeleton className="h-2 w-full" />}
-            {!isPending && (
-              <CommandGroup
-                className="max-h-36 overflow-auto"
-                heading={data?.payload ? "Etiquetas" : ""}
-                value={localLabel}
-              >
-                {data?.payload &&
-                  data.payload.map((label) => (
-                    <CommandItem
-                      key={label}
-                      value={label}
-                      onSelect={() => {
-                        onSelectionChange(label);
-                      }}
-                      className={cn(
-                        "flex items-center justify-between data-[selected='true']:bg-background data-[selected=true]:text-foreground data-[selected='true']:hover:text-primary",
-                        localLabel === label &&
-                          "text-primary data-[selected=true]:text-primary",
-                      )}
-                    >
-                      <p>{label}</p>
-                      <Check
-                        size={16}
+        {!isPending && data?.payload && data.payload.length > 0 && (
+          <>
+            <Command>
+              <CommandInput placeholder="Procurar etiqueta..." />
+              <CommandList>
+                <CommandEmpty>Não foram encontrados resultados.</CommandEmpty>
+                <CommandGroup
+                  className="max-h-36 overflow-auto"
+                  heading={data?.payload ? "Etiquetas" : ""}
+                  value={localLabel}
+                >
+                  {data?.payload &&
+                    data.payload.map((label) => (
+                      <CommandItem
+                        key={label}
+                        value={label}
+                        onSelect={() => {
+                          onSelectionChange(label);
+                        }}
                         className={cn(
-                          "opacity-0",
-                          localLabel === label && "opacity-100",
+                          "flex items-center justify-between data-[selected='true']:bg-background data-[selected=true]:text-foreground data-[selected='true']:hover:text-primary",
+                          localLabel === label &&
+                            "text-primary data-[selected=true]:text-primary",
                         )}
-                      />
-                    </CommandItem>
-                  ))}
-              </CommandGroup>
-            )}
-          </CommandList>
-        </Command>
-        {!isPending && <Separator />}
+                      >
+                        <p>{label}</p>
+                        <Check
+                          size={16}
+                          className={cn(
+                            "opacity-0",
+                            localLabel === label && "opacity-100",
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+            <Separator />
+          </>
+        )}
+
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -227,7 +231,7 @@ const LabelColumn = ({ value, fieldId, contractId }: LabelColumnProps) => {
                 </FormItem>
               )}
             />
-            <Button type="submit">
+            <Button type="submit" disabled={isLoading}>
               <Plus size={16} />
             </Button>
           </form>
