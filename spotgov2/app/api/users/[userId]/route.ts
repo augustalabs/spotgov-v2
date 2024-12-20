@@ -11,6 +11,7 @@ import {
 } from "@/utils/api/status-messages";
 import { checkUserAuthentication } from "@/utils/api/helpers";
 import { isSuperAdmin } from "@/features/internal-dashboard/utils/api";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 type Params = {
   userId: string;
@@ -21,6 +22,7 @@ export async function DELETE(
   { params }: { params: Params },
 ): Promise<NextResponse<Response<void>>> {
   try {
+    const supabase = createAdminClient();
     const user = await checkUserAuthentication();
     if (user instanceof NextResponse) return user;
 
@@ -37,7 +39,7 @@ export async function DELETE(
         status: STATUS_FORBIDDEN.status,
       });
     }
-
+    await supabase.auth.admin.deleteUser(params.userId);
     const deletedUser = await deleteUser(params.userId);
 
     if (!deletedUser) {
