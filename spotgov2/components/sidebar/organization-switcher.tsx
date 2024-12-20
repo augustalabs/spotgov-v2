@@ -12,8 +12,13 @@ import { OrganizationWithUserInfo } from "@/types";
 import organizationsQuery from "@/services/organizations-query";
 import { createClient } from "@/lib/supabase/client";
 import { SidebarMenuButton } from "../ui/sidebar";
+import { useTranslations } from "next-intl";
 
 const OrganizationSwitcher = () => {
+  const organizationSwitcherTranslation = useTranslations(
+    "sidebar.organizationSwitcher",
+  );
+
   const supabase = createClient();
 
   const { data, isPending } = useQuery(organizationsQuery());
@@ -99,7 +104,7 @@ const OrganizationSwitcher = () => {
           size="sm"
           role="combobox"
           className="flex items-center"
-          tooltip="Trocar de organização"
+          tooltip={organizationSwitcherTranslation("tooltip")}
         >
           <div className="flex w-full items-center justify-between gap-2 truncate">
             <GalleryVerticalEnd size={16} className="flex-shrink-0" />
@@ -127,16 +132,16 @@ const OrganizationSwitcher = () => {
           }
         >
           <CommandList>
-            <CommandGroup heading="Organizações">
+            <CommandGroup heading={organizationSwitcherTranslation("label")}>
               {data?.payload?.map((v) => (
                 <CommandItem
                   key={v.organizationId}
                   value={v.organizationId as string}
                   onSelect={() => handleSelection(v)}
                   className={cn(
-                    "flex cursor-pointer items-center justify-between text-foreground hover:text-foreground/70 data-[selected='true']:bg-background",
+                    "hover:text-foreground/70 flex cursor-pointer items-center justify-between text-foreground data-[selected='true']:bg-background",
                     isCurrentOrganization(v) &&
-                      "text-primary hover:text-primary/70",
+                      "hover:text-primary/70 text-primary",
                   )}
                 >
                   <p>{v.organization?.name}</p>

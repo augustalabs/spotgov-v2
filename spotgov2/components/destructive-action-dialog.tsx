@@ -8,6 +8,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
+import { useTranslations } from "next-intl";
 
 type DestructiveActionDialogProps = {
   children: ReactNode;
@@ -22,6 +23,9 @@ const DestructiveActionDialog = ({
   setIsOpen,
   action,
 }: DestructiveActionDialogProps) => {
+  const destructiveActionDialogTranslation =
+    useTranslations("destructiveDialog");
+
   const onAction = async () => {
     const success = await action();
 
@@ -35,18 +39,19 @@ const DestructiveActionDialog = ({
       <DialogTrigger className="w-full">{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Tem a certeza absoluta?</DialogTitle>
+          <DialogTitle>
+            {destructiveActionDialogTranslation("title")}
+          </DialogTitle>
           <DialogDescription>
-            Esta ação não pode ser desfeita. Isto irá eliminar permanentemente
-            os seus dados.
+            {destructiveActionDialogTranslation("subtitle")}
           </DialogDescription>
         </DialogHeader>
         <div className="flex w-full items-center justify-end space-x-2">
           <Button variant="outline" onClick={() => setIsOpen(false)}>
-            Cancelar
+            {destructiveActionDialogTranslation("buttons.cancel")}
           </Button>
           <Button variant="destructive" onClick={onAction}>
-            Continuar
+            {destructiveActionDialogTranslation("buttons.continue")}
           </Button>
         </div>
       </DialogContent>

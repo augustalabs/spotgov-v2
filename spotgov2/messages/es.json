@@ -1,1 +1,308 @@
-{}
+{
+  "sidebar": {
+    "sidebarItems": {
+      "detectionAndAnalysis": {
+        "title": "Detección y análisis",
+        "items": {
+          "radar": "Radar de concursos",
+          "search": "Motor de búsqueda"
+        }
+      },
+      "responseAndReview": {
+        "title": "Respuesta y revisión",
+        "items": {
+          "reviewer": "Revisor de propuestas"
+        }
+      },
+      "management": {
+        "title": "Gestión",
+        "items": {
+          "savedContests": "Concursos guardados"
+        }
+      },
+      "marketIntelligence": {
+        "title": "Inteligencia de mercado",
+        "items": {
+          "marketIntelligence": "Inteligencia de mercado"
+        }
+      },
+      "organization": {
+        "title": "Organización",
+        "items": {
+          "organization": "Organización"
+        }
+      }
+    },
+    "organizationSwitcher": {
+      "label": "Organizaciones",
+      "tooltip": "Cambiar de organización"
+    },
+    "userButton": {
+      "logout": "Salir",
+      "contacts": {
+        "label": "Contactos",
+        "description": "¿Tienes alguna pregunta? Ponte en contacto con nosotros.",
+        "call": {
+          "title": "Teléfono",
+          "subtitle": "Háblanos por llamada."
+        },
+        "email": {
+          "title": "Correo electrónico",
+          "subtitle": "Envíanos un mensaje."
+        },
+        "meeting": {
+          "title": "Reunión",
+          "subtitle": "Agenda una reunión"
+        },
+        "toasts": {
+          "success": {
+            "copied": "Copiado al portapapeles."
+          }
+        }
+      }
+    }
+  },
+
+  "radar": {
+    "header": {
+      "title": "Radar de concursos"
+    },
+    "filters": {
+      "search": "Buscar contratos...",
+      "queryTitle": {
+        "label": "Búsquedas",
+        "searchPlaceholder": "Buscar...",
+        "noResults": "No se encontraron resultados."
+      },
+      "cpv": {
+        "label": "CPV",
+        "searchPlaceholder": "Buscar...",
+        "noResults": "No se encontraron resultados."
+      },
+      "adjudicators": {
+        "label": "Adjudicantes",
+        "searchPlaceholder": "Buscar...",
+        "noResults": "No se encontraron resultados."
+      },
+      "saved": {
+        "label": "Interés",
+        "options": {
+          "all": "Todos",
+          "saved": "Guardados",
+          "notSaved": "No guardados"
+        }
+      },
+      "publishDate": {
+        "label": "Fecha de publicación"
+      },
+      "basePrice": {
+        "label": "Precio base",
+        "popover": {
+          "title": "Filtrar por precio base",
+          "subtitle": "Los valores están en euros"
+        }
+      },
+      "sort": {
+        "options": {
+          "publishDateDesc": "Más reciente",
+          "publishDateAsc": "Más antiguo",
+          "basePriceDesc": "Precio más alto",
+          "basePriceAsc": "Precio más bajo",
+          "deadlineDesc": "Plazo más lejano",
+          "deadlineAsc": "Plazo más cercano"
+        }
+      },
+      "newColumn": {
+        "label": "Añadir columna",
+        "dialog": {
+          "title": "Añadir columna",
+          "subtitle": "Añade una columna personalizada con información adicional.",
+          "inputs": {
+            "title": "Título",
+            "type": {
+              "label": "Tipo de datos",
+              "options": {
+                "text": "Texto",
+                "logic": "Lógico",
+                "date": "Fecha",
+                "label": "Etiqueta",
+                "file": "Archivo"
+              }
+            }
+          },
+          "button": "Añadir"
+        }
+      },
+      "onlyPriceCriteria": {
+        "label": "Solo contratos cuyo criterio de adjudicación es solo el precio."
+      }
+    },
+    "table": {
+      "columns": {
+        "title": "Título",
+        "basePrice": "Precio base",
+        "publishDate": "Fecha de publicación",
+        "deadline": "Plazo de entrega",
+        "timeLeft": {
+          "label": "Tiempo restante",
+          "options": {
+            "expired": "Expirado",
+            "today": "Termina hoy",
+            "day": "día",
+            "days": "días"
+          }
+        },
+        "query": "Búsqueda",
+        "saved": {
+          "label": "Interés",
+          "options": {
+            "saved": "Guardado",
+            "save": "Guardar"
+          }
+        }
+      },
+      "customColumns": {
+        "columnActions": {
+          "label": "Acciones",
+          "options": {
+            "changeName": "Cambiar nombre",
+            "delete": "Eliminar"
+          }
+        },
+        "date": "Elija una fecha",
+        "label": {
+          "label": "Añadir",
+          "popover": {
+            "searchPlaceholder": "Buscar etiqueta...",
+            "label": "Etiquetas",
+            "input": {
+              "label": "Etiqueta",
+              "placeholder": "Nombre de la etiqueta"
+            },
+            "noResults": "No se encontraron resultados"
+          }
+        }
+      },
+      "noResults": "No se encontraron resultados.",
+      "buttons": {
+        "previous": "Anterior",
+        "next": "Siguiente"
+      }
+    },
+    "toasts": {
+      "success": {
+        "saveContract": "Contrato guardado con éxito.",
+        "unsaveContract": "Contrato eliminado de los guardados con éxito.",
+        "addColumn": "Columna añadida con éxito.",
+        "editColumn": "Columna editada con éxito.",
+        "deleteColumn": "Columna eliminada con éxito.",
+        "updateColumnValue": "Valor de la columna actualizado con éxito.",
+        "addLabel": "Etiqueta añadida con éxito.",
+        "updateLabel": "Etiqueta actualizada con éxito.",
+        "removeLabel": "Etiqueta eliminada con éxito.",
+        "export": "Tabla exportada con éxito."
+      },
+      "error": {
+        "saveUnsaveContractFailed": "Ocurrió un error al guardar/eliminar el contrato. Por favor, inténtelo de nuevo.",
+        "addColumnFailed": "Ocurrió un error al añadir la columna. Por favor, inténtelo de nuevo.",
+        "editColumnFailed": "Ocurrió un error al editar la columna. Por favor, inténtelo de nuevo.",
+        "deleteColumnFailed": "Ocurrió un error al eliminar la columna. Por favor, inténtelo de nuevo.",
+        "updateColumnValueFailed": "Ocurrió un error al actualizar el valor de la columna. Por favor, inténtelo de nuevo.",
+        "addLabelFailed": "Ocurrió un error al añadir la etiqueta. Por favor, inténtelo de nuevo.",
+        "updateLabelFailed": "Ocurrió un error al actualizar la etiqueta. Por favor, inténtelo de nuevo.",
+        "removeLabelFailed": "Ocurrió un error al eliminar la etiqueta. Por favor, inténtelo de nuevo.",
+        "exportFailed": "Ocurrió un error al exportar la tabla. Por favor, inténtelo de nuevo."
+      }
+    }
+  },
+
+  "search": {
+    "header": {
+      "title": "Motor de búsqueda"
+    }
+  },
+
+  "reviewer": {
+    "header": {
+      "title": "Revisor de propuestas"
+    }
+  },
+
+  "savedContests": {
+    "header": {
+      "title": "Concursos guardados"
+    }
+  },
+
+  "marketIntelligence": {
+    "header": {
+      "title": "Inteligencia de mercado"
+    }
+  },
+
+  "organization": {
+    "header": {
+      "title": "Organización"
+    },
+    "information": {
+      "name": "Nombre",
+      "nif": "NIF"
+    },
+    "cards": {
+      "members": "Miembros",
+      "querysLeft": "Búsquedas restantes",
+      "analysis": "Análisis con IA restantes"
+    },
+    "table": {
+      "filter": {
+        "options": {
+          "all": "Todos",
+          "owner": "Propietario",
+          "admin": "Administrador",
+          "editor": "Editor",
+          "viewer": "Visualizador"
+        }
+      },
+      "inviteMember": {
+        "tooltip": "Invitar usuario",
+        "dialog": {
+          "title": "Invitar usuario",
+          "subtitle": "Invita a un usuario a tu organización.",
+          "input": {
+            "email": "Correo electrónico"
+          },
+          "button": "Enviar invitación"
+        }
+      },
+      "columns": {
+        "name": "Nombre",
+        "role": "Cargo",
+        "actions": "Acciones"
+      },
+      "removeMember": {
+        "tooltip": "Eliminar miembro"
+      }
+    },
+    "toasts": {
+      "success": {
+        "inviteSent": "Invitación enviada con éxito.",
+        "memberRemoved": "Miembro eliminado con éxito.",
+        "roleChange": "Cargo cambiado con éxito."
+      },
+      "error": {
+        "inviteFailed": "Hubo un error al enviar la invitación. Por favor, intenta nuevamente.",
+        "memberRemoveFailed": "Hubo un error al eliminar al miembro. Por favor, intenta nuevamente.",
+        "roleChangeFailed": "Hubo un error al cambiar el cargo. Por favor, intenta nuevamente."
+      }
+    }
+  },
+
+  "destructiveDialog": {
+    "title": "¿Estás seguro?",
+    "subtitle": "Esta acción no se puede deshacer. Esto eliminará permanentemente tus datos.",
+    "buttons": {
+      "cancel": "Cancelar",
+      "continue": "Continuar"
+    }
+  }
+}

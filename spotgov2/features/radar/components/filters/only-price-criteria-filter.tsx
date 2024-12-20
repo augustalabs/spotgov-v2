@@ -1,7 +1,12 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filters-store";
+import { useTranslations } from "next-intl";
 
 const OnlyPriceCriteriaFilter = () => {
+  const onlyPriceCriteriaTranslation = useTranslations(
+    "radar.filters.onlyPriceCriteria",
+  );
+
   const { onlyPriceCriteriaInput, setOnlyPriceCriteriaInput } =
     useFavoriteQueriesFiltersStore();
 
@@ -21,7 +26,7 @@ const OnlyPriceCriteriaFilter = () => {
         htmlFor="only-price-criteria"
         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
       >
-        Apenas contratos cujo critério de adjudicação é só o preço.
+        {onlyPriceCriteriaTranslation("label")}
       </label>
     </div>
   );

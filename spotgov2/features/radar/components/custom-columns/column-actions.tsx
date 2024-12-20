@@ -15,6 +15,7 @@ import { editColumnMutation, deleteColumnMutation } from "../../services";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { canEditFavoriteQueriesColumn } from "@/permissions";
 import { UserRoles } from "@/types";
+import { useTranslations } from "next-intl";
 
 type ColumnActionsProps = {
   label: string;
@@ -22,6 +23,11 @@ type ColumnActionsProps = {
 };
 
 const ColumnActions = ({ label, fieldId }: ColumnActionsProps) => {
+  const columnActionsTranslation = useTranslations(
+    "radar.table.customColumns.columnActions",
+  );
+  const toastTranslations = useTranslations("radar.toasts");
+
   const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(false);
   const [popoverIsOpen, setPopoverIsOpen] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
@@ -53,12 +59,12 @@ const ColumnActions = ({ label, fieldId }: ColumnActionsProps) => {
       });
 
       if (res.success) {
-        toast.success("Coluna editada com sucesso.");
+        toast.success(toastTranslations("success.editColumn"));
       } else {
-        toast.error("Erro ao editar a coluna. Por favor, tente novamente.");
+        toast.error(toastTranslations("error.editColumnFailed"));
       }
     } catch {
-      toast.error("Erro ao editar a coluna. Por favor, tente novamente.");
+      toast.error(toastTranslations("error.editColumnFailed"));
     }
   };
 
@@ -71,14 +77,14 @@ const ColumnActions = ({ label, fieldId }: ColumnActionsProps) => {
       const res = await deleteMutation.mutateAsync({ fieldId });
 
       if (res.success) {
-        toast.success("Coluna eliminada com sucesso.");
+        toast.success(toastTranslations("success.deleteColumn"));
       } else {
-        toast.error("Erro ao eliminar a coluna. Por favor, tente novamente.");
+        toast.error(toastTranslations("error.deleteColumnFailed"));
       }
 
       return res.success;
     } catch {
-      toast.error("Erro ao eliminar a coluna. Por favor, tente novamente.");
+      toast.error(toastTranslations("error.deleteColumnFailed"));
 
       return false;
     }
@@ -114,14 +120,18 @@ const ColumnActions = ({ label, fieldId }: ColumnActionsProps) => {
         )}
       </div>
       <PopoverContent className="space-y-2">
-        <h1 className="text-sm font-medium">Ações</h1>
+        <h1 className="text-sm font-medium">
+          {columnActionsTranslation("label")}
+        </h1>
         <Separator />
         <button
           className="group flex w-full cursor-pointer items-center gap-2 text-sm"
           onClick={handleEditClick}
         >
           <Edit size={14} />
-          <p className="group-hover:text-primary">Alterar o nome</p>
+          <p className="group-hover:text-primary">
+            {columnActionsTranslation("options.changeName")}
+          </p>
         </button>
         <DestructiveActionDialog
           isOpen={dialogIsOpen}
@@ -130,7 +140,9 @@ const ColumnActions = ({ label, fieldId }: ColumnActionsProps) => {
         >
           <div className="group flex items-center gap-2 text-sm">
             <Trash size={14} className="text-red-500" />
-            <p className="group-hover:text-primary">Eliminar</p>
+            <p className="group-hover:text-primary">
+              {columnActionsTranslation("options.delete")}
+            </p>
           </div>
         </DestructiveActionDialog>
       </PopoverContent>

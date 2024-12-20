@@ -1,11 +1,13 @@
 import Header from "@/components/header";
 import CustomTable from "@/features/radar/components/custom-table";
-import { CONTESTS_RADAR_ROUTE } from "@/routes";
+import { getTranslations } from "next-intl/server";
 
-export default function FavoriteSearchesPage() {
+export default async function FavoriteSearchesPage() {
+  const radar = await getTranslations("radar");
+
   return (
     <section>
-      <Header title={CONTESTS_RADAR_ROUTE.label} />
+      <Header title={radar("header.title")} />
       <CustomTable />
     </section>
   );

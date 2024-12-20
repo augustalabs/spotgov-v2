@@ -8,6 +8,7 @@ import { Separator } from "../ui/separator";
 import { signOut } from "@/features/auth/api";
 import { LogOut } from "lucide-react";
 import Contacts from "./contacts";
+import { getTranslations } from "next-intl/server";
 
 const Footer = async () => {
   const supabase = await createClient();
@@ -18,6 +19,8 @@ const Footer = async () => {
   const userName = userData?.user.user_metadata.full_name;
   const userEmail = userData?.user.email ?? "";
   const userAvatarUrl = userData?.user.user_metadata.avatar_url;
+
+  const userButton = await getTranslations("sidebar.userButton");
 
   return (
     <Popover>
@@ -50,7 +53,7 @@ const Footer = async () => {
               className="flex items-center gap-2 text-sm hover:text-primary"
             >
               <LogOut size={16} />
-              <span>Sair</span>
+              <span>{userButton("logout")}</span>
             </button>
           </form>
         </div>

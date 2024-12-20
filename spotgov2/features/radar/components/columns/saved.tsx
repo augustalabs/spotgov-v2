@@ -7,6 +7,7 @@ import { Bookmark } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filters-store";
+import { useTranslations } from "next-intl";
 
 type SavedProps = {
   saved: boolean;
@@ -14,6 +15,11 @@ type SavedProps = {
 };
 
 const Saved = ({ saved, contractId }: SavedProps) => {
+  const savedOptionsTranslation = useTranslations(
+    "radar.table.columns.saved.options",
+  );
+  const toastTranslations = useTranslations("radar.toasts");
+
   const { savedInput } = useFavoriteQueriesFiltersStore();
 
   const [isSaved, setIsSaved] = useState<boolean>(false);
@@ -45,13 +51,14 @@ const Saved = ({ saved, contractId }: SavedProps) => {
       });
 
       if (res.success) {
-        if (res.payload?.saved) toast.success("Contrato guardado com sucesso.");
-        else toast.success("Contrato removido dos guardados com sucesso.");
+        if (res.payload?.saved)
+          toast.success(toastTranslations("success.saveContract"));
+        else toast.success(toastTranslations("success.unsaveContract"));
       } else {
-        toast.error("Erro ao guardar/remover contrato.");
+        toast.error(toastTranslations("error.saveUnsaveContractFailed"));
       }
     } catch {
-      toast.error("Erro ao guardar/remover contrato.");
+      toast.error(toastTranslations("error.saveUnsaveContractFailed"));
     }
   };
 
@@ -60,10 +67,14 @@ const Saved = ({ saved, contractId }: SavedProps) => {
       variant="outline"
       size="sm"
       onClick={handleSaveContract}
-      className={cn(isSaved && "border-primary bg-primary/10 text-primary")}
+      className={cn(isSaved && "bg-primary/10 border-primary text-primary")}
     >
       <Bookmark size={16} />
-      <p>{isSaved ? "Guardado" : "Guardar"}</p>
+      <p>
+        {isSaved
+          ? savedOptionsTranslation("saved")
+          : savedOptionsTranslation("save")}
+      </p>
     </Button>
   );
 };

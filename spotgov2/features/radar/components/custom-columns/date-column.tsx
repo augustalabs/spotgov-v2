@@ -17,6 +17,8 @@ import {
 import { toast } from "sonner";
 import { canChangeFavoriteQueriesColumnValue } from "@/permissions";
 import { UserRoles } from "@/types";
+import { useLocale, useTranslations } from "next-intl";
+import { es, pt } from "date-fns/locale";
 
 type DateColumnProps = {
   value: string;
@@ -25,6 +27,12 @@ type DateColumnProps = {
 };
 
 const DateColumn = ({ value, fieldId, contractId }: DateColumnProps) => {
+  const customColumnsTranslation = useTranslations("radar.table.customColumns");
+  const toastTranslation = useTranslations("radar.toasts");
+
+  const locale = useLocale();
+  const parsedLocale = locale === "es" ? es : pt;
+
   const [newValue, setNewValue] = useState<string>(value);
 
   const { currentOrganization } = useCurrentOrganizationStore();
@@ -61,12 +69,12 @@ const DateColumn = ({ value, fieldId, contractId }: DateColumnProps) => {
       }
 
       if (res.success) {
-        toast.success("Valor atualizado com sucesso.");
+        toast.success(toastTranslation("success.updateColumnValue"));
       } else {
-        toast.error("Erro ao atualizar valor. Por favor, tente novamente.");
+        toast.error(toastTranslation("error.updateColumnValueFailed"));
       }
     } catch {
-      toast.error("Erro ao atualizar valor. Por favor, tente novamente.");
+      toast.error(toastTranslation("error.updateColumnValueFailed"));
     }
   };
 
@@ -84,7 +92,9 @@ const DateColumn = ({ value, fieldId, contractId }: DateColumnProps) => {
           className="flex w-full min-w-32 items-center justify-between disabled:cursor-text disabled:border-none disabled:bg-transparent disabled:opacity-100"
         >
           <p>
-            {newValue ? format(newValue, "dd/MM/yyyy") : "Escolha uma data"}
+            {newValue
+              ? format(newValue, "dd/MM/yyyy")
+              : customColumnsTranslation("date")}
           </p>
           {canChangeFavoriteQueriesColumnValue(
             currentOrganization?.role as UserRoles,
@@ -94,6 +104,7 @@ const DateColumn = ({ value, fieldId, contractId }: DateColumnProps) => {
       <PopoverContent>
         <Calendar
           mode="single"
+          locale={parsedLocale}
           initialFocus
           selected={new Date(newValue)}
           onSelect={(value) => handleValueEdit(value)}

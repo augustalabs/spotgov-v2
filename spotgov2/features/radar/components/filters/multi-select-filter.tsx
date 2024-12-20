@@ -20,6 +20,8 @@ type MultiSelectFilterProps = {
   setInput: (input: string[]) => void;
   defaultValues: string[];
   selectLabel: string;
+  searchPlaceholder: string;
+  noResultsMessage: string;
   selectIcon: LucideIcon;
   className?: string;
 };
@@ -29,6 +31,8 @@ const MultiSelectFilter = ({
   setInput,
   defaultValues,
   selectLabel,
+  searchPlaceholder,
+  noResultsMessage,
   selectIcon: SelectIcon,
   className,
 }: MultiSelectFilterProps) => {
@@ -48,7 +52,7 @@ const MultiSelectFilter = ({
         <Button variant="outline" className={className}>
           <SelectIcon size={16} />
           <p>{selectLabel}</p>
-          <div className="rounded-md border border-primary bg-primary/10 px-1">
+          <div className="bg-primary/10 rounded-md border border-primary px-1">
             {input.length}
           </div>
           <ChevronDown size={16} />
@@ -56,9 +60,9 @@ const MultiSelectFilter = ({
       </PopoverTrigger>
       <PopoverContent>
         <Command>
-          <CommandInput placeholder="Procurar..." />
+          <CommandInput placeholder={searchPlaceholder} />
           <CommandList>
-            <CommandEmpty>Não foram encontrados resultados.</CommandEmpty>
+            <CommandEmpty>{noResultsMessage}</CommandEmpty>
             <CommandGroup>
               {defaultValues?.map((value) => (
                 <CommandItem

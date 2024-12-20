@@ -14,40 +14,43 @@ import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filter
 import { OrderType } from "@/types";
 import { cn } from "@/utils/utils";
 import { Check, ChevronDown, ListFilter } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type DefaultValuesProps = {
   label: string;
   value: OrderType;
 };
 
-const DEFAULT_VALUES: DefaultValuesProps[] = [
-  {
-    label: "Mais recente",
-    value: "publish-date-desc",
-  },
-  {
-    label: "Mais antigo",
-    value: "publish-date-asc",
-  },
-  {
-    label: "Preço mais alto",
-    value: "base-price-desc",
-  },
-  {
-    label: "Preço mais baixo",
-    value: "base-price-asc",
-  },
-  {
-    label: "Prazo mais distante",
-    value: "deadline-desc",
-  },
-  {
-    label: "Prazo mais próximo",
-    value: "deadline-asc",
-  },
-];
-
 const Sort = ({ className }: { className?: string }) => {
+  const optionsTranslation = useTranslations("radar.filters.sort.options");
+
+  const DEFAULT_VALUES: DefaultValuesProps[] = [
+    {
+      label: optionsTranslation("publishDateDesc"),
+      value: "publish-date-desc",
+    },
+    {
+      label: optionsTranslation("publishDateAsc"),
+      value: "publish-date-asc",
+    },
+    {
+      label: optionsTranslation("basePriceDesc"),
+      value: "base-price-desc",
+    },
+    {
+      label: optionsTranslation("basePriceAsc"),
+      value: "base-price-asc",
+    },
+    {
+      label: optionsTranslation("deadlineDesc"),
+      value: "deadline-desc",
+    },
+    {
+      label: optionsTranslation("deadlineAsc"),
+      value: "deadline-asc",
+    },
+  ];
+
   const { selectedSortInput, setSelectedSortInput } =
     useFavoriteQueriesFiltersStore();
 

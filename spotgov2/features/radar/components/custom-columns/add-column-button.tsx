@@ -37,16 +37,20 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { canAddFavoriteQueriesColumn } from "@/permissions";
 import { UserRoles } from "@/types";
-
-const mapDataTypeToPortuguese = {
-  text: "Texto",
-  logic: "Lógico",
-  date: "Data",
-  label: "Etiqueta",
-  file: "Ficheiro",
-};
+import { useTranslations } from "next-intl";
 
 const AddColumnButton = ({ className }: { className: string }) => {
+  const newColumnTranslation = useTranslations("radar.filters.newColumn");
+  const toastsTranslation = useTranslations("radar.toasts");
+
+  const mapDataTypeToLocale = {
+    text: newColumnTranslation("dialog.inputs.type.options.text"),
+    logic: newColumnTranslation("dialog.inputs.type.options.logic"),
+    date: newColumnTranslation("dialog.inputs.type.options.date"),
+    label: newColumnTranslation("dialog.inputs.type.options.label"),
+    file: newColumnTranslation("dialog.inputs.type.options.file"),
+  };
+
   const form = useForm<z.infer<typeof addColumnSchema>>({
     resolver: zodResolver(addColumnSchema),
     defaultValues: {
@@ -73,14 +77,14 @@ const AddColumnButton = ({ className }: { className: string }) => {
       });
 
       if (res.success) {
-        toast.success("Coluna adicionada com sucesso.");
+        toast.success(toastsTranslation("success.addColumn"));
         setIsOpen(false);
         form.reset();
       } else {
-        toast.error("Erro ao adicionar coluna. Por favor, tente novamente.");
+        toast.error(toastsTranslation("error.addColumnFailed"));
       }
     } catch {
-      toast.error("Erro ao adicionar coluna. Por favor, tente novamente.");
+      toast.error(toastsTranslation("error.addColumnFailed"));
     }
   };
 
@@ -92,14 +96,14 @@ const AddColumnButton = ({ className }: { className: string }) => {
       <DialogTrigger asChild>
         <Button variant="outline" className={className}>
           <Plus size={16} />
-          <p>Adicionar coluna</p>
+          <p>{newColumnTranslation("label")}</p>
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Adicionar Coluna</DialogTitle>
+          <DialogTitle>{newColumnTranslation("dialog.title")}</DialogTitle>
           <DialogDescription>
-            Adicione uma coluna personalizada com informação adicional.
+            {newColumnTranslation("dialog.subtitle")}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -109,9 +113,15 @@ const AddColumnButton = ({ className }: { className: string }) => {
               name="fieldName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Título</FormLabel>
+                  <FormLabel>
+                    {newColumnTranslation("dialog.inputs.title")}
+                  </FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" placeholder="Título" />
+                    <Input
+                      {...field}
+                      type="text"
+                      placeholder={newColumnTranslation("dialog.inputs.title")}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -122,14 +132,16 @@ const AddColumnButton = ({ className }: { className: string }) => {
               name="fieldType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tipo de dados</FormLabel>
+                  <FormLabel>
+                    {newColumnTranslation("dialog.inputs.type.label")}
+                  </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Selecione um tipo de dados" />
+                        <SelectValue />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -139,7 +151,7 @@ const AddColumnButton = ({ className }: { className: string }) => {
                           value={data}
                           className={cn(data === field.value && "text-primary")}
                         >
-                          <p>{mapDataTypeToPortuguese[data]}</p>
+                          <p>{mapDataTypeToLocale[data]}</p>
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -149,7 +161,7 @@ const AddColumnButton = ({ className }: { className: string }) => {
               )}
             />
             <Button disabled={isLoading} type="submit" className="w-full">
-              Adicionar
+              {newColumnTranslation("dialog.button")}
             </Button>
           </form>
         </Form>

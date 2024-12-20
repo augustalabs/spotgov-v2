@@ -1,18 +1,33 @@
 import { cn } from "@/utils/utils";
 import { differenceInDays } from "date-fns";
+import { useTranslations } from "next-intl";
 
 type DeadlineDaysProps = {
   date: Date;
 };
 
 const DeadlineDays = ({ date }: DeadlineDaysProps) => {
+  const timeLeftOptionsTranslation = useTranslations(
+    "radar.table.columns.timeLeft.options",
+  );
+
   const difference = differenceInDays(date, new Date());
 
   function getDifferenceInDays(): string[] {
-    if (difference < 0) return ["Expirado", "bg-muted-foreground"];
-    else if (difference === 0) return ["Termina hoje", "bg-red-400"];
-    else if (difference === 1) return [`${difference} dia`, "bg-yellow-400"];
-    else return [`${difference} dias`, "bg-green-400"];
+    if (difference < 0)
+      return [timeLeftOptionsTranslation("expired"), "bg-muted-foreground"];
+    else if (difference === 0)
+      return [timeLeftOptionsTranslation("today"), "bg-red-400"];
+    else if (difference === 1)
+      return [
+        `${difference} ${timeLeftOptionsTranslation("day")}`,
+        "bg-yellow-400",
+      ];
+    else
+      return [
+        `${difference} ${timeLeftOptionsTranslation("days")}`,
+        "bg-green-400",
+      ];
   }
 
   return (

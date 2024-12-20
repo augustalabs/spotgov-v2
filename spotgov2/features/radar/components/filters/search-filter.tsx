@@ -5,9 +5,12 @@ import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filter
 import { cn } from "@/utils/utils";
 import { debounce } from "@tanstack/react-virtual";
 import { Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 
 const SearchFilter = ({ className }: { className?: string }) => {
+  const filtersTranslation = useTranslations("radar.filters");
+
   const { setSearchTextInput } = useFavoriteQueriesFiltersStore();
 
   const [localSearchTextInput, setLocalSearchTextInput] = useState("");
@@ -31,7 +34,7 @@ const SearchFilter = ({ className }: { className?: string }) => {
         className="absolute left-1 top-1/2 -translate-y-1/2 text-border"
       />
       <Input
-        placeholder="Procurar contratos..."
+        placeholder={filtersTranslation("search")}
         value={localSearchTextInput}
         onChange={(event) => setLocalSearchTextInput(event.target.value)}
         className="pl-6"

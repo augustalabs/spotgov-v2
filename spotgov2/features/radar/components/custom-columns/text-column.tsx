@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { canChangeFavoriteQueriesColumnValue } from "@/permissions";
 import { UserRoles } from "@/types";
+import { useTranslations } from "next-intl";
 
 type TextColumnProps = {
   value: string;
@@ -17,6 +18,8 @@ type TextColumnProps = {
 };
 
 const TextColumn = ({ value, fieldId, contractId }: TextColumnProps) => {
+  const toastTranslation = useTranslations("radar.toasts");
+
   const [newValue, setNewValue] = useState<string>(value);
 
   const { currentOrganization } = useCurrentOrganizationStore();
@@ -48,12 +51,12 @@ const TextColumn = ({ value, fieldId, contractId }: TextColumnProps) => {
       }
 
       if (res.success) {
-        toast.success("Valor atualizado com sucesso.");
+        toast.success(toastTranslation("success.updateColumnValue"));
       } else {
-        toast.error("Erro ao atualizar valor. Por favor, tente novamente.");
+        toast.error(toastTranslation("error.updateColumnValueFailed"));
       }
     } catch {
-      toast.error("Erro ao atualizar valor. Por favor, tente novamente.");
+      toast.error(toastTranslation("error.updateColumnValueFailed"));
     }
   };
 

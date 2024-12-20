@@ -21,6 +21,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 type InfoDetail = {
   key: string;
@@ -34,26 +35,28 @@ const Contacts = () => {
   const [hoveredAction, setHoveredAction] = useState<string | null>(null);
   const [copiedAction, setCopiedAction] = useState<string | null>(null);
 
+  const userButtonTranslation = useTranslations("sidebar.userButton");
+
   const infoDetails: InfoDetail[] = [
     {
       key: "call",
       icon: Phone,
-      title: "Telefone",
-      description: "Fale connosco por chamada.",
+      title: userButtonTranslation("contacts.call.title"),
+      description: userButtonTranslation("contacts.call.subtitle"),
       details: "+351 929 052 364",
     },
     {
       key: "email",
       icon: Mail,
-      title: "Email",
-      description: "Envie-nos uma mensagem.",
+      title: userButtonTranslation("contacts.email.title"),
+      description: userButtonTranslation("contacts.email.subtitle"),
       details: "info@spotgov.com",
     },
     {
       key: "book",
       icon: Calendar,
-      title: "Reunião",
-      description: "Agende uma reunião.",
+      title: userButtonTranslation("contacts.meeting.title"),
+      description: userButtonTranslation("contacts.meeting.subtitle"),
       details: "cal.com/spotgov",
     },
   ];
@@ -63,7 +66,7 @@ const Contacts = () => {
 
     navigator.clipboard.writeText(content).then(() => {
       setCopiedAction(action);
-      toast.success("Copiado para a área de transferência.");
+      toast.success(userButtonTranslation("contacts.toasts.success.copied"));
       setTimeout(() => setCopiedAction(null), 2000);
     });
   };
@@ -86,13 +89,13 @@ const Contacts = () => {
     <Dialog>
       <DialogTrigger className="flex items-center gap-2 text-sm hover:text-primary">
         <Info size={16} />
-        <span>Contactos</span>
+        <span>{userButtonTranslation("contacts.label")}</span>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Contactos</DialogTitle>
+          <DialogTitle>{userButtonTranslation("contacts.label")}</DialogTitle>
           <DialogDescription>
-            Tem alguma dúvida? Entre em contacto connosco.
+            {userButtonTranslation("contacts.description")}
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="max-h-[60vh]">
@@ -106,7 +109,7 @@ const Contacts = () => {
                   onClick={() => handleAction(info.key, info.details)}
                 >
                   <motion.div
-                    className="flex flex-col items-center justify-center space-y-2 rounded-lg border border-primary bg-primary/5 p-4 text-center transition-colors hover:bg-primary/10"
+                    className="bg-primary/5 hover:bg-primary/10 flex flex-col items-center justify-center space-y-2 rounded-lg border border-primary p-4 text-center transition-colors"
                     animate={{
                       height: hoveredAction === info.key ? "150px" : "200px",
                     }}
@@ -131,7 +134,7 @@ const Contacts = () => {
                       >
                         <div
                           onClick={(e) => handleCopy(e, info.key, info.details)}
-                          className="flex h-full w-full items-center justify-between rounded-lg border border-primary bg-primary/5 px-2 text-sm transition-colors hover:bg-primary/10"
+                          className="bg-primary/5 hover:bg-primary/10 flex h-full w-full items-center justify-between rounded-lg border border-primary px-2 text-sm transition-colors"
                         >
                           <span className="text-xs">{info.details}</span>
                           {copiedAction === info.key ? (

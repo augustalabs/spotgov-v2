@@ -31,7 +31,7 @@ export default async function RootLayout({
 
   return (
     <NextIntlClientProvider messages={messages}>
-      <html lang="en">
+      <html lang={locale}>
         <body className={`${inter.className} antialiased`}>
           <main className="h-full w-full">{children}</main>
         </body>

@@ -40,6 +40,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 import { canChangeFavoriteQueriesColumnValue } from "@/permissions";
 import { UserRoles } from "@/types";
+import { useTranslations } from "next-intl";
 
 type LabelColumnProps = {
   value: string;
@@ -48,6 +49,9 @@ type LabelColumnProps = {
 };
 
 const LabelColumn = ({ value, fieldId, contractId }: LabelColumnProps) => {
+  const labelTranslation = useTranslations("radar.table.customColumns.label");
+  const toastTranslation = useTranslations("radar.toasts");
+
   const [localLabel, setLocalLabel] = useState<string>(value);
 
   const { currentOrganization } = useCurrentOrganizationStore();
@@ -95,12 +99,12 @@ const LabelColumn = ({ value, fieldId, contractId }: LabelColumnProps) => {
       }
 
       if (res.success) {
-        toast.success("Etiqueta adicionada com sucesso.");
+        toast.success(toastTranslation("success.addLabel"));
       } else {
-        toast.error("Erro ao adicionar etiqueta. Por favor, tente novamente.");
+        toast.error(toastTranslation("error.addLabelFailed"));
       }
     } catch {
-      toast.error("Erro ao adicionar etiqueta. Por favor, tente novamente.");
+      toast.error(toastTranslation("error.addLabelFailed"));
     }
   };
 
@@ -140,12 +144,12 @@ const LabelColumn = ({ value, fieldId, contractId }: LabelColumnProps) => {
       }
 
       if (res.success) {
-        toast.success("Etiqueta atualizada com sucesso.");
+        toast.success(toastTranslation("success.updateLabel"));
       } else {
-        toast.error("Erro ao atualizar etiqueta. Por favor, tente novamente.");
+        toast.error(toastTranslation("error.updateLabelFailed"));
       }
     } catch {
-      toast.error("Erro ao atualizar etiqueta. Por favor, tente novamente.");
+      toast.error(toastTranslation("error.updateLabelFailed"));
     }
   };
 
@@ -162,19 +166,21 @@ const LabelColumn = ({ value, fieldId, contractId }: LabelColumnProps) => {
           }
         >
           {localLabel === "" && <Plus size={16} />}
-          {localLabel !== "" ? localLabel : "Adicionar"}
+          {localLabel !== "" ? localLabel : labelTranslation("label")}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="space-y-1">
         <Command>
-          <CommandInput placeholder="Procurar etiqueta..." />
+          <CommandInput
+            placeholder={labelTranslation("popover.searchPlaceholder")}
+          />
           <CommandList>
-            <CommandEmpty>Não foram encontrados resultados.</CommandEmpty>
+            <CommandEmpty>{labelTranslation("popover.noResults")}</CommandEmpty>
             {isPending && <Skeleton className="h-2 w-full" />}
             {!isPending && (
               <CommandGroup
                 className="max-h-36 overflow-auto"
-                heading={data?.payload ? "Etiquetas" : ""}
+                heading={data?.payload ? labelTranslation("popover.label") : ""}
                 value={localLabel}
               >
                 {data?.payload &&
@@ -216,12 +222,16 @@ const LabelColumn = ({ value, fieldId, contractId }: LabelColumnProps) => {
               name="label"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Etiqueta</FormLabel>
+                  <FormLabel>
+                    {labelTranslation("popover.input.label")}
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       type="text"
-                      placeholder="Nome da etiqueta"
+                      placeholder={labelTranslation(
+                        "popover.input.placeholder",
+                      )}
                     />
                   </FormControl>
                 </FormItem>

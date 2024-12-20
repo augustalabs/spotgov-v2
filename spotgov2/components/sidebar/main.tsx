@@ -38,6 +38,7 @@ import { usePathname } from "next/navigation";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { canViewOrganization } from "@/permissions";
 import { UserRoles } from "@/types";
+import { useTranslations } from "next-intl";
 
 type SidebarItem = {
   title: string;
@@ -49,59 +50,63 @@ type SidebarItem = {
   }[];
 };
 
-const items: SidebarItem[] = [
-  {
-    title: "Deteção e análise",
-    isActive: true,
-    items: [
-      {
-        icon: Search,
-        title: SEARCH_ROUTE.label,
-        url: SEARCH_ROUTE.url,
-      },
-      {
-        icon: Compass,
-        title: CONTESTS_RADAR_ROUTE.label,
-        url: CONTESTS_RADAR_ROUTE.url,
-      },
-    ],
-  },
-  {
-    title: "Resposta e revisão",
-    isActive: true,
-    items: [
-      {
-        icon: Eye,
-        title: PROPOSAL_REVIEW_ROUTE.label,
-        url: PROPOSAL_REVIEW_ROUTE.url,
-      },
-    ],
-  },
-  {
-    title: "Gestão",
-    isActive: true,
-    items: [
-      {
-        icon: Bookmark,
-        title: SAVED_CONTESTS_ROUTE.label,
-        url: SAVED_CONTESTS_ROUTE.url,
-      },
-    ],
-  },
-  {
-    title: "Inteligência de mercado",
-    isActive: true,
-    items: [
-      {
-        icon: ChartSpline,
-        title: MARKET_INTELLIGENCE_ROUTE.label,
-        url: MARKET_INTELLIGENCE_ROUTE.url,
-      },
-    ],
-  },
-];
-
 const Main = () => {
+  const sidebarItemsTranslation = useTranslations("sidebar.sidebarItems");
+
+  const items: SidebarItem[] = [
+    {
+      title: "Deteção e análise",
+      isActive: true,
+      items: [
+        {
+          icon: Search,
+          title: sidebarItemsTranslation("detectionAndAnalysis.items.search"),
+          url: SEARCH_ROUTE.url,
+        },
+        {
+          icon: Compass,
+          title: sidebarItemsTranslation("detectionAndAnalysis.items.radar"),
+          url: CONTESTS_RADAR_ROUTE.url,
+        },
+      ],
+    },
+    {
+      title: "Resposta e revisão",
+      isActive: true,
+      items: [
+        {
+          icon: Eye,
+          title: sidebarItemsTranslation("responseAndReview.items.reviewer"),
+          url: PROPOSAL_REVIEW_ROUTE.url,
+        },
+      ],
+    },
+    {
+      title: "Gestão",
+      isActive: true,
+      items: [
+        {
+          icon: Bookmark,
+          title: sidebarItemsTranslation("management.items.savedContests"),
+          url: SAVED_CONTESTS_ROUTE.url,
+        },
+      ],
+    },
+    {
+      title: "Inteligência de mercado",
+      isActive: true,
+      items: [
+        {
+          icon: ChartSpline,
+          title: sidebarItemsTranslation(
+            "marketIntelligence.items.marketIntelligence",
+          ),
+          url: MARKET_INTELLIGENCE_ROUTE.url,
+        },
+      ],
+    },
+  ];
+
   const pathname = usePathname();
 
   const { open } = useSidebar();

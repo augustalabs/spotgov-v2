@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ExportTableField } from "../../types";
 import { toast } from "sonner";
 import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
+import { useTranslations } from "next-intl";
 
 type ExportButtonProps = {
   queryIds: string[];
@@ -48,6 +49,8 @@ const FIELDS: ExportTableField[] = [
 ];
 
 const ExportButton = ({ queryIds, className }: ExportButtonProps) => {
+  const toastTranslation = useTranslations("radar.toasts");
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const mutation = useMutation(exportTableMutation());
@@ -66,15 +69,15 @@ const ExportButton = ({ queryIds, className }: ExportButtonProps) => {
       });
 
       if (res.success) {
-        toast.success("Exportação realizada com sucesso.");
+        toast.success(toastTranslation("success.export"));
       } else {
-        toast.error("Erro ao exportar tabela. Por favor, tente novamente.");
+        toast.error(toastTranslation("error.exportFailed"));
       }
     } catch (error) {
       // TODO: REMOVE LOG
       console.log(error);
 
-      toast.error("Erro ao exportar tabela. Por favor, tente novamente.");
+      toast.error(toastTranslation("error.exportFailed"));
     } finally {
       setIsLoading(false);
     }

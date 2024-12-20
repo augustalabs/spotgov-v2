@@ -9,8 +9,15 @@ import { ChevronDown } from "lucide-react";
 import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filters-store";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
+import { useLocale, useTranslations } from "next-intl";
+import { es, pt } from "date-fns/locale";
 
 const DateRangeFilter = ({ className }: { className: string }) => {
+  const publishDateTranslation = useTranslations("radar.filters.publishDate");
+
+  const locale = useLocale();
+  const parsedLocale = locale === "es" ? es : pt;
+
   const { publishDateInput, setPublishDateInput } =
     useFavoriteQueriesFiltersStore();
 
@@ -36,7 +43,7 @@ const DateRangeFilter = ({ className }: { className: string }) => {
           <p>
             {publishDateInput
               ? formattedPublishDateInput()
-              : "Data de publicação"}
+              : publishDateTranslation("label")}
           </p>
           <ChevronDown size={16} />
         </Button>
@@ -44,6 +51,7 @@ const DateRangeFilter = ({ className }: { className: string }) => {
       <PopoverContent className="w-full">
         <Calendar
           mode="range"
+          locale={parsedLocale}
           initialFocus
           selected={publishDateInput}
           onSelect={(value) => setPublishDateInput(value)}

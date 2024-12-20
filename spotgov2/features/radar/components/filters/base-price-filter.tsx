@@ -8,9 +8,12 @@ import {
 import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filters-store";
 import { debounce } from "@tanstack/react-virtual";
 import { ChevronDown, Euro } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 
 const BasePriceFilter = ({ className }: { className: string }) => {
+  const basePriceTranslation = useTranslations("radar.filters.basePrice");
+
   const { basePriceInput, setBasePriceInput, basePriceDefaultValues } =
     useFavoriteQueriesFiltersStore();
 
@@ -58,15 +61,19 @@ const BasePriceFilter = ({ className }: { className: string }) => {
       <PopoverTrigger asChild>
         <Button variant="outline" className={className}>
           <Euro size={16} />
-          <p>{basePriceInput ? formattedBasePriceInput() : "Preço base"}</p>
+          <p>
+            {basePriceInput
+              ? formattedBasePriceInput()
+              : basePriceTranslation("label")}
+          </p>
           <ChevronDown size={16} />
         </Button>
       </PopoverTrigger>
       <PopoverContent>
         {values && (
           <DualRangeSlider
-            title="Filtre por Preço Base"
-            subtitle="Os valores estão em euros"
+            title={basePriceTranslation("popover.title")}
+            subtitle={basePriceTranslation("popover.subtitle")}
             min={values[0]}
             max={values[1]}
             value={[

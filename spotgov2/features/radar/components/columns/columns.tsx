@@ -7,11 +7,16 @@ import Saved from "./saved";
 import ContractTitle from "./contract-title";
 import { PaginatedContractsType } from "../../types";
 import { formatPrice } from "@/utils/utils";
+import { useTranslations } from "next-intl";
 
 export const columns: ColumnDef<PaginatedContractsType>[] = [
   {
     accessorKey: "title",
-    header: "Título",
+    header: () => {
+      const columnsTranslation = useTranslations("radar.table.columns");
+
+      return <p>{columnsTranslation("title")}</p>;
+    },
     cell: ({ row }) => (
       <ContractTitle
         title={row.original.contract.title as string}
@@ -21,7 +26,11 @@ export const columns: ColumnDef<PaginatedContractsType>[] = [
   },
   {
     accessorKey: "basePrice",
-    header: "Preço base",
+    header: () => {
+      const columnsTranslation = useTranslations("radar.table.columns");
+
+      return <p>{columnsTranslation("basePrice")}</p>;
+    },
     cell: ({ row }) => (
       <p className="truncate">
         {formatPrice(parseInt(row.original.contract.basePrice as string))} €
@@ -30,13 +39,21 @@ export const columns: ColumnDef<PaginatedContractsType>[] = [
   },
   {
     accessorKey: "publishDate",
-    header: "Data de publicação",
+    header: () => {
+      const columnsTranslation = useTranslations("radar.table.columns");
+
+      return <p>{columnsTranslation("publishDate")}</p>;
+    },
     cell: ({ row }) =>
       formatDate(row.original.contract.publishDate as Date, "dd/MM/yyyy"),
   },
   {
     accessorKey: "submissionDeadlineDate",
-    header: "Prazo de submissão",
+    header: () => {
+      const columnsTranslation = useTranslations("radar.table.columns");
+
+      return <p>{columnsTranslation("deadline")}</p>;
+    },
     cell: ({ row }) =>
       formatDate(
         row.original.contract.submissionDeadlineDate as Date,
@@ -45,7 +62,11 @@ export const columns: ColumnDef<PaginatedContractsType>[] = [
   },
   {
     accessorKey: "executionDeadlineDays",
-    header: "Tempo restante",
+    header: () => {
+      const columnsTranslation = useTranslations("radar.table.columns");
+
+      return <p>{columnsTranslation("timeLeft.label")}</p>;
+    },
     cell: ({ row }) => (
       <DeadlineDays
         date={row.original.contract.submissionDeadlineDate as Date}
@@ -54,14 +75,22 @@ export const columns: ColumnDef<PaginatedContractsType>[] = [
   },
   {
     accessorKey: "queryTitle",
-    header: "Pesquisa",
+    header: () => {
+      const columnsTranslation = useTranslations("radar.table.columns");
+
+      return <p>{columnsTranslation("query")}</p>;
+    },
     cell: ({ row }) => (
       <p className="truncate">{row.original.queryTitle as string}</p>
     ),
   },
   {
     accessorKey: "saved",
-    header: "Interesse",
+    header: () => {
+      const columnsTranslation = useTranslations("radar.table.columns");
+
+      return <p>{columnsTranslation("saved.label")}</p>;
+    },
     cell: ({ row }) => (
       <Saved
         saved={row.original.saved as boolean}

@@ -13,6 +13,7 @@ import {
 import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filters-store";
 import { cn } from "@/utils/utils";
 import { Bookmark, Check, ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 type DefaultValuesProps = {
@@ -20,22 +21,24 @@ type DefaultValuesProps = {
   value: string;
 };
 
-const DEFAULT_VALUES: DefaultValuesProps[] = [
-  {
-    label: "Todos",
-    value: "all",
-  },
-  {
-    label: "Guardados",
-    value: "saved",
-  },
-  {
-    label: "Não guardados",
-    value: "not-saved",
-  },
-];
-
 const SavedFilter = ({ className }: { className?: string }) => {
+  const savedTranslation = useTranslations("radar.filters.saved");
+
+  const DEFAULT_VALUES: DefaultValuesProps[] = [
+    {
+      label: savedTranslation("options.all"),
+      value: "all",
+    },
+    {
+      label: savedTranslation("options.saved"),
+      value: "saved",
+    },
+    {
+      label: savedTranslation("options.notSaved"),
+      value: "not-saved",
+    },
+  ];
+
   const { savedInput, setSavedInput } = useFavoriteQueriesFiltersStore();
 
   const [selectedSaved, setSelectedSaved] = useState<string>(
@@ -59,10 +62,10 @@ const SavedFilter = ({ className }: { className?: string }) => {
           <Bookmark size={16} />
           <p>
             {savedInput === true
-              ? "Guardados"
+              ? savedTranslation("options.saved")
               : savedInput === false
-                ? "Não guardados"
-                : "Interesse"}
+                ? savedTranslation("options.notSaved")
+                : savedTranslation("label")}
           </p>
           <ChevronDown size={16} />
         </Button>
