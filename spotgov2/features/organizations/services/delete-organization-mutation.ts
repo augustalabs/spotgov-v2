@@ -12,11 +12,12 @@ function deleteOrganizationMutation(organizationId: string) {
       url: `organizations/${organizationId}`,
     });
 
-  const onSuccess = async () =>
+  const onSuccess = async () => {
     await queryClient.invalidateQueries({
       queryKey: ["get-all-organizations"],
     });
-  toast.success("Organization deleted successfully");
+    toast.success("Organization deleted successfully");
+  };
 
   return { mutationKey, mutationFn, onSuccess };
 }
