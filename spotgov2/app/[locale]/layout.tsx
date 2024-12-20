@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { routing } from "@/lib/i18n/routing";
 import { notFound } from "next/navigation";
+import Providers from "@/providers/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
