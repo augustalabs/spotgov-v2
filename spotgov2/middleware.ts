@@ -1,8 +1,20 @@
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
+import { routing } from "./lib/i18n/routing";
+import createMiddleware from "next-intl/middleware";
+
+const handleI18nRouting = createMiddleware(routing);
 
 export async function middleware(request: NextRequest) {
-  return await updateSession(request);
+  let response = NextResponse.next({
+    request,
+  });
+
+  if (!request.nextUrl.pathname.startsWith("/api")) {
+    response = handleI18nRouting(request);
+  }
+
+  return await updateSession(request, response);
 }
 
 export const config = {
@@ -14,6 +26,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * Feel free to modify this pattern to include more paths.
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|auth/callback|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

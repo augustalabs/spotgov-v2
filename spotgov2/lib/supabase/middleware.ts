@@ -2,17 +2,18 @@ import { canViewOrganization } from "@/permissions";
 import {
   HOME_ROUTE,
   LOGIN_ROUTE,
+  ORGANIZATION_ACCEPT_INVITE_ROUTE,
   ORGANIZATION_ROUTE,
   SEARCH_ROUTE,
+  SIGN_UP_ROUTE,
 } from "@/routes";
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({
-    request,
-  });
-
+export async function updateSession(
+  request: NextRequest,
+  response: NextResponse,
+) {
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -22,14 +23,11 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
+          cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value),
           );
-          supabaseResponse = NextResponse.next({
-            request,
-          });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options),
+            response.cookies.set(name, value, options),
           );
         },
       },
@@ -44,8 +42,10 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const pathname = request.nextUrl.pathname;
+
   // Redirect root '/' to '/nova-pesquisa' if user is logged in
-  if (request.nextUrl.pathname === HOME_ROUTE.url && user) {
+  if (pathname === HOME_ROUTE.url && user) {
     const url = request.nextUrl.clone();
     url.pathname = SEARCH_ROUTE.url;
     return NextResponse.redirect(url);
@@ -53,10 +53,10 @@ export async function updateSession(request: NextRequest) {
 
   if (
     !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth") &&
-    !request.nextUrl.pathname.startsWith("/aceitar-convite") &&
-    !request.nextUrl.pathname.startsWith("/api/organizations/accept-invite")
+    !pathname.includes(LOGIN_ROUTE.url) &&
+    !pathname.includes(SIGN_UP_ROUTE.url) &&
+    !pathname.includes(ORGANIZATION_ACCEPT_INVITE_ROUTE.url) &&
+    !pathname.includes("/api/organizations/accept-invite")
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
@@ -65,7 +65,7 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (
-    request.nextUrl.pathname.startsWith(ORGANIZATION_ROUTE.url) &&
+    pathname.includes(ORGANIZATION_ROUTE.url) &&
     !canViewOrganization(user?.user_metadata.current_organization.role)
   ) {
     const url = request.nextUrl.clone();
@@ -87,5 +87,5 @@ export async function updateSession(request: NextRequest) {
   // If this is not done, you may be causing the browser and server to go out
   // of sync and terminate the user's session prematurely!
 
-  return supabaseResponse;
+  return response;
 }
