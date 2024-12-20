@@ -21,7 +21,6 @@ import { cn } from "@/utils/utils";
 import { useMutation } from "@tanstack/react-query";
 import { updateOrganizationMutation } from "@/features/organizations/services";
 import { toast } from "sonner";
-import { ORGANIZATION_ROUTE } from "@/routes";
 import { useTranslations } from "next-intl";
 
 const InformationForm = () => {

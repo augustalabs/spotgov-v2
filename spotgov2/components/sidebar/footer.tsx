@@ -20,7 +20,7 @@ const Footer = async () => {
   const userEmail = userData?.user.email ?? "";
   const userAvatarUrl = userData?.user.user_metadata.avatar_url;
 
-  const userButton = await getTranslations("sidebar.userButton");
+  const userButtonTranslation = await getTranslations("sidebar.userButton");
 
   return (
     <Popover>
@@ -53,7 +53,7 @@ const Footer = async () => {
               className="flex items-center gap-2 text-sm hover:text-primary"
             >
               <LogOut size={16} />
-              <span>{userButton("logout")}</span>
+              <span>{userButtonTranslation("logout")}</span>
             </button>
           </form>
         </div>

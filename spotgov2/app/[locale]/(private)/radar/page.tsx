@@ -3,11 +3,11 @@ import CustomTable from "@/features/radar/components/custom-table";
 import { getTranslations } from "next-intl/server";
 
 export default async function FavoriteSearchesPage() {
-  const radar = await getTranslations("radar");
+  const radarTranslation = await getTranslations("radar");
 
   return (
     <section>
-      <Header title={radar("header.title")} />
+      <Header title={radarTranslation("header.title")} />
       <CustomTable />
     </section>
   );
