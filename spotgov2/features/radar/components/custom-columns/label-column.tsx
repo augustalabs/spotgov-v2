@@ -69,6 +69,8 @@ const LabelColumn = ({ value, fieldId, contractId }: LabelColumnProps) => {
     },
   });
 
+  const isLoading = form.formState.isSubmitting;
+
   const addMutation = useMutation(
     addColumnValueMutation(currentOrganization?.organizationId as string),
   );
@@ -170,21 +172,24 @@ const LabelColumn = ({ value, fieldId, contractId }: LabelColumnProps) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="space-y-1">
-        <Command>
-          <CommandInput
-            placeholder={labelTranslation("popover.searchPlaceholder")}
-          />
-          <CommandList>
-            <CommandEmpty>{labelTranslation("popover.noResults")}</CommandEmpty>
-            {isPending && <Skeleton className="h-2 w-full" />}
-            {!isPending && (
-              <CommandGroup
-                className="max-h-36 overflow-auto"
-                heading={data?.payload ? labelTranslation("popover.label") : ""}
-                value={localLabel}
-              >
-                {data?.payload &&
-                  data.payload.map((label) => (
+        {!isPending && data?.payload && data.payload.length > 0 && (
+          <>
+            <Command>
+              <CommandInput
+                placeholder={labelTranslation("popover.searchPlaceholder")}
+              />
+              <CommandList>
+                <CommandEmpty>
+                  {labelTranslation("popover.noResults")}
+                </CommandEmpty>
+                <CommandGroup
+                  className="max-h-36 overflow-auto"
+                  heading={
+                    data?.payload ? labelTranslation("popover.label") : ""
+                  }
+                  value={localLabel}
+                >
+                  {data.payload.map((label) => (
                     <CommandItem
                       key={label}
                       value={label}
@@ -207,11 +212,13 @@ const LabelColumn = ({ value, fieldId, contractId }: LabelColumnProps) => {
                       />
                     </CommandItem>
                   ))}
-              </CommandGroup>
-            )}
-          </CommandList>
-        </Command>
-        {!isPending && <Separator />}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+            <Separator />
+          </>
+        )}
+
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -237,7 +244,7 @@ const LabelColumn = ({ value, fieldId, contractId }: LabelColumnProps) => {
                 </FormItem>
               )}
             />
-            <Button type="submit">
+            <Button type="submit" disabled={isLoading}>
               <Plus size={16} />
             </Button>
           </form>

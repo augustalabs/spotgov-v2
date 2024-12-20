@@ -12,6 +12,7 @@ import { Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import {
   addColumnValueMutation,
+  deleteColumnValueMutation,
   updateColumnValueMutation,
 } from "../../services";
 import { toast } from "sonner";
@@ -45,27 +46,36 @@ const DateColumn = ({ value, fieldId, contractId }: DateColumnProps) => {
     addColumnValueMutation(currentOrganization?.organizationId as string),
   );
 
+  const deleteValueMutation = useMutation(
+    deleteColumnValueMutation(currentOrganization?.organizationId as string),
+  );
+
   const handleValueEdit = async (v: Date | undefined) => {
     try {
-      if (!v) return;
-
-      // Optimistic update
-      setNewValue(v.toISOString());
-
       let res;
 
-      if (!value) {
-        res = await addValueMutation.mutateAsync({
-          value: v.toISOString(),
+      if (!v) {
+        res = await deleteValueMutation.mutateAsync({
           fieldId,
           contractId,
         });
       } else {
-        res = await updateValuemutation.mutateAsync({
-          value: v.toISOString(),
-          fieldId,
-          contractId,
-        });
+        // Optimistic update
+        setNewValue(v.toISOString());
+
+        if (!value) {
+          res = await addValueMutation.mutateAsync({
+            value: v.toISOString(),
+            fieldId,
+            contractId,
+          });
+        } else {
+          res = await updateValuemutation.mutateAsync({
+            value: v.toISOString(),
+            fieldId,
+            contractId,
+          });
+        }
       }
 
       if (res.success) {

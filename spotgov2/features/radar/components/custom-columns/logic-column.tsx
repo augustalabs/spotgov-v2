@@ -67,7 +67,7 @@ const LogicColumn = ({ value, fieldId, contractId }: LogicColumnProps) => {
 
   return (
     <Switch
-      checked={Boolean(newValue)}
+      checked={newValue === "true" ? true : false}
       onCheckedChange={handleToggle}
       disabled={
         !canChangeFavoriteQueriesColumnValue(

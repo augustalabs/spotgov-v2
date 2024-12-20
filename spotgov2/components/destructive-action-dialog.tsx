@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -23,14 +23,24 @@ const DestructiveActionDialog = ({
   setIsOpen,
   action,
 }: DestructiveActionDialogProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const destructiveActionDialogTranslation =
     useTranslations("destructiveDialog");
 
   const onAction = async () => {
-    const success = await action();
+    try {
+      setIsLoading(true);
 
-    if (success) {
-      setIsOpen(false);
+      const success = await action();
+
+      if (success) {
+        setIsOpen(false);
+      }
+    } catch {
+      // TODO: Handle error
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -47,10 +57,14 @@ const DestructiveActionDialog = ({
           </DialogDescription>
         </DialogHeader>
         <div className="flex w-full items-center justify-end space-x-2">
-          <Button variant="outline" onClick={() => setIsOpen(false)}>
+          <Button
+            variant="outline"
+            onClick={() => setIsOpen(false)}
+            disabled={isLoading}
+          >
             {destructiveActionDialogTranslation("buttons.cancel")}
           </Button>
-          <Button variant="destructive" onClick={onAction}>
+          <Button variant="destructive" onClick={onAction} disabled={isLoading}>
             {destructiveActionDialogTranslation("buttons.continue")}
           </Button>
         </div>
