@@ -13,25 +13,17 @@ import { OrganizationsTab } from "@/features/internal-dashboard/components/organ
 import { UsersTab } from "@/features/internal-dashboard/components/users-tab";
 
 export default function InternalDashboard() {
-  const orgQueryObj = allOrganizationsQuery();
   const {
     data: orgsData,
     isLoading: orgsLoading,
     isError: orgsError,
-  } = useQuery({
-    queryKey: orgQueryObj.queryKey,
-    queryFn: orgQueryObj.queryFn,
-  });
+  } = useQuery(allOrganizationsQuery());
 
-  const usersQueryObj = allUsersQuery();
   const {
     data: usersData,
     isLoading: usersLoading,
     isError: usersError,
-  } = useQuery({
-    queryKey: usersQueryObj.queryKey,
-    queryFn: usersQueryObj.queryFn,
-  });
+  } = useQuery(allUsersQuery());
 
   return (
     <div className="container mx-auto space-y-6 p-6">

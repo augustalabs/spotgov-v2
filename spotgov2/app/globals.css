@@ -127,3 +127,15 @@ body {
     @apply border-[#2388FF]/30 bg-gradient-to-t from-[#2388FF]/10 to-white;
   }
 }
+
+.custom-scrollbar::-webkit-scrollbar {
+  @apply h-2.5 w-2.5;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply rounded-full border-[1px] border-solid border-transparent bg-border bg-clip-padding;
+}
