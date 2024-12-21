@@ -1,8 +1,12 @@
-import { Organization } from "@/database/schemas";
+import { Organization, organizations } from "@/database/schemas";
+import { isSuperAdmin } from "@/features/internal-dashboard/utils/api";
 import {
   getUserFromOrganization,
   updateOrganization,
+  deleteOrganization,
+  getOrganizationById,
 } from "@/features/organizations/api";
+
 import { canEditOrganization } from "@/permissions";
 import { Response } from "@/types";
 import { checkUserAuthentication } from "@/utils/api/helpers";
@@ -18,6 +22,33 @@ import { NextResponse } from "next/server";
 type Params = {
   organizationId: string;
 };
+
+export async function GET(
+  req: Request,
+  { params }: { params: Params },
+): Promise<NextResponse<Response<Organization | null>>> {
+  const user = await checkUserAuthentication();
+  if (user instanceof NextResponse) return user;
+
+  if (!user) {
+    return NextResponse.json(STATUS_FORBIDDEN, {
+      status: STATUS_FORBIDDEN.status,
+    });
+  }
+
+  const organization = await getOrganizationById(params.organizationId);
+
+  if (!organization) {
+    return NextResponse.json(STATUS_NOT_FOUND, {
+      status: STATUS_NOT_FOUND.status,
+    });
+  }
+
+  return NextResponse.json(
+    { ...STATUS_OK, payload: organization },
+    { status: STATUS_OK.status },
+  );
+}
 
 export async function PATCH(
   req: Request,
@@ -63,6 +94,47 @@ export async function PATCH(
       { status: STATUS_OK.status },
     );
   } catch {
+    return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
+      status: STATUS_INTERNAL_SERVER_ERROR.status,
+    });
+  }
+}
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: Params },
+): Promise<NextResponse<Response<Organization[]>>> {
+  try {
+    // Check user authentication
+    console.log("DELETE request received");
+    const user = await checkUserAuthentication();
+    if (user instanceof NextResponse) return user;
+    console.log("User authenticated");
+    // Check if user has permission to delete the organization
+    console.log("Checking if user has permission to delete the organization");
+    const userIsSuperAdmin = isSuperAdmin(user);
+    if (!user || !userIsSuperAdmin) {
+      return NextResponse.json(STATUS_FORBIDDEN, {
+        status: STATUS_FORBIDDEN.status,
+      });
+    }
+
+    // Delete the organization
+    console.log("Deleting the organization");
+    const organization = await deleteOrganization(params.organizationId);
+    console.log("Organization deleted");
+    if (!organization) {
+      return NextResponse.json(STATUS_NOT_FOUND, {
+        status: STATUS_NOT_FOUND.status,
+      });
+    }
+
+    return NextResponse.json(
+      { ...STATUS_OK, payload: organization },
+      { status: STATUS_OK.status },
+    );
+  } catch (error) {
+    console.error("Error deleting organization", error);
     return NextResponse.json(STATUS_INTERNAL_SERVER_ERROR, {
       status: STATUS_INTERNAL_SERVER_ERROR.status,
     });

@@ -23,7 +23,7 @@ async function getContractInOrganization({ contractId, organizationId }: { contr
 
   return {
     ...result.contracts,
-    contracts_organizations: result.contracts_organizations ?? null
+    contractsOrganization: result.contracts_organizations ?? null
   };
 }
 

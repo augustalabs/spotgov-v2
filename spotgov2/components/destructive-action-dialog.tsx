@@ -14,7 +14,7 @@ type DestructiveActionDialogProps = {
   children: ReactNode;
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
-  action: () => Promise<boolean>;
+  action: () => Promise<boolean> | void;
 };
 
 const DestructiveActionDialog = ({

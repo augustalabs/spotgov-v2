@@ -51,6 +51,7 @@ export async function updateSession(
     return NextResponse.redirect(url);
   }
 
+  // Redirect unauthenticated users to the login page
   if (
     !user &&
     !pathname.includes(LOGIN_ROUTE.url) &&
@@ -58,9 +59,18 @@ export async function updateSession(
     !pathname.includes(ORGANIZATION_ACCEPT_INVITE_ROUTE.url) &&
     !pathname.includes("/api/organizations/accept-invite")
   ) {
-    // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
     url.pathname = LOGIN_ROUTE.url;
+    return NextResponse.redirect(url);
+  }
+
+  // Restrict access to '/internal' route to super admin users
+  if (
+    request.nextUrl.pathname.startsWith("/internal") &&
+    !(user?.user_metadata?.is_super_admin === true)
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = SEARCH_ROUTE.url;
     return NextResponse.redirect(url);
   }
 

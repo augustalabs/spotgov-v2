@@ -16,6 +16,7 @@ import {
 import { UserOrganization } from "@/database/schemas";
 import { checkUserAuthentication } from "@/utils/api/helpers";
 import { canChangeUserRole, canRemoveUser } from "@/permissions";
+import { isSuperAdmin } from "@/features/internal-dashboard/utils/api";
 
 type Params = {
   organizationId: string;
@@ -38,15 +39,19 @@ export async function PATCH(
       });
     }
 
-    const user = await getUserFromOrganization(
-      userOrResponse.id,
-      params.organizationId,
-    );
+    const userIsSuperAdmin = isSuperAdmin(userOrResponse);
 
-    if (!user || !canChangeUserRole(user.role)) {
-      return NextResponse.json(STATUS_FORBIDDEN, {
-        status: STATUS_FORBIDDEN.status,
-      });
+    if (!userIsSuperAdmin) {
+      const user = await getUserFromOrganization(
+        userOrResponse.id,
+        params.organizationId,
+      );
+
+      if (!user || !canChangeUserRole(user.role)) {
+        return NextResponse.json(STATUS_FORBIDDEN, {
+          status: STATUS_FORBIDDEN.status,
+        });
+      }
     }
 
     const userOrganization = await updateUserRole(
@@ -85,16 +90,19 @@ export async function DELETE(
         status: STATUS_BAD_REQUEST.status,
       });
     }
+    const userIsSuperAdmin = isSuperAdmin(userOrResponse);
 
-    const user = await getUserFromOrganization(
-      userOrResponse.id,
-      params.organizationId,
-    );
+    if (!userIsSuperAdmin) {
+      const user = await getUserFromOrganization(
+        userOrResponse.id,
+        params.organizationId,
+      );
 
-    if (!user || !canRemoveUser(user.role)) {
-      return NextResponse.json(STATUS_FORBIDDEN, {
-        status: STATUS_FORBIDDEN.status,
-      });
+      if (!user || !canRemoveUser(user.role)) {
+        return NextResponse.json(STATUS_FORBIDDEN, {
+          status: STATUS_FORBIDDEN.status,
+        });
+      }
     }
 
     const deletedUser = await deleteUser(params.userId, params.organizationId);

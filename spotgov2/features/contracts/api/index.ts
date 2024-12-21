@@ -6,3 +6,6 @@ export { default as getContractInOrganization } from "./get-contract-in-organiza
 
 // Create
 export { default as createContractInOrganization } from "./create-contract-in-organization";
+
+// Update
+export { default as updateContractNotes } from "./update-contract-notes";
