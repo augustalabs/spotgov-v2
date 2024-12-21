@@ -60,6 +60,8 @@ export default async function ContractPage({ params }: ContractPageProps) {
 
           {isAuthenticated && (
             <ContractNotes
+              contractId={contractId}
+              organizationId={contractInOrganizationData?.organizationId || ""}
               comments={contractInOrganizationData?.comments || ""}
             />
           )}

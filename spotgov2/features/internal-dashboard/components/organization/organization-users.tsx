@@ -55,7 +55,6 @@ function OrganizationUsers({
         {!isLoading && !isError && users.length > 0 && (
           <ScrollArea className="h-[400px]">
             <Table>
-              <TableCaption>All users in this organization</TableCaption>
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
