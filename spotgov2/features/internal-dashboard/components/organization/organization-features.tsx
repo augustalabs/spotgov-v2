@@ -79,7 +79,7 @@ function OrganizationFeatures({
                   label={config.label}
                   sublabel={config.sublabel}
                   description={config.description}
-                  icon={<Icon className="h-5 w-5 shrink-0 text-primary" />}
+                  icon={<Icon className="h-4 w-4 shrink-0 text-primary" />}
                   enabled={features[featureKey] || false}
                   onToggle={() =>
                     handleUpdateFeatures(featureKey, !features[featureKey])

@@ -12,6 +12,15 @@ import { Organization } from "@/database/schemas";
 import OrganizationUsers from "@/features/internal-dashboard/components/organization/organization-users";
 import OrganizationDetails from "@/features/internal-dashboard/components/organization/organization-details";
 import OrganizationFeatures from "@/features/internal-dashboard/components/organization/organization-features";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function OrganizationPage() {
   const { organizationId } = useParams();
@@ -39,25 +48,44 @@ export default function OrganizationPage() {
   const features = orgFeaturesData?.payload || null;
 
   return (
-    <main className="space-y-6 p-4">
-      <OrganizationDetails
-        organization={organization as Organization}
-        isLoading={orgLoading}
-        isError={orgError}
-      />
-      <Separator />
-      <OrganizationUsers
-        users={users}
-        isLoading={orgUsersLoading}
-        isError={orgUsersError}
-      />
-      <Separator />
-      <OrganizationFeatures
-        organizationId={organization?.id || ""}
-        features={features}
-        isLoading={orgFeaturesLoading}
-        isError={orgFeaturesError}
-      />
-    </main>
+    <div className="flex flex-col gap-4 p-4">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/internal">Internal</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator> / </BreadcrumbSeparator>
+          <BreadcrumbItem>
+            <BreadcrumbPage>
+              {organization ? (
+                organization.name
+              ) : (
+                <Skeleton className="h-4 w-24" />
+              )}
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <main className="space-y-6">
+        <OrganizationDetails
+          organization={organization as Organization}
+          isLoading={orgLoading}
+          isError={orgError}
+        />
+        <Separator />
+        <OrganizationUsers
+          users={users}
+          isLoading={orgUsersLoading}
+          isError={orgUsersError}
+        />
+        <Separator />
+        <OrganizationFeatures
+          organizationId={organization?.id || ""}
+          features={features}
+          isLoading={orgFeaturesLoading}
+          isError={orgFeaturesError}
+        />
+      </main>
+    </div>
   );
 }

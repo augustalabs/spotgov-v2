@@ -46,6 +46,7 @@ import {
   EditOrganizationSchema,
 } from "@/features/internal-dashboard/schemas/edit-organization-schema";
 import { getQueryClient } from "@/lib/react-query/client";
+import Link from "next/link";
 
 interface OrganizationsTabProps {
   orgsData: Organization[] | undefined;
@@ -141,6 +142,14 @@ export function OrganizationsTab({
           />
         </div>
       ),
+      cell: ({ row }) => {
+        const org = row.original;
+        return (
+          <Link href={`/internal/organization/${org.id}`} className="underline">
+            {org.name}
+          </Link>
+        );
+      },
     },
     {
       accessorKey: "nif",

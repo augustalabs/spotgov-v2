@@ -27,8 +27,8 @@ function FeatureItem({
         onCheckedChange={onToggle}
       />
       <div className="flex grow items-center gap-3">
-        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
-          {icon || <Zap className="h-5 w-5 shrink-0 text-primary" />}
+        <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
+          {icon || <Zap className="h-4 w-4 shrink-0 text-primary" />}
         </div>
         <div className="grid grow gap-2">
           <Label htmlFor={`switch-${label}`}>
