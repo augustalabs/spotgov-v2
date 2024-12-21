@@ -13,15 +13,19 @@ import {
   TableCaption,
 } from "@/components/ui/table";
 import UsersSkeleton from "./users-skeleton";
+import RemoveFromOrganizationButton from "./remove-from-organization-button";
+import UserRoleSelect from "./user-role-select";
 
 function OrganizationUsers({
   users,
   isLoading,
   isError,
+  organizationId,
 }: {
   users: UserWithOrganizationInfo[];
   isLoading: boolean;
   isError: boolean;
+  organizationId: string;
 }) {
   return (
     <Card>
@@ -54,20 +58,35 @@ function OrganizationUsers({
               <TableCaption>All users in this organization</TableCaption>
               <TableHeader>
                 <TableRow>
+                  <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Role</TableHead>
                   <TableHead>Last Online</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {users.map((user) => (
                   <TableRow key={user?.user?.id}>
+                    <TableCell>{user?.user?.name}</TableCell>
                     <TableCell>{user?.user?.email}</TableCell>
-                    <TableCell>{user?.role}</TableCell>
+                    <TableCell>
+                      <UserRoleSelect
+                        userRole={user?.role}
+                        userId={user?.user?.id || ""}
+                        organizationId={organizationId}
+                      />
+                    </TableCell>
                     <TableCell>
                       {user?.lastOnline
                         ? new Date(user.lastOnline).toLocaleString()
                         : "N/A"}
+                    </TableCell>
+                    <TableCell>
+                      <RemoveFromOrganizationButton
+                        userId={user?.user?.id || ""}
+                        organizationId={organizationId}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}

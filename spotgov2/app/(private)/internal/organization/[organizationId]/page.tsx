@@ -74,6 +74,7 @@ export default function OrganizationPage() {
         />
         <Separator />
         <OrganizationUsers
+          organizationId={organization?.id || ""}
           users={users}
           isLoading={orgUsersLoading}
           isError={orgUsersError}

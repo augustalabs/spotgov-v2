@@ -53,6 +53,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { getQueryClient } from "@/lib/react-query/client";
 import { useRouter } from "next/navigation";
+import DestructiveActionDialog from "@/components/destructive-action-dialog";
 function OrganizationDetails({
   organization,
   isLoading,
@@ -163,13 +164,16 @@ function OrganizationDetails({
                 <Pencil className="h-4 w-4" />
                 <span>Edit</span>
               </Button>
-              <Button
-                variant="destructive"
-                onClick={() => setDeleteDialogOpen(true)}
+              <DestructiveActionDialog
+                isOpen={deleteDialogOpen}
+                setIsOpen={setDeleteDialogOpen}
+                action={handleDeleteOrg}
               >
-                <Trash className="h-4 w-4" />
-                <span>Delete</span>
-              </Button>
+                <Button variant="destructive">
+                  <Trash className="h-4 w-4" />
+                  <span>Delete</span>
+                </Button>
+              </DestructiveActionDialog>
             </div>
           )}
         </CardHeader>
@@ -315,30 +319,6 @@ function OrganizationDetails({
               </DialogFooter>
             </form>
           </Form>
-        </DialogContent>
-      </Dialog>
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              Are you sure you want to delete this organization?
-            </DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. This will permanently delete the
-              organization and remove all associated data.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setDeleteDialogOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button variant="destructive" onClick={handleDeleteOrg}>
-              Delete
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </>

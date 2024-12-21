@@ -39,15 +39,19 @@ export async function PATCH(
       });
     }
 
-    const user = await getUserFromOrganization(
-      userOrResponse.id,
-      params.organizationId,
-    );
+    const userIsSuperAdmin = isSuperAdmin(userOrResponse);
 
-    if (!user || !canChangeUserRole(user.role)) {
-      return NextResponse.json(STATUS_FORBIDDEN, {
-        status: STATUS_FORBIDDEN.status,
-      });
+    if (!userIsSuperAdmin) {
+      const user = await getUserFromOrganization(
+        userOrResponse.id,
+        params.organizationId,
+      );
+
+      if (!user || !canChangeUserRole(user.role)) {
+        return NextResponse.json(STATUS_FORBIDDEN, {
+          status: STATUS_FORBIDDEN.status,
+        });
+      }
     }
 
     const userOrganization = await updateUserRole(
