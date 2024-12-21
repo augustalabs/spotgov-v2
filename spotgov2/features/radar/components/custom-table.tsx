@@ -1,47 +1,45 @@
 "use client";
 
-import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
-
-import Filters from "./filters/filters";
-import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filters-store";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { favoriteQueriesQuery } from "../services";
-import { DataTable } from "./data-table";
-import { columns } from "./columns/columns";
-import useCustomColumns from "../hooks/use-custom-columns";
-import { PaginatedContractsType } from "../types";
-import { ColumnDef } from "@tanstack/react-table";
+
+import { useFavoriteQueriesFiltersStore } from "@/stores/favorite-queries-filters-store";
+import { useCurrentOrganizationStore } from "@/stores/current-organization-store";
 import { getQueryClient } from "@/lib/react-query/client";
+
+import { FavoriteContractsDataType } from "../types";
+import { favoriteQueriesQuery } from "../services";
+import { useCustomColumns } from "../hooks/use-custom-columns";
+
+import { DataTable } from "./data-table";
+import { Filters } from "./filters/filters";
+import { columns } from "./columns/columns";
 
 const PAGE_SIZE = 8;
 
 const CustomTable = () => {
+  const { currentOrganization } = useCurrentOrganizationStore();
+
   const {
     searchTextInput,
     adjudicatorsInput,
-    adjudicatorsDefaultValues,
     setAdjudicatorsDefaultValues,
     queryTitlesInput,
-    queryTitlesDefaultValues,
     setQueryTitlesDefaultValues,
     savedInput,
     cpvsInput,
-    cpvsDefaultValues,
     setCpvsDefaultValues,
     basePriceInput,
-    basePriceDefaultValues,
     setBasePriceDefaultValues,
     publishDateInput,
     onlyPriceCriteriaInput,
     selectedSortInput,
   } = useFavoriteQueriesFiltersStore();
-  const { currentOrganization } = useCurrentOrganizationStore();
 
   const [page, setPage] = useState<number>(1);
 
   useEffect(() => {
-    setPage(1);
+    if (page !== 1) setPage(1);
   }, [
     searchTextInput,
     adjudicatorsInput,
@@ -73,66 +71,57 @@ const CustomTable = () => {
 
   const queryClient = getQueryClient();
 
-  // This is necessary to update the default values of the multi select components and the dual range
-  // base price slider
-  useEffect(() => {
-    const payload = data?.payload;
-
-    // This is necessary to rerun the query to get the custom fields with values, otherwise the custom
-    // columns values will not be updated in the table, and then it will show old values for different
-    // contracts
-    const invalidateCustomValues = async () => {
-      await queryClient.invalidateQueries({
-        queryKey: [
-          "get-custom-fields-with-values",
-          currentOrganization?.organizationId,
-        ],
-      });
-    };
-
-    if (!isPending && payload) {
-      const shouldSetAdjudicators =
-        payload.distinctAdjudicators.length > adjudicatorsDefaultValues.length;
-
-      if (shouldSetAdjudicators) {
+  const updateDefaultValues = useCallback(
+    (payload: FavoriteContractsDataType) => {
+      if (payload.distinctAdjudicators.length > 0) {
         setAdjudicatorsDefaultValues(payload.distinctAdjudicators);
       }
-
-      const shouldSetQueryTitles =
-        payload.distinctQueryTitles.length > queryTitlesDefaultValues.length;
-
-      if (shouldSetQueryTitles) {
+      if (payload.distinctQueryTitles.length > 0) {
         setQueryTitlesDefaultValues(payload.distinctQueryTitles);
       }
-
-      const shouldSetCpvs =
-        payload.distinctCpvs.length > cpvsDefaultValues.length;
-
-      if (shouldSetCpvs) {
+      if (payload.distinctCpvs.length > 0) {
         setCpvsDefaultValues(payload.distinctCpvs);
       }
-
-      const shouldSetBasePrice = !basePriceDefaultValues;
-
-      if (shouldSetBasePrice) {
+      if (payload.basePriceRange) {
         setBasePriceDefaultValues(payload.basePriceRange);
       }
+    },
+    [
+      setAdjudicatorsDefaultValues,
+      setQueryTitlesDefaultValues,
+      setCpvsDefaultValues,
+      setBasePriceDefaultValues,
+    ],
+  );
 
-      invalidateCustomValues();
+  const invalidateQuery = useCallback(async () => {
+    await queryClient.invalidateQueries({
+      queryKey: [
+        "get-custom-fields-with-values",
+        currentOrganization?.organizationId,
+      ],
+    });
+  }, [queryClient, currentOrganization?.organizationId]);
+
+  useEffect(() => {
+    if (!isPending && data?.payload) {
+      updateDefaultValues(data.payload);
+      invalidateQuery();
     }
-  }, [isPending, data?.payload]);
+  }, [
+    isPending,
+    data?.payload,
+    updateDefaultValues,
+    queryClient,
+    currentOrganization?.organizationId,
+  ]);
 
   const customColumns = useCustomColumns();
 
-  const [allCustomColumns, setAllCustomColumns] = useState<
-    ColumnDef<PaginatedContractsType>[]
-  >([]);
-
-  useEffect(() => {
-    if (!customColumns.isPending) {
-      setAllCustomColumns(customColumns.columns);
-    }
-  }, [customColumns.isPending]);
+  const allColumns = useMemo(
+    () => [...columns, ...customColumns.columns],
+    [customColumns.columns],
+  );
 
   return (
     <div className="my-6">
@@ -140,7 +129,7 @@ const CustomTable = () => {
       <DataTable
         data={data?.payload?.paginatedContracts ?? []}
         isPending={isPending || isFetching}
-        columns={[...columns, ...allCustomColumns]}
+        columns={allColumns}
         page={page}
         setPage={setPage}
         pageSize={PAGE_SIZE}

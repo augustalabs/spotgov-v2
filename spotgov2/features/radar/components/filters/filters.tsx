@@ -15,7 +15,7 @@ type FiltersProps = {
   queryIds: string[];
 };
 
-const Filters = ({ queryIds }: FiltersProps) => {
+export const Filters = ({ queryIds }: FiltersProps) => {
   return (
     <div className="my-5 space-y-4">
       <div className="flex flex-wrap gap-2">
@@ -35,5 +35,3 @@ const Filters = ({ queryIds }: FiltersProps) => {
     </div>
   );
 };
-
-export default Filters;
