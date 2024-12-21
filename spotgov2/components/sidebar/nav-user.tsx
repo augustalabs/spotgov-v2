@@ -15,7 +15,7 @@ const NavUser = ({
   shouldHaveIcon,
 }: NavUserProps) => {
   return (
-    <div className="flex items-center justify-between gap-2 truncate">
+    <div className="flex w-full items-center justify-between truncate">
       <div className="flex items-center gap-2">
         <Avatar className="h-8 w-8 rounded-lg">
           <AvatarImage src={userAvatarUrl} alt={userName} />
