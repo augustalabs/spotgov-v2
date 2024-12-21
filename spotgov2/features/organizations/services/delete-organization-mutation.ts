@@ -12,14 +12,7 @@ function deleteOrganizationMutation(organizationId: string) {
       url: `organizations/${organizationId}`,
     });
 
-  const onSuccess = async () => {
-    await queryClient.invalidateQueries({
-      queryKey: ["get-all-organizations"],
-    });
-    toast.success("Organization deleted successfully");
-  };
-
-  return { mutationKey, mutationFn, onSuccess };
+  return { mutationKey, mutationFn };
 }
 
 export default deleteOrganizationMutation;

@@ -3,3 +3,4 @@ export { default as updateOrganizationInfoAndCredits } from "./update-organizati
 export { default as getAllOrganizations } from "./get-all-organizations";
 export { default as getAllUsers } from "./get-all-users";
 export { default as deleteUser } from "./delete-user";
+export { default as getOrganizationFeatures } from "./get-organization-features";

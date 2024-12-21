@@ -45,20 +45,20 @@ import {
   editOrganizationSchema,
   EditOrganizationSchema,
 } from "@/features/internal-dashboard/schemas/edit-organization-schema";
+import { getQueryClient } from "@/lib/react-query/client";
 
 interface OrganizationsTabProps {
   orgsData: Organization[] | undefined;
   isLoading: boolean;
   isError: boolean;
-  refetchOrgs: () => Promise<any>;
 }
 
 export function OrganizationsTab({
   orgsData,
   isLoading,
   isError,
-  refetchOrgs,
 }: OrganizationsTabProps) {
+  const queryClient = getQueryClient();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [currentOrg, setCurrentOrg] = useState<Organization | null>(null);
@@ -83,6 +83,12 @@ export function OrganizationsTab({
   const handleDeleteOrg = () => {
     if (currentOrg) {
       deleteMutation.mutate(undefined, {
+        onSuccess: async () => {
+          await queryClient.invalidateQueries({
+            queryKey: ["get-all-organizations"],
+          });
+          toast.success("Organization deleted successfully");
+        },
         onError: (error) => {
           toast.error("Failed to delete the organization. Please try again.");
           console.error("Delete error:", error);
@@ -104,6 +110,13 @@ export function OrganizationsTab({
           nif: data.nif,
         },
         {
+          onSuccess: async () => {
+            await queryClient.invalidateQueries({
+              queryKey: ["get-all-organizations"],
+            });
+            toast.success("Organization updated successfully");
+          },
+
           onError: (error) => {
             toast.error("Failed to update the organization. Please try again.");
             console.error("Update error:", error);

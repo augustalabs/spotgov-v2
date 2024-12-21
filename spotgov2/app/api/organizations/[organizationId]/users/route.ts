@@ -16,6 +16,7 @@ import {
 import { addUserToOrganization } from "@/features/organization-invitation/api";
 import { checkUserAuthentication } from "@/utils/api/helpers";
 import { canViewOrganization } from "@/permissions";
+import { isSuperAdmin } from "@/features/internal-dashboard/utils/api";
 
 type Params = {
   organizationId: string;
@@ -34,16 +35,19 @@ export async function GET(
         status: STATUS_BAD_REQUEST.status,
       });
     }
+    const userIsSuperAdmin = isSuperAdmin(userOrResponse);
 
-    const user = await getUserFromOrganization(
-      userOrResponse.id,
-      params.organizationId,
-    );
+    if (!userIsSuperAdmin) {
+      const user = await getUserFromOrganization(
+        userOrResponse.id,
+        params.organizationId,
+      );
 
-    if (!user || !canViewOrganization(user.role)) {
-      return NextResponse.json(STATUS_FORBIDDEN, {
-        status: STATUS_FORBIDDEN.status,
-      });
+      if (!user || !canViewOrganization(user.role)) {
+        return NextResponse.json(STATUS_FORBIDDEN, {
+          status: STATUS_FORBIDDEN.status,
+        });
+      }
     }
 
     const users = await getUsers(params.organizationId);

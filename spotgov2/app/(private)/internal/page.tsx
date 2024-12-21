@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { useQuery } from "@tanstack/react-query"
-import React from "react"
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
 
-import allOrganizationsQuery from "@/features/internal-dashboard/services/all-organizations-query"
-import allUsersQuery from "@/features/internal-dashboard/services/all-users-query"
+import allOrganizationsQuery from "@/features/internal-dashboard/services/all-organizations-query";
+import allUsersQuery from "@/features/internal-dashboard/services/all-users-query";
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { OrganizationsTab } from "@/features/internal-dashboard/components/organizations-tab"
-import { UsersTab } from "@/features/internal-dashboard/components/users-tab"
+import { OrganizationsTab } from "@/features/internal-dashboard/components/organizations-tab";
+import { UsersTab } from "@/features/internal-dashboard/components/users-tab";
 
 export default function InternalDashboard() {
-  const orgQueryObj = allOrganizationsQuery()
+  const orgQueryObj = allOrganizationsQuery();
   const {
     data: orgsData,
     isLoading: orgsLoading,
@@ -21,9 +21,9 @@ export default function InternalDashboard() {
   } = useQuery({
     queryKey: orgQueryObj.queryKey,
     queryFn: orgQueryObj.queryFn,
-  })
+  });
 
-  const usersQueryObj = allUsersQuery()
+  const usersQueryObj = allUsersQuery();
   const {
     data: usersData,
     isLoading: usersLoading,
@@ -31,10 +31,10 @@ export default function InternalDashboard() {
   } = useQuery({
     queryKey: usersQueryObj.queryKey,
     queryFn: usersQueryObj.queryFn,
-  })
+  });
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto space-y-6 p-6">
       <Card>
         <CardHeader>
           <CardTitle>Internal Dashboard</CardTitle>
@@ -63,6 +63,5 @@ export default function InternalDashboard() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
-

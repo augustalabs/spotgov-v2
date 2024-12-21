@@ -23,14 +23,7 @@ function updateInfoAndCreditsMutation(organizationId: string) {
       body: { deepDiveCurrency, matchmakingCurrency, name, nif },
     });
 
-  const onSuccess = async () => {
-    await queryClient.invalidateQueries({
-      queryKey: ["get-all-organizations"],
-    });
-    toast.success("Organization updated successfully");
-  };
-
-  return { mutationKey, mutationFn, onSuccess };
+  return { mutationKey, mutationFn };
 }
 
 export default updateInfoAndCreditsMutation;

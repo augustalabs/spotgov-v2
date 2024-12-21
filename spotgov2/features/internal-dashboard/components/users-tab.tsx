@@ -41,15 +41,9 @@ interface UsersTabProps {
   usersData: User[] | undefined;
   isLoading: boolean;
   isError: boolean;
-  refetchUsers: () => Promise<any>;
 }
 
-export function UsersTab({
-  usersData,
-  isLoading,
-  isError,
-  refetchUsers,
-}: UsersTabProps) {
+export function UsersTab({ usersData, isLoading, isError }: UsersTabProps) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [passwordRecoveryDialogOpen, setPasswordRecoveryDialogOpen] =
     useState(false);

@@ -4,20 +4,22 @@ import { features } from "@/database/schemas";
 
 import { db } from "@/database/db";
 import { eq } from "drizzle-orm";
+import { FeatureKey } from "../utils/feature-config";
 
 async function updateFeatureState(
   organizationId: string,
   states: {
-    featureDeepdive: boolean;
-    featureMarketintel: boolean;
-    featureNews: boolean;
-    featureEvents: boolean;
+    featureKey: FeatureKey;
+    enabled: boolean;
   },
 ): Promise<Feature[]> {
-    return await db.update(features).set({
-        featureDeepdive: states.featureDeepdive,
-        featureMarketintel: states.featureMarketintel
-    }).where(eq(features.organizationId, organizationId)).returning();
+  return await db
+    .update(features)
+    .set({
+      [states.featureKey]: states.enabled,
+    })
+    .where(eq(features.organizationId, organizationId))
+    .returning();
 }
 
 export default updateFeatureState;
